@@ -1,0 +1,6 @@
+.next/
+dist/
+node_modules/
+
+# Incremental TypeScript build cache — regenerated on every build.
+tsconfig.tsbuildinfo
