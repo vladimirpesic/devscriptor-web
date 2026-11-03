@@ -39,9 +39,6 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 right-0 px-3 py-1 text-xs text-slate-500 font-mono bg-slate-900 rounded-bl-lg border-b border-l border-slate-800">
-        {language}
-      </div>
       <pre className="bg-slate-950 rounded-lg p-4 pt-8 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent border border-slate-800">
         <code className={`text-sm font-mono whitespace-pre ${getLanguageColor()}`}>{code}</code>
       </pre>

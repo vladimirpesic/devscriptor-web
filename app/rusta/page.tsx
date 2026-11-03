@@ -1018,7 +1018,7 @@ export default function RustaPage() {
           <div className="mx-auto max-w-4xl text-center">
             <RustaLogo
               priority
-              className="mx-auto mb-8 h-36 w-36 drop-shadow-[0_12px_32px_rgba(245,158,11,0.3)] sm:h-44 sm:w-44"
+              className="mx-auto mb-8 h-48 w-48 drop-shadow-[0_12px_32px_rgba(245,158,11,0.3)]"
             />
             <Badge className="mb-4 border-amber-500/30 bg-amber-500/20 text-amber-300">
               <Bot className="mr-1 h-3 w-3" />
@@ -1150,7 +1150,7 @@ export default function RustaPage() {
             <Card className="border-slate-800 bg-slate-900/50">
               <CardContent className="p-0">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs sm:text-sm">
+                  <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                     <thead>
                       <tr className="border-b border-slate-800 text-left">
                         <th className="p-3 font-semibold text-slate-500">--provider</th>
@@ -1175,7 +1175,7 @@ export default function RustaPage() {
                             )}
                           </td>
                           <td className="p-3 align-top text-slate-300">{row.model}</td>
-                          <td className="break-all p-3 align-top text-slate-500">{row.baseUrl}</td>
+                          <td className="p-3 align-top text-slate-500">{row.baseUrl}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1336,30 +1336,32 @@ export default function RustaPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <ol className="space-y-2 text-sm text-slate-400">
-                    {[
-                      <>
-                        <code className="text-slate-300">$DEVSCRIPTOR_BIN</code> — an explicit path
-                      </>,
-                      <>
-                        <code className="text-slate-300">$PATH</code>
-                      </>,
-                      <>
-                        The platform install directories — <code className="text-slate-300">/usr/local/bin</code>,{' '}
-                        <code className="text-slate-300">~/.local/bin</code>,{' '}
-                        <code className="text-slate-300">/opt/homebrew/bin</code>, …; on Windows,{' '}
-                        <code className="text-slate-300">%LOCALAPPDATA%\Programs\devscriptor</code> and
-                        the like
-                      </>,
-                    ].map((step, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-xs font-bold text-blue-400">
-                          {i + 1}
-                        </span>
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
+                  <div className="overflow-x-auto">
+                    <ol className="space-y-2 text-sm text-slate-400">
+                      {[
+                        <>
+                          <code className="text-slate-300">$DEVSCRIPTOR_BIN</code> — an explicit path
+                        </>,
+                        <>
+                          <code className="text-slate-300">$PATH</code>
+                        </>,
+                        <>
+                          The platform install directories — <code className="text-slate-300">/usr/local/bin</code>,{' '}
+                          <code className="text-slate-300">~/.local/bin</code>,{' '}
+                          <code className="text-slate-300">/opt/homebrew/bin</code>, …; on Windows,{' '}
+                          <code className="text-slate-300">%LOCALAPPDATA%\Programs\devscriptor</code> and
+                          the like
+                        </>,
+                      ].map((step, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-xs font-bold text-blue-400">
+                            {i + 1}
+                          </span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
                   <div className="rounded-lg bg-slate-950/60 p-3 text-xs leading-relaxed text-slate-500">
                     Started as <code className="text-slate-400">devscriptor mcp</code> in the
                     session&apos;s working directory, with an explicit absolute{' '}

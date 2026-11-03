@@ -647,14 +647,9 @@ export DEVSCRIPTOR_LSP_MAX_SERVERS=4`}</code>
               {cliCommands.map((cmd) => (
                 <Card key={cmd.command} className="bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-all">
                   <CardHeader className="pb-3">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
-                        <Terminal className="w-5 h-5 text-slate-400" />
-                      </div>
-                      <div className="min-w-0">
-                        <code className="text-sm font-mono text-white break-all">{cmd.command}</code>
-                        <p className="text-sm text-slate-400 mt-1">{cmd.description}</p>
-                      </div>
+                    <div>
+                      <code className="text-sm font-mono text-white whitespace-normal">{cmd.command}</code>
+                      <p className="text-sm text-slate-400 mt-1">{cmd.description}</p>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0">

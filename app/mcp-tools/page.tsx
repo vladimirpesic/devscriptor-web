@@ -477,10 +477,12 @@ export default function MCPToolsPage() {
   }
 }`}</code>
                   </pre>
-                  <p className="text-xs text-slate-500 mt-3">
-                    For debug logs on stderr use{' '}
-                    <code className="text-slate-400">&quot;args&quot;: [&quot;--verbose&quot;, &quot;mcp&quot;, &quot;--no-daemon&quot;]</code>
-                    — a shared server writes its log to its runtime directory instead. Setting{' '}
+                  <p className="text-xs text-slate-500 mt-3">For debug logs on stderr use:</p>
+                  <pre className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-400 overflow-x-auto border border-slate-800 mt-2">
+                    <code>{`"args": ["--verbose", "mcp", "--no-daemon"]`}</code>
+                  </pre>
+                  <p className="text-xs text-slate-500 mt-2">
+                    A shared server writes its log to its runtime directory instead. Setting{' '}
                     <code className="text-slate-400">RUST_LOG</code> has no effect — it is not read.
                   </p>
                 </CardContent>

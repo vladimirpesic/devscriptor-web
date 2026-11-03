@@ -13,11 +13,11 @@ import {
   Brain,
   Search,
 } from 'lucide-react'
-import { RustaLogo } from '@/components/rusta-logo'
 import { RUSTA_VERSION, linuxDownloadCommand, archiveName, RELEASE_TARGETS } from '@/lib/github'
 
 const DOWNLOAD_COMMAND = linuxDownloadCommand('devscriptor')
 const CHECKSUM_FILE = `${archiveName('devscriptor', RELEASE_TARGETS[0])}.sha256`
+const VERIFY_COMMAND = `sha256sum -c ${CHECKSUM_FILE}`
 
 export function Hero() {
   return (
@@ -180,14 +180,12 @@ export function Hero() {
               href="#rusta"
               className="group inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm transition-colors hover:bg-amber-500/20"
             >
-              <RustaLogo className="h-6 w-6" alt="" />
               <span className="font-semibold text-amber-300">
                 Meet Rusta v{RUSTA_VERSION}
               </span>
               <span className="text-slate-400">
                 — the coding agent built for Kimi, GLM &amp; DeepSeek
               </span>
-              <ChevronRight className="h-4 w-4 flex-shrink-0 text-amber-400 transition-transform group-hover:translate-x-0.5" />
             </a>
           </motion.div>
 
@@ -198,25 +196,44 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="mt-12"
           >
-            <div className="mx-auto flex max-w-full items-center gap-3 bg-slate-950/80 backdrop-blur-sm border border-slate-800 rounded-lg px-4 sm:px-6 py-3 w-fit">
-              <span className="text-slate-500 flex-shrink-0">$</span>
-              <code className="text-emerald-400 font-mono text-xs sm:text-sm overflow-x-auto whitespace-nowrap">{DOWNLOAD_COMMAND}</code>
-              <button
-                className="text-slate-500 hover:text-white transition-colors flex-shrink-0"
-                aria-label="Copy the command"
-                onClick={() => navigator.clipboard.writeText(DOWNLOAD_COMMAND)}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-              </button>
-            </div>
+            <CommandLine command={DOWNLOAD_COMMAND} />
             <p className="mt-2 text-sm text-slate-500">
-              Linux x86_64: the archive and its checksum — verify with <code className="text-slate-400">sha256sum -c {CHECKSUM_FILE}</code>. Or pick another <a href="/download/" className="text-blue-400 hover:text-blue-300">platform</a>
+              Linux x86_64: the archive and its checksum — verify with:
+            </p>
+            <CommandLine command={VERIFY_COMMAND} className="mt-2" codeClassName="text-slate-400" />
+            <p className="mt-2 text-sm text-slate-500">
+              Or pick another <a href="/download/" className="text-blue-400 hover:text-blue-300">platform</a>
             </p>
           </motion.div>
         </div>
       </div>
     </section>
+  )
+}
+
+/** A one-line shell command that scrolls horizontally on narrow screens, with a copy button. */
+function CommandLine({
+  command,
+  className = '',
+  codeClassName = 'text-emerald-400',
+}: {
+  command: string
+  className?: string
+  codeClassName?: string
+}) {
+  return (
+    <div className={`mx-auto flex max-w-full items-center gap-3 bg-slate-950/80 backdrop-blur-sm border border-slate-800 rounded-lg px-4 sm:px-6 py-3 w-fit ${className}`}>
+      <span className="text-slate-500 flex-shrink-0">$</span>
+      <code className={`${codeClassName} font-mono text-xs sm:text-sm overflow-x-auto whitespace-nowrap`}>{command}</code>
+      <button
+        className="text-slate-500 hover:text-white transition-colors flex-shrink-0"
+        aria-label="Copy the command"
+        onClick={() => navigator.clipboard.writeText(command)}
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      </button>
+    </div>
   )
 }
