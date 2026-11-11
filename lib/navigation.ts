@@ -39,6 +39,7 @@ export const moduleNav: NavItem[] = [
 /** Supporting material. Header dropdown + footer column. */
 export const resourceNav: NavItem[] = [
   { label: 'Examples', href: '/examples/' },
+  { label: 'Benchmarks', href: '/benchmarks/' },
   { label: 'Security', href: '/security/' },
   { label: 'FAQ', href: '/faq/' },
   { label: 'License', href: '/terms/' },

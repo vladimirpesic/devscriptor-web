@@ -31,6 +31,7 @@ import {
   ShieldCheck,
   Sparkles,
   Terminal,
+  Trophy,
   Webhook,
   Workflow,
 } from 'lucide-react'
@@ -1778,7 +1779,8 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
             <h2 className="mb-4 text-3xl font-bold text-white">Better together</h2>
             <p className="mb-8 text-slate-400">
               Rusta drives the model. Devscriptor gives it a map of your codebase. Install both and
-              the agent starts with 75 code-intelligence tools within reach.
+              the agent starts with 75 code-intelligence tools within reach. Together they resolved
+              75–81% of SWE-bench Multilingual with Kimi, GLM and DeepSeek models.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
@@ -1794,6 +1796,13 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
               >
                 <Layers className="h-4 w-4" />
                 Explore the 75 MCP Tools
+              </a>
+              <a
+                href="/benchmarks/"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-700"
+              >
+                <Trophy className="h-4 w-4" />
+                See the Benchmark
               </a>
             </div>
           </div>

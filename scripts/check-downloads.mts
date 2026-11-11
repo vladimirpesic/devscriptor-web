@@ -1,5 +1,5 @@
 /**
- * Pre-deploy gate: every download and source link the site generates must be live.
+ * Pre-deploy gate: every download, source and data link the site generates must be live.
  *
  * This imports the *real* `getReleaseInfo()` from lib/github.ts rather than
  * re-deriving the URLs. That matters: a checker with its own copy of the naming
@@ -16,6 +16,7 @@
 
 import { readFileSync, existsSync } from 'node:fs'
 import { PRODUCTS, getReleaseInfo, licenseUrl, repoUrl, type ProductId } from '../lib/github.ts'
+import { BENCHMARK_ARCHIVE } from '../lib/benchmarks.ts'
 import { supportNav } from '../lib/support.ts'
 
 const TIMEOUT_MS = 15_000
@@ -151,6 +152,16 @@ async function main() {
     console.log()
   }
 
+  // The archive the benchmarks page offers, and its checksum.
+  console.log('  Benchmark data')
+  const data = await Promise.all([
+    head(BENCHMARK_ARCHIVE.url),
+    head(BENCHMARK_ARCHIVE.sha256Url),
+  ])
+  links += data.length
+  failed += report(data)
+  console.log()
+
   // Polar Checkout Links of the optional support. Same gate: a broken one
   // blocks deploy.
   console.log('  Support links (Polar)')
@@ -161,11 +172,12 @@ async function main() {
   if (failed > 0) {
     console.error(`  ❌ ${failed} link(s) are broken. Refusing to deploy.`)
     console.error(`     Downloads: fix the version in lib/github.ts or publish the release.`)
+    console.error(`     Benchmark: upload the archive named in lib/benchmarks.ts to its release.`)
     console.error(`     Support:   confirm the Polar product is still published.\n`)
     process.exit(1)
   }
 
-  console.log(`  ✅ All ${links} release and source links + ${support.length} support links are live.\n`)
+  console.log(`  ✅ All ${links} release, source and data links + ${support.length} support links are live.\n`)
 }
 
 main().catch((err) => {

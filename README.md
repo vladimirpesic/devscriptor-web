@@ -26,6 +26,8 @@ fonts are downloaded at build time and served with the site.
 - `lib/licensing.ts`: the license, as every page states it.
 - `lib/navigation.ts`: the header and footer links.
 - `lib/support.ts`: the optional support links.
+- `lib/benchmarks.ts`: every figure on the benchmarks page, and the archive of
+  predictions, reports and trajectories behind them.
 
 ## Publishing
 
@@ -37,6 +39,10 @@ After a product's release is published on GitHub, set its version in
 `lib/github.ts`. `check:downloads` fails while any archive or `.sha256` of that
 version is missing, and warns when a sibling checkout's `Cargo.toml` holds
 another version.
+
+The benchmarks page's archive and its `.sha256` are files of this repository's
+`swe-bench-multilingual` release, named in `lib/benchmarks.ts`;
+`check:downloads` fails while either is missing.
 
 Old addresses keep working: `/juggler/` leads to `/rusta/`, `/commercial-license/`
 to `/terms/`, and `/license-confirmed/` to `/thank-you/`.
