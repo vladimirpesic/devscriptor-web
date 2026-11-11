@@ -30,7 +30,7 @@ export const PRODUCTS: Record<ProductId, ProductSpec> = {
   rusta: {
     id: 'rusta',
     name: 'Rusta',
-    version: '1.0.0',
+    version: '1.0.1',
     binary: 'rusta',
     repo: 'vladimirpesic/rusta',
   },

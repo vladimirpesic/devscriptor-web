@@ -141,7 +141,7 @@ const harness = [
   {
     icon: ShieldCheck,
     title: 'Permissions and guardrails',
-    desc: 'Three modes — default, accept_edits, bypass_permissions — and ordered rules, the first match winning; a compound shell command is matched per segment. Writes to secrets (.env*, .ssh/, *.key, *.pem, …) and git push, reset, rebase, checkout -f and clean -f ask in every mode, --yes included.',
+    desc: 'Three modes — default, accept_edits, bypass_permissions — and ordered rules, the first match winning; a compound shell command is matched per segment. Writes to secrets (.env*, .ssh/, *.key, *.pem, …) and git push, reset, rebase, checkout -f and clean -f ask in every mode, --yes included. No command, hook or MCP server Rusta starts sees the variables it reads its API keys from.',
   },
   {
     icon: AlertTriangle,
