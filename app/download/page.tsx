@@ -330,7 +330,7 @@ cargo build --release -p devscriptor-cli       # target/release/devscriptor`}</c
               <h3 className="flex items-center gap-2 font-semibold text-white">
                 <Github className="h-4 w-4" /> Or build from source
               </h3>
-              <p className="mt-2 text-sm text-slate-400">With Rust 1.88 or newer:</p>
+              <p className="mt-2 text-sm text-slate-400">With Rust 1.89 or newer:</p>
               <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
                 <code>{`git clone ${repoUrl('rusta')}.git && cd rusta
 cargo build --release -p rusta-cli                  # target/release/rusta

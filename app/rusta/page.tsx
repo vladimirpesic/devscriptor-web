@@ -1770,7 +1770,7 @@ action  = "allow"`}</code>
 
             <div className="mx-auto mt-8 max-w-3xl rounded-lg border border-slate-800 bg-slate-950 p-6">
               <h3 className="font-semibold text-white">Or build from source</h3>
-              <p className="mt-2 text-sm text-slate-400">With Rust 1.88 or newer:</p>
+              <p className="mt-2 text-sm text-slate-400">With Rust 1.89 or newer:</p>
               <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
                 <code>{`git clone https://github.com/vladimirpesic/rusta.git && cd rusta
 cargo build --release -p rusta-cli                  # target/release/rusta
