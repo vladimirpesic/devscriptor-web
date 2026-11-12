@@ -454,7 +454,9 @@ export default function MCPToolsPage() {
                 your PATH with <code className="text-slate-300">args: [&quot;mcp&quot;]</code>. It serves all
                 75 tools over JSON-RPC on stdio — there is no network port. The clients of one
                 workspace share one server process, through a local socket: one index, watcher,
-                embedding model and set of language servers.
+                embedding model and set of language servers. On connecting, the server tells the
+                model which tools to start with, which matters most to a client that loads tools
+                on demand.
               </p>
             </div>
 

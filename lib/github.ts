@@ -23,7 +23,7 @@ export const PRODUCTS: Record<ProductId, ProductSpec> = {
   devscriptor: {
     id: 'devscriptor',
     name: 'Devscriptor',
-    version: '1.0.4',
+    version: '1.0.5',
     binary: 'devscriptor',
     repo: 'vladimirpesic/devscriptor',
   },
