@@ -10,6 +10,7 @@ import {
   BENCHMARK_ARCHIVE,
   LANGUAGE_RESULTS,
   LEADERBOARD,
+  LEFTOVER_READS,
   MODEL_RESULTS,
   MULTILINGUAL,
   OVERLAP,
@@ -54,15 +55,6 @@ const millions = (n: number) => `${(n / 1e6).toFixed(n >= 1e8 ? 0 : 1)} M`
 const points = (tasks: number) => ((100 * tasks) / MULTILINGUAL.tasks).toFixed(1)
 
 const byId = Object.fromEntries(MODEL_RESULTS.map((m) => [m.id, m])) as Record<BenchmarkModelId, ModelResult>
-
-// Which runs read the leftovers of the warm-up's test run (see "The warm-up's
-// leftovers"), and how many of those were resolved: counted from the
-// trajectories in the archive.
-const LEFTOVER_READS: Record<BenchmarkModelId, { runs: number; resolved: number }> = {
-  deepseek: { runs: 21, resolved: 18 },
-  glm: { runs: 12, resolved: 10 },
-  kimi: { runs: 11, resolved: 9 },
-}
 
 const RESCORE = `base=${BENCHMARK_ARCHIVE.url.slice(0, BENCHMARK_ARCHIVE.url.lastIndexOf('/'))}
 curl -LO $base/${BENCHMARK_ARCHIVE.name}
@@ -519,18 +511,19 @@ export default function BenchmarksPage() {
               </SetupCard>
               <SetupCard icon={AlertTriangle} title="The warm-up’s leftovers">
                 <p>
-                  The build-and-test step left its reports and caches in the environment, such as
-                  Maven’s surefire reports and PHPUnit’s result cache. They name the existing tests
-                  that the scoring runs, which hints at where the fix belongs.
+                  The build-and-test step left its reports, caches and logs in the environment, such
+                  as Maven’s surefire reports, PHPUnit’s result cache and, in the Go tasks, the
+                  tests’ output in Go’s build cache. They name the existing tests that the scoring
+                  runs, which hints at where the fix belongs.
                 </p>
                 <p>
-                  Some runs read them: DeepSeek {LEFTOVER_READS.deepseek.runs} (
+                  Some runs named them in a tool call: DeepSeek {LEFTOVER_READS.deepseek.runs} (
                   {LEFTOVER_READS.deepseek.resolved} resolved), GLM {LEFTOVER_READS.glm.runs} (
                   {LEFTOVER_READS.glm.resolved}) and Kimi {LEFTOVER_READS.kimi.runs} (
-                  {LEFTOVER_READS.kimi.resolved}). Even if every one of those resolutions came from
-                  the hint, the rates would fall by at most {points(LEFTOVER_READS.deepseek.resolved)},{' '}
-                  {points(LEFTOVER_READS.glm.resolved)} and {points(LEFTOVER_READS.kimi.resolved)}{' '}
-                  percentage points.
+                  {LEFTOVER_READS.kimi.resolved}), over {LEFTOVER_READS.tasks} tasks. Even if every
+                  one of those resolutions came from the hint, the rates would fall by at most{' '}
+                  {points(LEFTOVER_READS.deepseek.resolved)}, {points(LEFTOVER_READS.glm.resolved)}{' '}
+                  and {points(LEFTOVER_READS.kimi.resolved)} percentage points.
                 </p>
               </SetupCard>
             </div>

@@ -208,6 +208,18 @@ export const WITHOUT_SENTENCE = {
   ] as SentenceCheckRow[],
 }
 
+/**
+ * The full run's runs whose tool calls named what the warm-up's test run left in the image
+ * (test reports and caches, test logs, the tests' output in Go's build cache), and how many
+ * of them were resolved. They are of `tasks` tasks.
+ */
+export const LEFTOVER_READS: { tasks: number } & Record<BenchmarkModelId, { runs: number; resolved: number }> = {
+  tasks: 47,
+  deepseek: { runs: 35, resolved: 26 },
+  glm: { runs: 13, resolved: 11 },
+  kimi: { runs: 13, resolved: 9 },
+}
+
 /** The official leaderboard's Multilingual entries, all run with the same minimal agent. */
 export const LEADERBOARD: { url: string; agent: string; dated: string; entries: LeaderboardEntry[] } = {
   url: 'https://www.swebench.com/',
