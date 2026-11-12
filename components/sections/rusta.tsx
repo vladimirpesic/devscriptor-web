@@ -34,7 +34,7 @@ const pillars = [
   {
     icon: Server,
     title: 'Devscriptor, auto-wired',
-    desc: 'Detects your Devscriptor install and registers its 75 MCP tools on first run, loaded on demand so they do not crowd the context. Zero configuration.',
+    desc: 'Detects your Devscriptor install and registers its 75 MCP tools on first run: the twelve it uses most are at hand from the first request, and the rest load on demand so they do not crowd the context. Zero configuration.',
   },
   {
     icon: KeyRound,

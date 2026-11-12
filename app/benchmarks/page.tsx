@@ -14,6 +14,7 @@ import {
   MULTILINGUAL,
   OVERLAP,
   TASK_PROMPT,
+  WITHOUT_SENTENCE,
   type BenchmarkModelId,
   type ModelResult,
 } from '@/lib/benchmarks'
@@ -513,7 +514,7 @@ export default function BenchmarksPage() {
                 <p>
                   An earlier smoke test ran 8 of the tasks with a prompt that did not mention
                   Devscriptor. Those tasks were run again with the final prompt, and only the new
-                  results count.
+                  results count. The earlier runs are compared below, and are in the archive.
                 </p>
               </SetupCard>
               <SetupCard icon={AlertTriangle} title="The warm-up’s leftovers">
@@ -608,6 +609,61 @@ export default function BenchmarksPage() {
                 (DeepSeek, GLM, Kimi). The two groups are not alike: the runs without a Devscriptor
                 call needed fewer model requests, which suggests easier tasks. What Devscriptor adds
                 is measured by running the same tasks without it.
+              </p>
+            </div>
+
+            <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="border-b border-slate-800 px-4 py-3">
+                <h3 className="text-sm font-semibold text-white">Without the prompt’s sentence</h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  The smoke test’s {WITHOUT_SENTENCE.tasks} tasks, one in each of eight languages,
+                  run by the three models with Devscriptor {MULTILINGUAL.devscriptor}:{' '}
+                  {WITHOUT_SENTENCE.runs} runs a row.
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap text-xs sm:text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-left">
+                      <th className="p-3 font-semibold text-slate-500">Rusta</th>
+                      <th className="p-3 font-semibold text-slate-500">Prompt</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Runs using it</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Calls</th>
+                      <th className="p-3 font-semibold text-slate-500">DeepSeek · GLM · Kimi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {WITHOUT_SENTENCE.rows.map((row, i) => (
+                      <tr key={row.folder ?? 'full-run'} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
+                        <td className="p-3 text-white">{row.rusta}</td>
+                        <td className="p-3 text-slate-300">
+                          {row.sentence ? 'With the sentence (the full run)' : 'Without the sentence'}
+                        </td>
+                        <td className="p-3 text-right text-slate-300">
+                          {row.using} of {WITHOUT_SENTENCE.runs}
+                        </td>
+                        <td className="p-3 text-right text-slate-300">{row.calls}</td>
+                        <td className="p-3">
+                          {MODEL_RESULTS.map((m, j) => (
+                            <span key={m.id}>
+                              {j > 0 && <span className="text-slate-600"> · </span>}
+                              <span className={TONES[m.id].text}>{row.byModel[m.id].using}</span>
+                            </span>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                Rusta 1.0.0 loads every Devscriptor tool on demand, and without the sentence the
+                models mostly searched with grep and read files instead, which is why the full run’s
+                prompt has it. Rusta 1.0.1 takes its place: Devscriptor’s twelve most-used tools are
+                in the tool table from the first request, and a reminder to start with them comes
+                with the first prompt. The models then made about as many Devscriptor calls as with
+                the sentence, in somewhat fewer runs. Eight tasks are too few to compare resolution
+                rates; the archive holds these runs in full.
               </p>
             </div>
           </div>
@@ -723,6 +779,10 @@ export default function BenchmarksPage() {
                     time.
                   </li>
                   <li>The prompt and the Rusta configuration every run used.</li>
+                  <li>
+                    The smoke test’s runs without the prompt’s sentence, with Rusta 1.0.0 and 1.0.1,
+                    laid out the same way, with the prompt each task got.
+                  </li>
                   <li>
                     In a few runs the agent printed its environment, which held the provider’s API
                     key. Each such key is replaced with [REDACTED]; nothing else is changed.

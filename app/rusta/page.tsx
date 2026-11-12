@@ -102,7 +102,7 @@ const harness = [
   {
     icon: Layers,
     title: 'Progressive tool disclosure',
-    desc: 'A large MCP server does not flood the tool table. A server with more than ten tools is deferred: announced by name and description, and loaded with select_tools when the model needs it. deferred = true/false on a server, or default_deferred under [mcp], overrides the rule.',
+    desc: 'A large MCP server does not flood the tool table. A server with more than ten tools is deferred: announced by name and description, and loaded with select_tools when the model needs it — except the tools its preload list keeps in the table, which the model holds from the first request. deferred = true/false on a server, or default_deferred under [mcp], overrides the rule.',
   },
   {
     icon: Brain,
@@ -1416,14 +1416,23 @@ scope  = "session"`}</code>
             <div className="mt-6 flex items-start gap-3 rounded-xl border border-violet-500/20 bg-violet-500/5 p-5">
               <Layers className="mt-0.5 h-5 w-5 flex-shrink-0 text-violet-400" />
               <p className="text-sm text-slate-300">
-                <span className="font-medium text-white">Loaded on demand, used well.</span>{' '}
-                Devscriptor&apos;s 75 tools would swamp a tool table, so they are deferred and loaded
-                with <code className="text-slate-400">select_tools</code> when needed. With
-                Devscriptor connected, the system prompt carries its workflow — index first, search
-                and navigate with it, record durable notes in the Context Graph — and the{' '}
+                <span className="font-medium text-white">The main tools at hand, the rest on demand.</span>{' '}
+                Devscriptor&apos;s 75 tools would swamp a tool table, so Rusta keeps the twelve that
+                find and follow code there — search, definitions and references, relationships, the
+                index&apos;s state and the Context Graph — and loads the rest with{' '}
+                <code className="text-slate-400">select_tools</code> when needed. With Devscriptor
+                connected, the system prompt carries its workflow — find code with it before grep,
+                index first, record durable notes in the Context Graph — each conversation&apos;s
+                first prompt comes with a reminder to start with it, and the{' '}
                 <code className="text-slate-400">explore</code> and{' '}
                 <code className="text-slate-400">plan</code> sub-agents get its read-only tools, so
-                the agents that research code search it with Devscriptor too.
+                the agents that research code search it with Devscriptor too. A model reaches first
+                for the tools it holds and for what comes with its task: on{' '}
+                <a href="/benchmarks/" className="text-cyan-400 hover:text-cyan-300">
+                  eight benchmark tasks
+                </a>{' '}
+                run by three models, Devscriptor was called in 5 of 24 runs with every tool behind a
+                loading step, and in 19 with the main tools at hand and the reminder.
               </p>
             </div>
           </div>

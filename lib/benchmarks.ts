@@ -50,6 +50,20 @@ export interface LeaderboardEntry {
   resolved: number
 }
 
+/** Runs of the smoke test's tasks with and without the prompt's sentence about Devscriptor. */
+export interface SentenceCheckRow {
+  /** The runs' folder under comparison/ in the archive; null for the full run's own runs. */
+  folder: string | null
+  rusta: string
+  /** Whether the prompt asked the model to use Devscriptor. */
+  sentence: boolean
+  /** Runs that called Devscriptor at least once. */
+  using: number
+  calls: number
+  resolved: number
+  byModel: Record<BenchmarkModelId, { using: number; calls: number }>
+}
+
 export const MULTILINGUAL = {
   dataset: 'SWE-bench/SWE-bench_Multilingual',
   datasetUrl: 'https://huggingface.co/datasets/SWE-bench/SWE-bench_Multilingual',
@@ -155,6 +169,45 @@ export const OVERLAP = {
   only: { deepseek: 9, glm: 7, kimi: 2 },
 }
 
+/**
+ * Devscriptor's use on the smoke test's tasks, each run by every model, with Rusta 1.0.0
+ * and 1.0.1 and a prompt that does not mention Devscriptor, beside the full run's runs of
+ * the same tasks, whose prompt does.
+ */
+export const WITHOUT_SENTENCE = {
+  tasks: 8,
+  runs: 24,
+  rows: [
+    {
+      folder: 'rusta-1.0.0-without-sentence',
+      rusta: '1.0.0',
+      sentence: false,
+      using: 5,
+      calls: 15,
+      resolved: 17,
+      byModel: { deepseek: { using: 3, calls: 12 }, glm: { using: 2, calls: 3 }, kimi: { using: 0, calls: 0 } },
+    },
+    {
+      folder: null,
+      rusta: '1.0.0',
+      sentence: true,
+      using: 23,
+      calls: 50,
+      resolved: 16,
+      byModel: { deepseek: { using: 7, calls: 10 }, glm: { using: 8, calls: 19 }, kimi: { using: 8, calls: 21 } },
+    },
+    {
+      folder: 'rusta-1.0.1-without-sentence',
+      rusta: '1.0.1',
+      sentence: false,
+      using: 19,
+      calls: 49,
+      resolved: 18,
+      byModel: { deepseek: { using: 6, calls: 13 }, glm: { using: 6, calls: 17 }, kimi: { using: 7, calls: 19 } },
+    },
+  ] as SentenceCheckRow[],
+}
+
 /** The official leaderboard's Multilingual entries, all run with the same minimal agent. */
 export const LEADERBOARD: { url: string; agent: string; dated: string; entries: LeaderboardEntry[] } = {
   url: 'https://www.swebench.com/',
@@ -204,5 +257,5 @@ export const BENCHMARK_ARCHIVE = {
   name: 'rusta-devscriptor-swe-bench-multilingual.tar.gz',
   url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz`,
   sha256Url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz.sha256`,
-  sizeMb: 53,
+  sizeMb: 56,
 }
