@@ -269,5 +269,5 @@ export const BENCHMARK_ARCHIVE = {
   name: 'rusta-devscriptor-swe-bench-multilingual.tar.gz',
   url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz`,
   sha256Url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz.sha256`,
-  sizeMb: 56,
+  sizeMb: 67,
 }

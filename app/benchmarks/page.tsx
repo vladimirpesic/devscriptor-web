@@ -778,7 +778,7 @@ export default function BenchmarksPage() {
                   </li>
                   <li>
                     In a few runs the agent printed its environment, which held the provider’s API
-                    key. Each such key is replaced with [REDACTED]; nothing else is changed.
+                    key. Each such key is replaced with [REDACTED]; nothing else is redacted.
                   </li>
                 </ul>
                 <div>
