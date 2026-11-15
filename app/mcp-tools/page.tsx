@@ -396,8 +396,9 @@ export default function MCPToolsPage() {
                   Core tools operate on the local SQLite knowledge graph built by{' '}
                   <code className="text-slate-300">devscriptor scan</code> or{' '}
                   <code className="text-slate-300">scan_codebase</code>, and need no language
-                  server. The ones that answer from the index first check the files they name
-                  against the disk, and re-index those that changed.
+                  server. The ones that answer from the index, the analyses of the whole index
+                  included, first wait for the watcher, then check the files they name against
+                  the disk and re-index those that changed.
                 </p>
                 {coreSections.map((section) => (
                   <CategorySection key={section.key} title={section.title} category={section.key} tools={section.tools} />
@@ -411,8 +412,10 @@ export default function MCPToolsPage() {
                   LSP tools proxy live language-server features. A call goes to the server for the
                   file&apos;s language, which starts on first use — or in the background once{' '}
                   <code className="text-slate-300">lsp_arch_detect</code> finds its language — and
-                  stops after 10 minutes unused. Positions are 0-based, and every result with one
-                  carries a 1-based <code className="text-slate-300">cite</code> to quote. Missing
+                  stops after 10 minutes unused. Before each call the server is brought up to date
+                  with the disk: the files it holds open that changed are sent again, and it hears
+                  of the others the index found changed. Positions are 0-based, and every result
+                  with one carries a 1-based <code className="text-slate-300">cite</code> to quote. Missing
                   servers are installed with the Architecture tools or{' '}
                   <code className="text-slate-300">devscriptor lsp setup</code>.
                 </p>

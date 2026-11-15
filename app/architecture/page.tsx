@@ -79,7 +79,7 @@ const modules = [
       { icon: Layers, name: 'LSP Tools', desc: '38 Tools', detail: 'Navigation, completion, diagnostics, refactoring' },
       { icon: Settings, name: 'Architecture Tools', desc: '5 Tools', detail: 'LSP detection, prerequisite checks, setup' },
       { icon: Workflow, name: 'Shared Server', desc: 'One per workspace', detail: 'devscriptor mcp relays its stdio to devscriptor serve over a local socket (a named pipe on Windows): one index, watcher, model and set of language servers — no network port' },
-      { icon: RefreshCw, name: 'Freshness Check', desc: 'At query time', detail: 'An answer re-indexes the changed files it names first, waiting up to 250 ms' },
+      { icon: RefreshCw, name: 'Freshness Check', desc: 'At query time', detail: 'An answer waits for the watcher, then re-indexes the changed files it names, waiting up to 250 ms' },
     ],
   },
   {

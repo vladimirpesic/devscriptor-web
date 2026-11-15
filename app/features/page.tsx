@@ -108,11 +108,12 @@ const features = [
   {
     icon: ListFilter,
     title: 'Incremental & Real-time',
-    description: 'Re-scans only what changed via an mtime+size fast path, a watcher keeps the graph current as you code, and every MCP answer re-checks the files it names.',
+    description: 'Re-scans only what changed via an mtime+size fast path, a watcher keeps the graph current as you code, and every MCP answer waits for it and re-checks the files it names.',
     details: [
       'mtime+size fast-path, XXH3 content hashing',
       'Only changed files are re-parsed',
       'A watcher in devscriptor watch and in every MCP server',
+      'Language servers hear of every change on disk',
       'Content-hash embedding cache skips re-inference',
     ],
     accent: 'text-pink-400',
