@@ -102,7 +102,7 @@ const harness = [
   {
     icon: Layers,
     title: 'Progressive tool disclosure',
-    desc: 'A large MCP server does not flood the tool table. A server with more than ten tools is deferred: announced by name and description, and loaded with select_tools when the model needs it — except the tools its preload list keeps in the table, which the model holds from the first request. deferred = true/false on a server, or default_deferred under [mcp], overrides the rule.',
+    desc: 'A large MCP server does not flood the tool table. A server with more than ten tools is deferred: announced by name and the first sentence or clause of its description, and loaded with select_tools when the model needs it — except the tools its preload list keeps in the table, which the model holds from the first request. deferred = true/false on a server, or default_deferred under [mcp], overrides the rule.',
   },
   {
     icon: Brain,
@@ -1417,13 +1417,15 @@ scope  = "session"`}</code>
               <Layers className="mt-0.5 h-5 w-5 flex-shrink-0 text-violet-400" />
               <p className="text-sm text-slate-300">
                 <span className="font-medium text-white">The main tools at hand, the rest on demand.</span>{' '}
-                Devscriptor&apos;s 75 tools would swamp a tool table, so Rusta keeps the twelve that
-                find and follow code there — search, definitions and references, relationships, the
-                index&apos;s state and the Context Graph — and loads the rest with{' '}
+                Devscriptor&apos;s 75 tools would swamp a tool table, so Rusta keeps the six that
+                find code there — the searches, a file&apos;s summary, an entity and a symbol&apos;s
+                references — and loads the rest with{' '}
                 <code className="text-slate-400">select_tools</code> when needed. With Devscriptor
                 connected, the system prompt carries its workflow — find code with it before grep,
-                index first, record durable notes in the Context Graph — each conversation&apos;s
-                first prompt comes with a reminder to start with it, and the{' '}
+                quote the language servers&apos; positions as given, record durable notes in the
+                Context Graph — kept short, since it goes with every request: Devscriptor itself
+                says when the workspace is not indexed and which notes match a search. Each
+                conversation&apos;s first prompt comes with a reminder to start with it, and the{' '}
                 <code className="text-slate-400">explore</code> and{' '}
                 <code className="text-slate-400">plan</code> sub-agents get its read-only tools, so
                 the agents that research code search it with Devscriptor too. A model reaches first
