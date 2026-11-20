@@ -8,6 +8,7 @@ import { VendorTabs, type VendorId } from '@/components/vendor-tabs'
 import { RustaLogo } from '@/components/rusta-logo'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { REQUEST_TOKENS } from '@/lib/benchmarks'
 import { RUSTA_VERSION, repoUrl } from '@/lib/github'
 import { LICENSE_BADGE, LICENSE_SPDX, LICENSE_SUMMARY, RUSTA_NOT_AFFILIATED } from '@/lib/licensing'
 import {
@@ -117,12 +118,12 @@ const harness = [
   {
     icon: Gauge,
     title: 'Turns that hand the work back',
-    desc: 'max_turns (--max-turns, RUSTA_MAX_TURNS; default 100) caps a turn’s model round-trips. When it, or the repeated-call guard, stops a turn, the model gets one more step, with tools refused, to say what it completed, what is blocked and what comes next. The result carries a stop_reason.',
+    desc: 'max_turns (--max-turns, RUSTA_MAX_TURNS; default 100) caps a turn’s model round-trips. When it, or the repeated-call guard, stops a turn, the model gets one more step, with tools refused, to say what it completed, what is blocked and what comes next. The result carries a stop_reason. A command you stop with its turn answers with what it had printed by then.',
   },
   {
     icon: Network,
     title: 'Sub-agents and swarms',
-    desc: 'agent delegates to a sub-agent, and agent_swarm runs many at once — only when you ask for delegation, and swarms only in swarm mode, which you turn on. Delegation nests one level unless max_subagent_depth raises it. Each sub-agent keeps an agent_id and its records, so one that stopped, failed or ran past its deadline can be resumed.',
+    desc: 'agent delegates to a sub-agent, and agent_swarm runs many at once — only when you ask for delegation, and swarms only in swarm mode, which you turn on. Delegation nests one level unless max_subagent_depth raises it. Each sub-agent keeps an agent_id and its records, so one that stopped, failed or ran past its deadline can be resumed, and its result hands back its last message: the work it did not finish is not lost.',
   },
   {
     icon: Boxes,
@@ -152,7 +153,7 @@ const harness = [
   {
     icon: KeyRound,
     title: 'Workspace trust',
-    desc: 'A cloned repository’s .rusta.toml cannot start MCP servers, redirect requests or your key, loosen permissions or reach outside the folder until you trust it, and cannot declare hooks at all. An interactive session lists those settings and asks; a headless run leaves them out and says so. rusta trust trusts a folder ahead of time.',
+    desc: 'A cloned repository’s .rusta.toml cannot start MCP servers, redirect requests or your key, loosen permissions or reach outside the folder until you trust it, and cannot declare hooks at all. An interactive session lists those settings and asks; a headless run leaves them out and says so. rusta trust trusts a folder ahead of time. Nor does the folder run a program unasked: the git context a sub-agent starts with is read by a git outside the folder, with the repository’s core.fsmonitor command off.',
   },
   {
     icon: Workflow,
@@ -1413,29 +1414,96 @@ scope  = "session"`}</code>
               </Card>
             </div>
 
-            <div className="mt-6 flex items-start gap-3 rounded-xl border border-violet-500/20 bg-violet-500/5 p-5">
-              <Layers className="mt-0.5 h-5 w-5 flex-shrink-0 text-violet-400" />
-              <p className="text-sm text-slate-300">
-                <span className="font-medium text-white">The main tools at hand, the rest on demand.</span>{' '}
-                Devscriptor&apos;s 75 tools would swamp a tool table, so Rusta keeps the six that
-                find code there — the searches, a file&apos;s summary, an entity and a symbol&apos;s
-                references — and loads the rest with{' '}
-                <code className="text-slate-400">select_tools</code> when needed. With Devscriptor
-                connected, the system prompt carries its workflow — find code with it before grep,
-                quote the language servers&apos; positions as given, record durable notes in the
-                Context Graph — kept short, since it goes with every request: Devscriptor itself
-                says when the workspace is not indexed and which notes match a search. Each
-                conversation&apos;s first prompt comes with a reminder to start with it, and the{' '}
-                <code className="text-slate-400">explore</code> and{' '}
-                <code className="text-slate-400">plan</code> sub-agents get its read-only tools, so
-                the agents that research code search it with Devscriptor too. A model reaches first
-                for the tools it holds and for what comes with its task: on{' '}
-                <a href="/benchmarks/" className="text-cyan-400 hover:text-cyan-300">
-                  eight benchmark tasks
-                </a>{' '}
-                run by three models, Devscriptor was called in 5 of 24 runs with every tool behind a
-                loading step, and in 19 with the main tools at hand and the reminder.
-              </p>
+            <div className="mt-6 rounded-xl border border-violet-500/20 bg-violet-500/5 p-6">
+              <h3 className="mb-4 flex items-center gap-2 font-semibold text-white">
+                <Layers className="h-5 w-5 text-violet-400" />
+                What Devscriptor costs a request
+              </h3>
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div className="space-y-3 text-sm leading-relaxed text-slate-300">
+                  <p>
+                    Devscriptor&apos;s tools and its guidance go with every request the model gets, so
+                    Rusta keeps them small:
+                  </p>
+                  <ul className="list-disc space-y-2 pl-5">
+                    <li>
+                      <span className="font-medium text-white">
+                        Six tools are loaded up front, not twelve
+                      </span>{' '}
+                      — the searches by meaning and by name, a file&apos;s summary, an entity&apos;s
+                      details and a symbol&apos;s references. The other 69 load with{' '}
+                      <code className="text-slate-400">select_tools</code> when a task needs one.
+                    </li>
+                    <li>
+                      <span className="font-medium text-white">
+                        The others are listed by the first clause of their description
+                      </span>
+                      , not the whole of it.
+                    </li>
+                    <li>
+                      <span className="font-medium text-white">The guidance is short.</span> It
+                      carries the workflow — find code with Devscriptor before grep, quote the language
+                      servers&apos; positions as given, record durable notes in the Context Graph — and
+                      leaves the rest to Devscriptor&apos;s answers, which say when the workspace is not
+                      indexed and which notes match a search. So the model scans when an answer says
+                      to, and reads a note when a search lists it, not on every task.
+                    </li>
+                  </ul>
+                  <p className="text-slate-400">
+                    Each conversation&apos;s first prompt comes with a reminder to start with
+                    Devscriptor, and the <code className="text-slate-400">explore</code> and{' '}
+                    <code className="text-slate-400">plan</code> sub-agents get its read-only tools, so
+                    the agents that research code search it too. On eight benchmark tasks run by three
+                    models, Devscriptor was called in 5 of 24 runs with every tool behind a loading
+                    step, and in 19 with its main tools at hand and the reminder.
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    { label: 'Without Devscriptor', tokens: REQUEST_TOKENS.without, bar: 'bg-slate-500' },
+                    {
+                      label: `Rusta ${REQUEST_TOKENS.before.rusta} · Devscriptor ${REQUEST_TOKENS.before.devscriptor}`,
+                      tokens: REQUEST_TOKENS.before.total,
+                      bar: 'bg-rose-400',
+                    },
+                    {
+                      label: `Rusta ${REQUEST_TOKENS.after.rusta} · Devscriptor ${REQUEST_TOKENS.after.devscriptor}`,
+                      tokens: REQUEST_TOKENS.after.total,
+                      bar: 'bg-emerald-400',
+                    },
+                  ].map((row) => (
+                    <div key={row.label}>
+                      <div className="mb-1 flex justify-between gap-4 text-sm">
+                        <span className="text-slate-300">{row.label}</span>
+                        <span className="font-semibold text-white">
+                          {row.tokens.toLocaleString('en-US')}
+                          {row.tokens > REQUEST_TOKENS.without && (
+                            <span className="ml-2 text-xs font-normal text-slate-500">
+                              +{(row.tokens - REQUEST_TOKENS.without).toLocaleString('en-US')}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                        <div
+                          className={`h-full rounded-full ${row.bar}`}
+                          style={{ width: `${(100 * row.tokens) / REQUEST_TOKENS.before.total}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <p className="text-xs leading-relaxed text-slate-500">
+                    Tokens of the first request of a SWE-bench task, counted by DeepSeek. On the
+                    benchmark, Devscriptor did not pay off: DeepSeek found the code as soon without it,
+                    two in five of its calls went where the old guidance sent it on every task, and it cost
+                    more. The{' '}
+                    <a href="/benchmarks/#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                      runs with and without Devscriptor
+                    </a>{' '}
+                    show why, and what these changes did.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1791,7 +1859,12 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
             <p className="mb-8 text-slate-400">
               Rusta drives the model. Devscriptor gives it a map of your codebase. Install both and
               the agent starts with 75 code-intelligence tools within reach. Together they resolved
-              75–81% of SWE-bench Multilingual with Kimi, GLM and DeepSeek models.
+              75–81% of SWE-bench Multilingual with Kimi, GLM and DeepSeek models. Run without
+              Devscriptor, DeepSeek resolved as many of those tasks;{' '}
+              <a href="/benchmarks/#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                the benchmark page
+              </a>{' '}
+              shows why, and what Devscriptor costs a request now.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
