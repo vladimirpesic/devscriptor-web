@@ -5,6 +5,13 @@ import { BackToTop } from '@/components/back-to-top'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { HelpCircle, Mail, Sparkles } from 'lucide-react'
+import { ARMS, FOLLOW_UPS, LOCATING, MODEL_RESULTS, REQUEST_TOKENS } from '@/lib/benchmarks'
+
+const ARM_MODEL = MODEL_RESULTS.find((m) => m.id === ARMS.model)?.name
+const [WITH, WITHOUT] = [true, false].map((d) => ARMS.rows.find((r) => r.devscriptor === d)!)
+const LEAN = FOLLOW_UPS[0]
+const thousands = (n: number) => n.toLocaleString('en-US')
+const ordinal = (n: number) => ['', 'first', 'second', 'third'][n] ?? `${n}th`
 
 export const metadata: Metadata = {
   title: 'FAQ - Devscriptor',
@@ -75,6 +82,11 @@ const faqs = [
   {
     question: 'Do I need Rusta to use Devscriptor?',
     answer: 'No. Devscriptor works with any MCP client — Claude Desktop, Claude Code, Cursor, Cline and others. Rusta is one such client, built to use it well, and Rusta works without Devscriptor too.',
+    category: 'Rusta',
+  },
+  {
+    question: 'Does Devscriptor make an agent resolve more issues?',
+    answer: `Not on SWE-bench Multilingual. Run side by side by Rusta on all ${ARMS.tasks} tasks, ${ARM_MODEL} resolved ${WITH.resolved} with Devscriptor and ${WITHOUT.resolved} without it, a gap within chance, and the runs with it cost more. There, finding the code was not the hard part: the model named a file the fix changes by its ${ordinal(Math.max(...LOCATING.rows.map((r) => r.medianStep)))} request either way, and every request carried Devscriptor’s tools and guidance. Rusta ${REQUEST_TOKENS.after.rusta} and Devscriptor ${REQUEST_TOKENS.after.devscriptor} cut what Devscriptor adds to a request from ${thousands(REQUEST_TOKENS.before.total - REQUEST_TOKENS.without)} tokens to ${thousands(REQUEST_TOKENS.after.total - REQUEST_TOKENS.without)}; on ${LEAN.tasks} of the tasks, run again, it then cost about the same as running without it. The benchmarks page has the figures, and the archive every run.`,
     category: 'Rusta',
   },
   {

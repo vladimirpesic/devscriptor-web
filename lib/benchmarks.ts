@@ -261,6 +261,137 @@ references) to find the relevant code before reading files.
 
 Make the smallest change that resolves the issue.`
 
+/** One of DeepSeek V4.1-Flash's two runs of every task, side by side: with Devscriptor or without it. */
+export interface ArmResult {
+  /** The arm's folder under arms/ in the archive. */
+  folder: string
+  devscriptor: boolean
+  resolved: number
+  /** The 95 % Wilson interval of the share resolved. */
+  interval: [number, number]
+  /** Model requests in a task. */
+  steps: { median: number }
+  tokens: { input: number; cached: number; output: number }
+  usd: number
+  /** Runs that called Devscriptor at least once, and its calls. */
+  devscriptorRuns: number
+  devscriptorCalls: number
+  /** Tasks resolved, in the order of LANGUAGE_RESULTS. */
+  byLanguage: number[]
+}
+
+/**
+ * Every task run twice more by DeepSeek V4.1-Flash with Rusta 1.0.1 and a prompt that does not mention
+ * Devscriptor, side by side: with Devscriptor 1.0.5, and without it. `paired` counts the
+ * tasks by which arms resolved them, with the exact McNemar test's p.
+ */
+export const ARMS = {
+  model: 'deepseek' as BenchmarkModelId,
+  rusta: '1.0.1',
+  devscriptor: '1.0.5',
+  tasks: 300,
+  runDates: '12 November 2026',
+  paired: { both: 234, onlyWith: 7, onlyWithout: 11, neither: 48, p: 0.4807 },
+  rows: [
+    {
+      folder: 'with-devscriptor',
+      devscriptor: true,
+      resolved: 241,
+      interval: [0.7546, 0.8444],
+      steps: { median: 44 },
+      tokens: { input: 1056354495, cached: 1041210880, output: 9376557 },
+      usd: 15.13,
+      devscriptorRuns: 274,
+      devscriptorCalls: 591,
+      byLanguage: [26, 9, 28, 40, 31, 36, 33, 38],
+    },
+    {
+      folder: 'without-devscriptor',
+      devscriptor: false,
+      resolved: 245,
+      interval: [0.769, 0.8564],
+      steps: { median: 44.5 },
+      tokens: { input: 870072635, cached: 856665856, output: 8336993 },
+      usd: 13.43,
+      devscriptorRuns: 0,
+      devscriptorCalls: 0,
+      byLanguage: [28, 9, 26, 40, 35, 36, 33, 38],
+    },
+  ] as ArmResult[],
+}
+
+/**
+ * How soon the arms' runs found the code: the first model request whose tool calls named a
+ * source file the fix changes (1 for the first), and the issues that name one themselves.
+ */
+export const LOCATING = {
+  issueNamesFile: 59,
+  tasks: 300,
+  rows: [
+    { folder: 'with-devscriptor', medianStep: 2, atFirst: 57, byThird: 263, never: 0 },
+    { folder: 'without-devscriptor', medianStep: 2, atFirst: 91, byThird: 270, never: 0 },
+  ],
+}
+
+/** The arm with Devscriptor's calls, and those Rusta 1.0.1's guidance asked for whatever the task. */
+export const STANDING_ORDERS = {
+  calls: 591,
+  tools: [['get_statistics', 98], ['search_context', 106], ['get_context_statistics', 8], ['add_context_note', 35]] as [string, number][],
+}
+
+/**
+ * Rusta's first request of a task (jqlang__jq-2235), counted by DeepSeek: without
+ * Devscriptor, and with it before and after the changes that make its share smaller.
+ * `parts` splits Devscriptor's share.
+ */
+export const REQUEST_TOKENS = {
+  without: 11731,
+  before: { rusta: '1.0.1', devscriptor: '1.0.5', total: 18776, preloaded: 12, parts: { toolDefinitions: 2590, toolList: 2321, guidance: 2003, reminder: 131 } },
+  after: { rusta: '1.0.2', devscriptor: '1.0.7', total: 15554, preloaded: 6, parts: { toolDefinitions: 959, toolList: 1548, guidance: 1180, reminder: 136 } },
+}
+
+export interface FollowUpRow {
+  /** The runs' folder under arms/ in the archive. */
+  folder: string
+  resolved: number
+  requests: number
+  input: number
+  output: number
+  /** At DeepSeek's off-peak prices: the runs were made at different hours. */
+  usd: number
+  devscriptorCalls: number
+  contextGraphCalls: number
+}
+
+/**
+ * Tasks run again with the changes of Rusta 1.0.2 and Devscriptor 1.0.7, beside the arms'
+ * runs of the same tasks: every fifth task, then those of them whose runs called the
+ * Context Graph's tools, with Rusta 1.0.2's guidance for it.
+ */
+export const FOLLOW_UPS: { folder: string; tasks: number; runDates: string; rows: FollowUpRow[] }[] = [
+  {
+    folder: 'devscriptor-lean',
+    tasks: 60,
+    runDates: '18–19 November 2026',
+    rows: [
+      { folder: 'without-devscriptor', resolved: 51, requests: 2954, input: 159409643, output: 1616309, usd: 1.836, devscriptorCalls: 0, contextGraphCalls: 0 },
+      { folder: 'with-devscriptor', resolved: 49, requests: 2885, input: 163193247, output: 1646676, usd: 1.886, devscriptorCalls: 115, contextGraphCalls: 26 },
+      { folder: 'devscriptor-lean', resolved: 51, requests: 2674, input: 152389286, output: 1589752, usd: 1.845, devscriptorCalls: 107, contextGraphCalls: 26 },
+    ],
+  },
+  {
+    folder: 'devscriptor-notes',
+    tasks: 18,
+    runDates: '19 November 2026',
+    rows: [
+      { folder: 'without-devscriptor', resolved: 14, requests: 1170, input: 71914777, output: 642643, usd: 0.74, devscriptorCalls: 0, contextGraphCalls: 0 },
+      { folder: 'with-devscriptor', resolved: 14, requests: 1117, input: 71747906, output: 680402, usd: 0.769, devscriptorCalls: 51, contextGraphCalls: 15 },
+      { folder: 'devscriptor-lean', resolved: 14, requests: 1084, input: 70289445, output: 662734, usd: 0.777, devscriptorCalls: 50, contextGraphCalls: 24 },
+      { folder: 'devscriptor-notes', resolved: 13, requests: 1007, input: 65954493, output: 650006, usd: 0.734, devscriptorCalls: 27, contextGraphCalls: 3 },
+    ],
+  },
+]
+
 const RESULTS_RELEASE =
   'https://github.com/vladimirpesic/devscriptor-web/releases/download/swe-bench-multilingual'
 
@@ -269,5 +400,5 @@ export const BENCHMARK_ARCHIVE = {
   name: 'rusta-devscriptor-swe-bench-multilingual.tar.gz',
   url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz`,
   sha256Url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz.sha256`,
-  sizeMb: 68,
+  sizeMb: 122,
 }

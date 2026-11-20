@@ -7,22 +7,31 @@ import { CodeBlock } from '@/components/code-block'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
+  ARMS,
   BENCHMARK_ARCHIVE,
+  FOLLOW_UPS,
   LANGUAGE_RESULTS,
   LEADERBOARD,
   LEFTOVER_READS,
+  LOCATING,
   MODEL_RESULTS,
   MULTILINGUAL,
   OVERLAP,
+  REQUEST_TOKENS,
+  STANDING_ORDERS,
   TASK_PROMPT,
   WITHOUT_SENTENCE,
+  type ArmResult,
   type BenchmarkModelId,
+  type FollowUpRow,
   type ModelResult,
 } from '@/lib/benchmarks'
 import {
   AlertTriangle,
   BarChart3,
   Bot,
+  Columns2,
+  Compass,
   Download,
   FileArchive,
   FlaskConical,
@@ -30,7 +39,10 @@ import {
   Languages,
   ListChecks,
   Lock,
+  Receipt,
+  RefreshCw,
   Scale,
+  Scissors,
   Server,
   Target,
   Trophy,
@@ -39,7 +51,7 @@ import {
 export const metadata: Metadata = {
   title: 'SWE-bench Multilingual Results - Devscriptor',
   description:
-    'Rusta with Devscriptor resolved 81.3% of SWE-bench Multilingual with DeepSeek V4.1-Flash, 78.7% with GLM-5.3 and 75.3% with Kimi K2.8 Preview: 300 real GitHub issues in nine languages, one attempt each, scored by the official harness. Every prediction, report and trajectory is published.',
+    'Rusta with Devscriptor resolved 81.3% of SWE-bench Multilingual with DeepSeek V4.1-Flash, 78.7% with GLM-5.3 and 75.3% with Kimi K2.8 Preview: 300 real GitHub issues in nine languages, one attempt each, scored by the official harness. Run again with and without Devscriptor, DeepSeek resolved about as many tasks either way: why, and what Rusta 1.0.2 and Devscriptor 1.0.7 changed. Every prediction, report and trajectory is published.',
 }
 
 // The vendors' colours, as on the Rusta page.
@@ -51,10 +63,48 @@ const TONES: Record<BenchmarkModelId, { text: string; border: string; bg: string
 
 const pct = (part: number, whole: number, digits = 1) => `${((100 * part) / whole).toFixed(digits)}%`
 const share = (fraction: number) => `${(100 * fraction).toFixed(1)}%`
-const millions = (n: number) => `${(n / 1e6).toFixed(n >= 1e8 ? 0 : 1)} M`
+const millions = (n: number) => {
+  const digits = n >= 1e8 ? 0 : 1
+  return `${(n / 1e6).toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })} M`
+}
 const points = (tasks: number) => ((100 * tasks) / MULTILINGUAL.tasks).toFixed(1)
 
 const byId = Object.fromEntries(MODEL_RESULTS.map((m) => [m.id, m])) as Record<BenchmarkModelId, ModelResult>
+
+const thousands = (n: number) => n.toLocaleString('en-US')
+const more = (value: number, base: number) => `${Math.round((100 * (value - base)) / base)}%`
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
+const word = (n: number) => WORDS[n] ?? String(n)
+const ORDINALS = ['', 'first', 'second', 'third', 'fourth', 'fifth']
+const ordinal = (n: number) => ORDINALS[n] ?? `${n}th`
+const capitalized = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+
+// The two arms, how soon their runs found the code, and the calls the guidance asked for.
+const ARM_WITH = ARMS.rows.find((r) => r.devscriptor) as ArmResult
+const ARM_WITHOUT = ARMS.rows.find((r) => !r.devscriptor) as ArmResult
+const ARM_MODEL = byId[ARMS.model]
+const locate = (arm: ArmResult) => LOCATING.rows.find((r) => r.folder === arm.folder) as (typeof LOCATING.rows)[number]
+const ORDERED_CALLS = STANDING_ORDERS.tools.reduce((sum, [, calls]) => sum + calls, 0)
+
+// What Devscriptor adds to the first request, before and after Rusta 1.0.2 and Devscriptor 1.0.7.
+const added = (setup: typeof REQUEST_TOKENS.before) => setup.total - REQUEST_TOKENS.without
+const PARTS: { key: keyof typeof REQUEST_TOKENS.before.parts; label: string }[] = [
+  { key: 'toolDefinitions', label: 'Its tool definitions' },
+  { key: 'toolList', label: 'The list of its other tools' },
+  { key: 'guidance', label: 'The guidance: Rusta’s and Devscriptor’s own' },
+  { key: 'reminder', label: 'The reminder beside the first prompt' },
+]
+
+// The follow-ups: a fifth of the tasks, then those whose runs called the Context Graph.
+const [LEAN, NOTES] = FOLLOW_UPS
+const run = (followUp: (typeof FOLLOW_UPS)[number], folder: string) =>
+  followUp.rows.find((r) => r.folder === folder) as FollowUpRow
+const FOLLOW_UP_LABELS: Record<string, string> = {
+  'without-devscriptor': 'Without Devscriptor',
+  'with-devscriptor': `Rusta ${ARMS.rusta} · Devscriptor ${ARMS.devscriptor}`,
+  'devscriptor-lean': 'Builds of Rusta 1.0.2 · Devscriptor 1.0.7',
+  'devscriptor-notes': 'Rusta 1.0.2 · the Devscriptor build',
+}
 
 const RESCORE = `base=${BENCHMARK_ARCHIVE.url.slice(0, BENCHMARK_ARCHIVE.url.lastIndexOf('/'))}
 curl -LO $base/${BENCHMARK_ARCHIVE.name}
@@ -217,6 +267,15 @@ export default function BenchmarksPage() {
                 </div>
               ))}
             </div>
+            <p className="mx-auto mt-8 max-w-2xl text-sm text-slate-400">
+              Run again with and without Devscriptor, {ARM_MODEL.name} resolved about as many tasks
+              either way.{' '}
+              <a href="#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                Why, and what Rusta {REQUEST_TOKENS.after.rusta} and Devscriptor{' '}
+                {REQUEST_TOKENS.after.devscriptor} changed
+              </a>
+              .
+            </p>
           </div>
         </div>
       </section>
@@ -384,8 +443,12 @@ export default function BenchmarksPage() {
                     <li>
                       <span className="text-slate-300">A different agent.</span> A full coding agent with
                       code intelligence is expected to do better than a minimal one with only a shell.
-                      How much of the gap is Rusta, Devscriptor or the newer models, these runs cannot
-                      tell apart.
+                      How much of the gap is Rusta or the newer models, these runs cannot tell apart;
+                      for DeepSeek, Devscriptor’s share is measured{' '}
+                      <a href="#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                        below
+                      </a>
+                      .
                     </li>
                     <li>
                       <span className="text-slate-300">A generous budget.</span> Reasoning effort{' '}
@@ -600,8 +663,12 @@ export default function BenchmarksPage() {
                   (m) => `${m.devscriptor.resolvedWithout} of ${m.tasks - m.devscriptor.runs}`,
                 ).join(', ')}{' '}
                 (DeepSeek, GLM, Kimi). The two groups are not alike: the runs without a Devscriptor
-                call needed fewer model requests, which suggests easier tasks. What Devscriptor adds
-                is measured by running the same tasks without it.
+                call needed fewer model requests, which suggests easier tasks. Measuring what
+                Devscriptor adds takes the same tasks run without it, which {ARM_MODEL.name} did:{' '}
+                <a href="#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                  see below
+                </a>
+                .
               </p>
             </div>
 
@@ -656,7 +723,426 @@ export default function BenchmarksPage() {
                 in the tool table from the first request, and a reminder to start with them comes
                 with the first prompt. The models then made about as many Devscriptor calls as with
                 the sentence, in somewhat fewer runs. Eight tasks are too few to compare resolution
-                rates; the archive holds these runs in full.
+                rates; the archive holds these runs in full. Rusta {REQUEST_TOKENS.after.rusta} keeps{' '}
+                {word(REQUEST_TOKENS.after.preloaded)} of them, for a smaller share of each request
+                (below).
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* With and without Devscriptor */}
+      <section id="devscriptor" className="scroll-mt-20 border-t border-slate-900 py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-5xl">
+            <SectionHeading
+              icon={Columns2}
+              badge="With and without"
+              tone="border-amber-500/30 bg-amber-500/20 text-amber-300"
+              title="The same tasks without Devscriptor"
+            >
+              {ARM_MODEL.name} ran every task twice more, side by side: once with Devscriptor and
+              once without it. Without it, the model resolved as many tasks, and spent less.
+            </SectionHeading>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap text-xs sm:text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-left">
+                      <th className="p-3 font-semibold text-slate-500">Arm</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">95% interval</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Input tokens</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Cost</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Devscriptor calls</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[ARM_WITH, ARM_WITHOUT].map((r, i) => (
+                      <tr key={r.folder} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
+                        <td className="p-3 text-white">
+                          {r.devscriptor ? `With Devscriptor ${ARMS.devscriptor}` : 'Without Devscriptor'}
+                        </td>
+                        <td className="p-3 text-right text-slate-300">
+                          {pct(r.resolved, ARMS.tasks)}
+                          <span className="ml-2 text-xs text-slate-500">
+                            {r.resolved}/{ARMS.tasks}
+                          </span>
+                        </td>
+                        <td className="p-3 text-right text-slate-400">
+                          {share(r.interval[0])} – {share(r.interval[1])}
+                        </td>
+                        <td className="p-3 text-right text-slate-300">{millions(r.tokens.input)}</td>
+                        <td className="p-3 text-right text-slate-300">${r.usd.toFixed(2)}</td>
+                        <td className="p-3 text-right text-slate-300">
+                          {r.devscriptor ? `${r.devscriptorCalls}, in ${r.devscriptorRuns} runs` : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                Both arms resolved {ARMS.paired.both} tasks, and neither resolved {ARMS.paired.neither}.
+                Of the {ARMS.paired.onlyWith + ARMS.paired.onlyWithout} tasks only one arm resolved,{' '}
+                {ARMS.paired.onlyWith} went to the arm with Devscriptor and {ARMS.paired.onlyWithout} to
+                the arm without it: a gap well within chance (exact McNemar test, p ={' '}
+                {ARMS.paired.p.toFixed(2)}). With Devscriptor, the runs read{' '}
+                {more(ARM_WITH.tokens.input, ARM_WITHOUT.tokens.input)} more input tokens and cost{' '}
+                {more(ARM_WITH.usd, ARM_WITHOUT.usd)} more.
+              </p>
+            </div>
+
+            <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap text-xs sm:text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-left">
+                      <th className="p-3 font-semibold text-slate-500">Resolved by language</th>
+                      {LANGUAGE_RESULTS.map((l) => (
+                        <th key={l.language} className="p-3 text-right font-semibold text-slate-500">
+                          {l.language === 'JavaScript / TypeScript' ? 'JS / TS' : l.language}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[ARM_WITH, ARM_WITHOUT].map((r, i) => (
+                      <tr key={r.folder} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
+                        <td className="p-3 text-slate-300">{r.devscriptor ? 'With Devscriptor' : 'Without'}</td>
+                        {r.byLanguage.map((n, j) => (
+                          <td key={LANGUAGE_RESULTS[j].language} className="p-3 text-right text-slate-400">
+                            {n}
+                            <span className="text-xs text-slate-600">/{LANGUAGE_RESULTS[j].tasks}</span>
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <SetupCard icon={FlaskConical} title="How the arms ran">
+                <p>
+                  Both arms used Rusta {ARMS.rusta} and the same prompt, which does not mention
+                  Devscriptor. The arm without it had no Devscriptor at all: not in its
+                  configuration, not in its container. The model, its effort, the limits and the
+                  environment were the full run’s, and both arms ran on {ARMS.runDates}.
+                </p>
+                <p>
+                  Their images were warmed up without leftovers: after the build-and-test step, its
+                  reports, caches and logs were removed, and the dependencies and builds kept.
+                </p>
+              </SetupCard>
+              <SetupCard icon={Scale} title="What it shows">
+                <p>
+                  On these tasks, with this model, Devscriptor did not change how many issues were
+                  resolved, and it made the runs cost more. The next section shows why.
+                </p>
+                <p>
+                  Whether that holds for GLM and Kimi, which ran only with Devscriptor, these runs do
+                  not show.
+                </p>
+              </SetupCard>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why it did not pay off */}
+      <section className="border-t border-slate-900 py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              icon={Compass}
+              badge="Why"
+              tone="border-rose-500/30 bg-rose-500/20 text-rose-300"
+              title="Why Devscriptor did not pay off"
+            >
+              Three reasons, each measured in the arms’ runs.
+            </SectionHeading>
+
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <SetupCard icon={Compass} title="Finding the code was not the hard part">
+                <p className="text-2xl font-bold text-white">
+                  {capitalized(ordinal(locate(ARM_WITH).medianStep))} request, either way
+                </p>
+                <p>
+                  The first model request whose tool calls named a source file the fix changes was
+                  the{' '}
+                  {locate(ARM_WITH).medianStep === locate(ARM_WITHOUT).medianStep
+                    ? `${ordinal(locate(ARM_WITH).medianStep)} at the median, with Devscriptor and without it`
+                    : `${ordinal(locate(ARM_WITH).medianStep)} at the median with Devscriptor, and the ${ordinal(locate(ARM_WITHOUT).medianStep)} without it`}
+                  . By the third request,{' '}
+                  {locate(ARM_WITH).byThird} of {ARMS.tasks} runs with it had named one, and{' '}
+                  {locate(ARM_WITHOUT).byThird} without it, which searched with grep, ls and file
+                  reads.
+                </p>
+                <p>
+                  Only {LOCATING.issueNamesFile} of the {LOCATING.tasks} issues name such a file
+                  themselves. Finding the code by meaning is what Devscriptor is best at; on these
+                  tasks a plain search found it as soon.
+                </p>
+              </SetupCard>
+              <SetupCard icon={ListChecks} title="Calls the guidance asked for, not the task">
+                <p className="text-2xl font-bold text-white">
+                  {pct(ORDERED_CALLS, STANDING_ORDERS.calls, 0)} of the calls
+                </p>
+                <p>
+                  Of Devscriptor’s {STANDING_ORDERS.calls} calls, {ORDERED_CALLS} went where Rusta{' '}
+                  {ARMS.rusta}’s guidance sent the model on every task: the index’s statistics before
+                  anything else, and the Context Graph’s notes —{' '}
+                  {STANDING_ORDERS.tools.map(([tool, calls]) => `${tool} ${calls}`).join(', ')}.
+                </p>
+                <p>
+                  None of them could help: every run started with its index built, and with no note
+                  in its Context Graph, since no earlier session had worked on the task.
+                </p>
+              </SetupCard>
+              <SetupCard icon={Receipt} title="A cost on every request">
+                <p className="text-2xl font-bold text-white">
+                  +{thousands(added(REQUEST_TOKENS.before))} tokens a request
+                </p>
+                <p>
+                  Devscriptor’s tool definitions, the list of its other tools and its guidance go with
+                  every request. DeepSeek counted Rusta {ARMS.rusta}’s first request of a task:{' '}
+                  {thousands(REQUEST_TOKENS.without)} tokens without Devscriptor,{' '}
+                  {thousands(REQUEST_TOKENS.before.total)} with it,{' '}
+                  {more(REQUEST_TOKENS.before.total, REQUEST_TOKENS.without)} more.
+                </p>
+                <p>
+                  A run made {ARM_WITH.steps.median} requests at the median. Most of the extra input
+                  came from the prompt cache, which is cheap, so the arm with Devscriptor read{' '}
+                  {more(ARM_WITH.tokens.input, ARM_WITHOUT.tokens.input)} more input tokens and cost{' '}
+                  {more(ARM_WITH.usd, ARM_WITHOUT.usd)} more.
+                </p>
+              </SetupCard>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What changed */}
+      <section className="border-t border-slate-900 py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              icon={Scissors}
+              badge={`Rusta ${REQUEST_TOKENS.after.rusta} · Devscriptor ${REQUEST_TOKENS.after.devscriptor}`}
+              tone="border-emerald-500/30 bg-emerald-500/20 text-emerald-300"
+              title="Devscriptor costs less per request"
+            >
+              Rusta {REQUEST_TOKENS.after.rusta} and Devscriptor {REQUEST_TOKENS.after.devscriptor} cut
+              Devscriptor’s share of every request from {thousands(added(REQUEST_TOKENS.before))} tokens
+              to {thousands(added(REQUEST_TOKENS.after))}, and stop the calls no task asked for.
+            </SectionHeading>
+
+            <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+              <Card className="border-slate-800 bg-slate-900/50">
+                <CardContent className="p-6">
+                  <ul className="list-disc space-y-3 pl-5 text-sm leading-relaxed text-slate-300">
+                    <li>
+                      <span className="font-medium text-white">
+                        {capitalized(word(REQUEST_TOKENS.after.preloaded))} tools are loaded up front
+                        instead of {word(REQUEST_TOKENS.before.preloaded)}:
+                      </span>{' '}
+                      the searches by meaning and by name, a file’s summary, an entity’s details and a
+                      symbol’s references. The others load with select_tools when a task needs one.
+                    </li>
+                    <li>
+                      <span className="font-medium text-white">
+                        The other tools are listed by the first clause of their description
+                      </span>
+                      , not the whole of it.
+                    </li>
+                    <li>
+                      <span className="font-medium text-white">The guidance is shorter.</span>{' '}
+                      Devscriptor’s answers now say when the workspace is not indexed (notice) and which
+                      Context Graph notes match a search (context_notes). So the guidance no longer
+                      asks for the index’s statistics first or for the notes on every task: the model
+                      scans when an answer says to, and reads a note when a search lists it.
+                    </li>
+                    <li>
+                      <span className="font-medium text-white">
+                        Devscriptor’s tool descriptions are a third shorter:
+                      </span>{' '}
+                      how positions count is said once, in its instructions, instead of in each tool
+                      that takes one.
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <div className="rounded-xl border border-slate-800 bg-slate-900/50">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs sm:text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-800 text-left">
+                        <th className="p-3 font-semibold text-slate-500">Devscriptor’s share</th>
+                        <th className="whitespace-nowrap p-3 text-right font-semibold text-slate-500">
+                          {REQUEST_TOKENS.before.rusta} · {REQUEST_TOKENS.before.devscriptor}
+                        </th>
+                        <th className="whitespace-nowrap p-3 text-right font-semibold text-emerald-300">
+                          {REQUEST_TOKENS.after.rusta} · {REQUEST_TOKENS.after.devscriptor}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {PARTS.map((part, i) => (
+                        <tr key={part.key} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
+                          <td className="p-3 text-slate-300">{part.label}</td>
+                          <td className="p-3 text-right text-slate-400">
+                            {thousands(REQUEST_TOKENS.before.parts[part.key])}
+                          </td>
+                          <td className="p-3 text-right text-white">
+                            {thousands(REQUEST_TOKENS.after.parts[part.key])}
+                          </td>
+                        </tr>
+                      ))}
+                      <tr className="border-t border-slate-800">
+                        <td className="p-3 font-semibold text-white">Every request</td>
+                        <td className="p-3 text-right text-slate-400">
+                          +{thousands(added(REQUEST_TOKENS.before))}
+                          <span className="ml-1 text-xs text-slate-500">
+                            ({more(REQUEST_TOKENS.before.total, REQUEST_TOKENS.without)})
+                          </span>
+                        </td>
+                        <td className="p-3 text-right font-semibold text-emerald-300">
+                          +{thousands(added(REQUEST_TOKENS.after))}
+                          <span className="ml-1 text-xs text-slate-500">
+                            ({more(REQUEST_TOKENS.after.total, REQUEST_TOKENS.without)})
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                  Tokens of Rusta’s first request of a task, counted by DeepSeek, beyond the{' '}
+                  {thousands(REQUEST_TOKENS.without)} of the same request without Devscriptor. Each
+                  part is what the count lost when it was taken out. The requests and their counts
+                  are in the archive.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Checked again */}
+      <section className="border-t border-slate-900 py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-5xl">
+            <SectionHeading
+              icon={RefreshCw}
+              badge="Checked again"
+              tone="border-cyan-500/30 bg-cyan-500/20 text-cyan-300"
+              title="Every fifth task, run again"
+            >
+              On this sample, Devscriptor now costs about the same as running without it.
+            </SectionHeading>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap text-xs sm:text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-left">
+                      <th className="p-3 font-semibold text-slate-500">{LEAN.tasks} tasks</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Requests</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Input tokens</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Cost, off-peak</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Devscriptor calls</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {LEAN.rows.map((r, i) => {
+                      const latest = i === LEAN.rows.length - 1
+                      return (
+                        <tr key={r.folder} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
+                          <td className={`p-3 ${latest ? 'font-semibold text-emerald-300' : 'text-white'}`}>
+                            {FOLLOW_UP_LABELS[r.folder]}
+                          </td>
+                          <td className="p-3 text-right text-slate-300">
+                            {r.resolved}/{LEAN.tasks}
+                          </td>
+                          <td className="p-3 text-right text-slate-300">{thousands(r.requests)}</td>
+                          <td className="p-3 text-right text-slate-300">{millions(r.input)}</td>
+                          <td className={`p-3 text-right ${latest ? 'font-semibold text-white' : 'text-slate-300'}`}>
+                            ${r.usd.toFixed(3)}
+                          </td>
+                          <td className="p-3 text-right text-slate-300">{r.devscriptorCalls || '—'}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                The last row ran on {LEAN.runDates}, with builds of the changes above; Devscriptor’s
+                tools, descriptions and instructions in it are those 1.0.7 released. The other rows
+                are the arms’ runs of the same tasks. Costs are at DeepSeek’s off-peak prices, since
+                the runs were made at different hours. With less added to each request and{' '}
+                {thousands(run(LEAN, 'without-devscriptor').requests - run(LEAN, 'devscriptor-lean').requests)}{' '}
+                fewer requests, the runs read less input than those without Devscriptor. {LEAN.tasks}{' '}
+                tasks are too few to compare the resolution rates.
+              </p>
+            </div>
+
+            <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="border-b border-slate-800 px-4 py-3">
+                <h3 className="text-sm font-semibold text-white">The notes, only when a search lists them</h3>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                  Those runs still called the Context Graph’s tools,{' '}
+                  {run(LEAN, 'devscriptor-lean').contextGraphCalls} times, in the hope that an earlier
+                  session had left notes. Rusta 1.0.2’s guidance sends the model to the notes only when
+                  a search lists them in context_notes. The {NOTES.tasks} tasks whose runs had called
+                  them ran again on {NOTES.runDates}.
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap text-xs sm:text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-left">
+                      <th className="p-3 font-semibold text-slate-500">{NOTES.tasks} tasks</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Context Graph calls</th>
+                      <th className="p-3 text-right font-semibold text-slate-500">Cost, off-peak</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {NOTES.rows.map((r, i) => {
+                      const latest = i === NOTES.rows.length - 1
+                      return (
+                        <tr key={r.folder} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
+                          <td className={`p-3 ${latest ? 'font-semibold text-emerald-300' : 'text-white'}`}>
+                            {FOLLOW_UP_LABELS[r.folder]}
+                          </td>
+                          <td className="p-3 text-right text-slate-300">
+                            {r.resolved}/{NOTES.tasks}
+                          </td>
+                          <td className="p-3 text-right text-slate-300">
+                            {r.folder === 'without-devscriptor' ? '—' : r.contextGraphCalls}
+                          </td>
+                          <td className={`p-3 text-right ${latest ? 'font-semibold text-white' : 'text-slate-300'}`}>
+                            ${r.usd.toFixed(3)}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                The last row ran Rusta 1.0.2 as released, with the same Devscriptor build. It resolved
+                one task fewer: its patch made the fix’s test pass but broke
+                three tests that had passed before, and neither of its Devscriptor calls failed.{' '}
+                {capitalized(word(NOTES.tasks))} tasks, picked for their calls, are too few to compare
+                the resolution rates.
               </p>
             </div>
           </div>
@@ -692,6 +1178,11 @@ export default function BenchmarksPage() {
                     language, for every model.
                   </li>
                   <li>
+                    With {ARM_MODEL.name}, Devscriptor made no measurable difference to the share
+                    resolved: {ARM_WITH.resolved} tasks with it and {ARM_WITHOUT.resolved} without it,
+                    run side by side. It did not help find the code, and it cost more.
+                  </li>
+                  <li>
                     DeepSeek V4.1-Flash scored highest, for ${byId.deepseek.usd} for all{' '}
                     {MULTILINGUAL.tasks} tasks: under 5 cents a task, with{' '}
                     {pct(byId.deepseek.tokens.cached, byId.deepseek.tokens.input)} of its input read
@@ -705,8 +1196,13 @@ export default function BenchmarksPage() {
                 </h3>
                 <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-300">
                   <li>
-                    How much Devscriptor contributes. That takes the same tasks run without it,
-                    which these runs do not include.
+                    What Devscriptor does for GLM and Kimi: only {ARM_MODEL.name} ran the tasks
+                    without it.
+                  </li>
+                  <li>
+                    Whether Rusta {REQUEST_TOKENS.after.rusta} and Devscriptor{' '}
+                    {REQUEST_TOKENS.after.devscriptor} change the share resolved: {LEAN.tasks} tasks
+                    are too few to tell.
                   </li>
                   <li>
                     A ranking against other agents, which would need the same models, budget and
@@ -738,7 +1234,8 @@ export default function BenchmarksPage() {
               title="Every file, to check for yourself"
             >
               The predictions, the harness’s reports and the full trajectories of all 900 runs,
-              in one archive.
+              and of the {2 * ARMS.tasks + LEAN.tasks + NOTES.tasks} runs with and without
+              Devscriptor, in one archive.
             </SectionHeading>
 
             <Card className="border-slate-800 bg-slate-900/50">
@@ -775,6 +1272,15 @@ export default function BenchmarksPage() {
                   <li>
                     The smoke test’s runs without the prompt’s sentence, with Rusta 1.0.0 and 1.0.1,
                     laid out the same way, with the prompt each task got.
+                  </li>
+                  <li>
+                    {ARM_MODEL.name}’s runs with and without Devscriptor and the two that checked
+                    again, laid out the same way, with their prompt, their configurations, the clean
+                    warm-up’s steps and a report of what they show.
+                  </li>
+                  <li>
+                    Rusta’s first request of a task with and without Devscriptor, as sent, and
+                    DeepSeek’s count of each and of Devscriptor’s parts.
                   </li>
                   <li>
                     In a few runs the agent printed its environment, which held the provider’s API
