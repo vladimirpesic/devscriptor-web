@@ -77,7 +77,7 @@ const keyFeatures = [
   {
     icon: Search,
     title: 'Keyword, Semantic & Hybrid Search',
-    description: 'search_context runs keyword, vector-semantic, or RRF-fused hybrid search, with optional note_type, status, and min_priority filters.',
+    description: 'search_context runs keyword, vector-semantic, or RRF-fused hybrid search, with optional note_type, status, and min_priority filters. A search of the code names the notes its query matches, up to three, in context_notes, so an agent knows when the Context Graph has something to say without asking.',
   },
   {
     icon: Archive,

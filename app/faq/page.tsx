@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     question: 'What is the Context Graph?',
-    answer: 'Context Graph is an AI memory system that persists across sessions in the same local SQLite database as the code graph. It stores notes using 9 structured types: adr (architecture decisions), standard (coding standards), optimization, failure, practice, reflection, general, file_description, and modification. Notes can be linked to concrete code entities and abstract concepts, and retrieved by keyword, semantic, or hybrid search. When you return to a project weeks later, your AI recalls the context.',
+    answer: 'Context Graph is an AI memory system that persists across sessions in the same local SQLite database as the code graph. It stores notes using 9 structured types: adr (architecture decisions), standard (coding standards), optimization, failure, practice, reflection, general, file_description, and modification. Notes can be linked to concrete code entities and abstract concepts, and retrieved by keyword, semantic, or hybrid search. A code search names the notes its query matches, so an agent reads the ones that bear on its task. When you return to a project weeks later, your AI recalls the context.',
     category: 'Features',
   },
   {

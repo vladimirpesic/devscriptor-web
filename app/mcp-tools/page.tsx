@@ -398,8 +398,11 @@ export default function MCPToolsPage() {
                   <code className="text-slate-300">scan_codebase</code>, and need no language
                   server. The ones that answer from the index, the analyses of the whole index
                   included, first wait for the watcher, then check the files they name against
-                  the disk and re-index those that changed. An answer says when the workspace is
-                  not indexed, and a search names the Context Graph notes its query matches.
+                  the disk and re-index those that changed, each project in its own{' '}
+                  <code className="text-slate-300">devscriptor.yaml</code>. One index can hold
+                  several projects: the analyses of the whole index take the workspace&apos;s. An
+                  answer says when the workspace is not indexed, and a search names the Context
+                  Graph notes its query matches.
                 </p>
                 {coreSections.map((section) => (
                   <CategorySection key={section.key} title={section.title} category={section.key} tools={section.tools} />

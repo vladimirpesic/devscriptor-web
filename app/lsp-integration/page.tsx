@@ -27,6 +27,7 @@ import {
   FolderOpen,
   Globe,
   Package,
+  RefreshCw,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -540,6 +541,63 @@ export default function LSPIntegrationPage() {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <code className="text-xs text-slate-600">{server.source}</code>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* In step with the disk */}
+      <section className="py-16 border-t border-slate-800">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                <RefreshCw className="w-3 h-3 mr-1" />
+                In step with the disk
+              </Badge>
+              <h2 className="text-3xl font-bold text-white mb-4">What the Servers See</h2>
+              <p className="text-slate-400 max-w-2xl mx-auto">
+                A language server answers from its own view of the files. Before each request,
+                Devscriptor brings that view up to date with the disk, so an answer never comes
+                from an older copy of the code.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  icon: FileCode,
+                  title: 'Open documents',
+                  text: 'A document the server holds open is sent again when its file changed, and closed when its file is gone, so a server never reports references in a deleted file.',
+                },
+                {
+                  icon: RefreshCw,
+                  title: 'Every other file',
+                  text: 'The files a re-index finds created, changed or deleted reach the servers whose folders hold them, as workspace/didChangeWatchedFiles before their next request. So do the files the watcher saw change when another process indexing the same database, such as devscriptor watch in a terminal, re-indexed them first.',
+                },
+                {
+                  icon: FolderOpen,
+                  title: 'A cache it can write',
+                  text: 'Each server runs with a temporary directory of its own. Where the cache folder cannot be written, as where it is mounted read-only, the server’s cache is a folder in that directory: phpactor cannot build its index without one, nor gopls read a package’s metadata.',
+                },
+                {
+                  icon: Package,
+                  title: 'A ruby-lsp for this Ruby',
+                  text: 'ruby-lsp’s native extensions load only on a Ruby like the one that built them. Devscriptor checks them with the Ruby it runs, skips a package another Ruby built with a warning naming both, and lsp setup ruby-lsp installs it again for this Ruby.',
+                },
+              ].map((item) => (
+                <Card key={item.title} className="bg-slate-900/50 border-slate-800">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg text-white flex items-center gap-2">
+                      <item.icon className="w-5 h-5 text-emerald-400" />
+                      {item.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm leading-relaxed text-slate-400">{item.text}</p>
                   </CardContent>
                 </Card>
               ))}

@@ -103,10 +103,10 @@ const modules = [
 // Technology stack
 const techStack = [
   { category: 'Parsing', items: ['tree-sitter 0.27', '26 grammars (27 with TSX)', 'Memory-mapped file reading'] },
-  { category: 'Database', items: ['rusqlite 0.40 (bundled SQLite 3.53)', 'sqlite-vec 0.1.9 — FLOAT[768]', 'FTS5 code-aware tokenizer', 'r2d2 0.8 connection pool'] },
+  { category: 'Database', items: ['rusqlite 0.41 (bundled SQLite 3.54)', 'sqlite-vec 0.1.9 — FLOAT[768]', 'FTS5 code-aware tokenizer', 'r2d2 0.8 connection pool'] },
   { category: 'Embeddings', items: ['jinaai/jina-embeddings-v2-base-code', 'tract-onnx 0.23 (pure-Rust ONNX inference)', 'Shared model, RAM-aware concurrency, no API keys'] },
   { category: 'Async Runtime', items: ['Tokio 1.x', 'ignore 0.4 (ripgrep engine)', 'reqwest 0.13 with rustls (model + LSP downloads)'] },
-  { category: 'MCP Protocol', items: ['rmcp SDK 3.5', 'JSON-RPC over stdio', 'One shared server per workspace'] },
+  { category: 'MCP Protocol', items: ['rmcp SDK 3.9', 'JSON-RPC over stdio', 'One shared server per workspace'] },
   { category: 'LSP Integration', items: ['21 language servers', '4-tier detection', 'Checksum-verified installs, when asked'] },
 ]
 
