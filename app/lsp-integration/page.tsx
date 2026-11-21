@@ -295,7 +295,7 @@ installed (20)
   {
     command: 'devscriptor lsp check <server>',
     description:
-      'Check one server: where it resolves, or why it does not run and the prerequisites it lacks, each with how to install it.',
+      'Check one server: where it resolves, or why it does not run or cannot start here (a runtime missing or too old, such as jdtls on a Java older than 21), with what it lacks and how to install it.',
     example: `$ devscriptor lsp check rust-analyzer
 🔍 Checking: rust-analyzer
 ✅ found at: ~/.cache/devscriptor/lsp-servers/rust-analyzer/bin/rust-analyzer
@@ -428,7 +428,9 @@ export default function LSPIntegrationPage() {
                 source: its GitHub release, npm, <code className="text-slate-300">go install</code>,{' '}
                 <code className="text-slate-300">dotnet tool</code>, gem, Coursier, or its
                 publisher&apos;s archive. An unverified download is refused, and nothing is installed
-                unasked.
+                unasked. A server Devscriptor installed starts only where the runtime it needs is there
+                and new enough — Java 21 for jdtls, Node.js 18 for the npm servers, Ruby 3.0 for
+                ruby-lsp, PHP 8.2 for phpactor — and is otherwise refused with what it needs.
               </p>
             </div>
           </div>
