@@ -261,7 +261,7 @@ references) to find the relevant code before reading files.
 
 Make the smallest change that resolves the issue.`
 
-/** One of DeepSeek V4.1-Flash's two runs of every task, side by side: with Devscriptor or without it. */
+/** One of a pair of DeepSeek V4.1-Flash's runs of every task, side by side: with Devscriptor or without it. */
 export interface ArmResult {
   /** The arm's folder under arms/ in the archive. */
   folder: string
@@ -273,9 +273,17 @@ export interface ArmResult {
   steps: { median: number }
   tokens: { input: number; cached: number; output: number }
   usd: number
+  /** The cost at DeepSeek's off-peak prices, for arms run at different hours. */
+  offPeakUsd: number
   /** Runs that called Devscriptor at least once, and its calls. */
   devscriptorRuns: number
   devscriptorCalls: number
+  /** Devscriptor's answers that were errors, and the calls Rusta refused before they
+   * reached it, their arguments not matching the tool's schema. */
+  devscriptorErrors: number
+  refusedCalls: number
+  /** Calls of the web tools, every one refused by the arm's configuration. */
+  webCalls: number
   /** Tasks resolved, in the order of LANGUAGE_RESULTS. */
   byLanguage: number[]
 }
@@ -301,8 +309,12 @@ export const ARMS = {
       steps: { median: 44 },
       tokens: { input: 1056354495, cached: 1041210880, output: 9376557 },
       usd: 15.13,
+      offPeakUsd: 11.02,
       devscriptorRuns: 274,
       devscriptorCalls: 591,
+      devscriptorErrors: 3,
+      refusedCalls: 0,
+      webCalls: 202,
       byLanguage: [26, 9, 28, 40, 31, 36, 33, 38],
     },
     {
@@ -313,9 +325,63 @@ export const ARMS = {
       steps: { median: 44.5 },
       tokens: { input: 870072635, cached: 856665856, output: 8336993 },
       usd: 13.43,
+      offPeakUsd: 9.58,
       devscriptorRuns: 0,
       devscriptorCalls: 0,
+      devscriptorErrors: 0,
+      refusedCalls: 0,
+      webCalls: 218,
       byLanguage: [28, 9, 26, 40, 35, 36, 33, 38],
+    },
+  ] as ArmResult[],
+}
+
+/**
+ * Every task run again side by side by DeepSeek V4.1-Flash with Rusta 1.0.2 and Devscriptor
+ * 1.0.7 as released, the same prompt and a preparation of their own: with Devscriptor
+ * and without it. `orderedCalls` are the arm with Devscriptor's calls of the tools Rusta
+ * 1.0.1's guidance asked for whatever the task.
+ */
+export const RELEASED = {
+  model: 'deepseek' as BenchmarkModelId,
+  rusta: '1.0.2',
+  devscriptor: '1.0.7',
+  tasks: 300,
+  runDates: '20–21 November 2026',
+  paired: { both: 231, onlyWith: 13, onlyWithout: 12, neither: 44, p: 1.0 },
+  orderedCalls: 66,
+  rows: [
+    {
+      folder: 'rusta-1.0.2-with-devscriptor',
+      devscriptor: true,
+      resolved: 244,
+      interval: [0.7654, 0.8534],
+      steps: { median: 44 },
+      tokens: { input: 1049668068, cached: 1033940352, output: 9257301 },
+      usd: 11.02,
+      offPeakUsd: 11.02,
+      devscriptorRuns: 262,
+      devscriptorCalls: 484,
+      devscriptorErrors: 1,
+      refusedCalls: 7,
+      webCalls: 212,
+      byLanguage: [28, 8, 26, 39, 34, 36, 34, 39],
+    },
+    {
+      folder: 'rusta-1.0.2-without-devscriptor',
+      devscriptor: false,
+      resolved: 243,
+      interval: [0.7618, 0.8504],
+      steps: { median: 42 },
+      tokens: { input: 890961968, cached: 877079680, output: 8340231 },
+      usd: 9.72,
+      offPeakUsd: 9.72,
+      devscriptorRuns: 0,
+      devscriptorCalls: 0,
+      devscriptorErrors: 0,
+      refusedCalls: 0,
+      webCalls: 211,
+      byLanguage: [26, 9, 26, 42, 34, 34, 34, 38],
     },
   ] as ArmResult[],
 }
@@ -377,6 +443,8 @@ export const FOLLOW_UPS: { folder: string; tasks: number; runDates: string; rows
       { folder: 'without-devscriptor', resolved: 51, requests: 2954, input: 159409643, output: 1616309, usd: 1.836, devscriptorCalls: 0, contextGraphCalls: 0 },
       { folder: 'with-devscriptor', resolved: 49, requests: 2885, input: 163193247, output: 1646676, usd: 1.886, devscriptorCalls: 115, contextGraphCalls: 26 },
       { folder: 'devscriptor-lean', resolved: 51, requests: 2674, input: 152389286, output: 1589752, usd: 1.845, devscriptorCalls: 107, contextGraphCalls: 26 },
+      { folder: 'rusta-1.0.2-without-devscriptor', resolved: 49, requests: 2699, input: 142778359, output: 1371934, usd: 1.636, devscriptorCalls: 0, contextGraphCalls: 0 },
+      { folder: 'rusta-1.0.2-with-devscriptor', resolved: 50, requests: 2703, input: 151500978, output: 1607822, usd: 1.819, devscriptorCalls: 90, contextGraphCalls: 13 },
     ],
   },
   {
@@ -388,6 +456,8 @@ export const FOLLOW_UPS: { folder: string; tasks: number; runDates: string; rows
       { folder: 'with-devscriptor', resolved: 14, requests: 1117, input: 71747906, output: 680402, usd: 0.769, devscriptorCalls: 51, contextGraphCalls: 15 },
       { folder: 'devscriptor-lean', resolved: 14, requests: 1084, input: 70289445, output: 662734, usd: 0.777, devscriptorCalls: 50, contextGraphCalls: 24 },
       { folder: 'devscriptor-notes', resolved: 13, requests: 1007, input: 65954493, output: 650006, usd: 0.734, devscriptorCalls: 27, contextGraphCalls: 3 },
+      { folder: 'rusta-1.0.2-without-devscriptor', resolved: 14, requests: 1022, input: 62724538, output: 542809, usd: 0.654, devscriptorCalls: 0, contextGraphCalls: 0 },
+      { folder: 'rusta-1.0.2-with-devscriptor', resolved: 13, requests: 1042, input: 67299919, output: 663091, usd: 0.734, devscriptorCalls: 35, contextGraphCalls: 6 },
     ],
   },
 ]
@@ -400,5 +470,5 @@ export const BENCHMARK_ARCHIVE = {
   name: 'rusta-devscriptor-swe-bench-multilingual.tar.gz',
   url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz`,
   sha256Url: `${RESULTS_RELEASE}/rusta-devscriptor-swe-bench-multilingual.tar.gz.sha256`,
-  sizeMb: 122,
+  sizeMb: 172,
 }
