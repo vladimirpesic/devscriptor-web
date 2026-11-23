@@ -23,14 +23,14 @@ export const PRODUCTS: Record<ProductId, ProductSpec> = {
   devscriptor: {
     id: 'devscriptor',
     name: 'Devscriptor',
-    version: '1.0.8',
+    version: '1.0.9',
     binary: 'devscriptor',
     repo: 'vladimirpesic/devscriptor',
   },
   rusta: {
     id: 'rusta',
     name: 'Rusta',
-    version: '1.0.3',
+    version: '1.1.0',
     binary: 'rusta',
     repo: 'vladimirpesic/rusta',
   },

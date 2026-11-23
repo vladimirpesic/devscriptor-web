@@ -108,7 +108,7 @@ const harness = [
   {
     icon: Brain,
     title: 'Compaction that summarizes',
-    desc: 'Past 90 % of the model’s window — 786,432 tokens on DeepSeek, which keeps 256K for output — the model writes a handoff summary: goals and constraints, decisions, commands run and files changed, what is still unknown, and the plan. Your oldest and most recent messages stay verbatim, with the live todo list and a pointer to the replaced lines in the records. A context overrun the provider reports, Z.AI’s 1261 included, takes the same path.',
+    desc: 'Past 90 % of the model’s window — 786,432 tokens on DeepSeek, which keeps 256K for output — the model writes a handoff summary: goals and constraints, decisions, commands run and files changed, what is still unknown, and the plan. Your oldest and most recent messages stay verbatim, with the live todo list and a pointer to the replaced lines in the records. A context overrun the provider reports, Z.AI’s 1261 included, takes the same path. /context shows what the next request holds, part by part, against the window, and how far it is from that point.',
   },
   {
     icon: Repeat,
@@ -168,7 +168,7 @@ const harness = [
   {
     icon: Scissors,
     title: 'Bounded tool output',
-    desc: 'No single result floods the context: each is capped at 50,000 characters, with the full output saved to a spill file the model can read. read_file returns 100,000 characters a call by default, with the exact offset to continue from, and images are downsampled to 256 KiB and 2000 px.',
+    desc: 'No single result floods the context: each is capped at 50,000 characters, with the full output saved to a spill file the model can read. read_file returns 100,000 characters a call by default, with the exact offset to continue from, and images are downsampled to 256 KiB and 2000 px. A command’s output is read to its end whatever bytes it prints: a byte that is not UTF-8 reads as U+FFFD.',
   },
   {
     icon: Webhook,
@@ -206,7 +206,7 @@ const builtinTools = [
 const endpointTable = [
   { provider: 'kimi', billing: 'subscription', isDefault: true, model: 'kimi-for-coding', baseUrl: 'https://api.kimi.com/coding/v1' },
   { provider: 'kimi', billing: 'api', isDefault: false, model: 'kimi-k3.1-pro', baseUrl: 'https://api.moonshot.ai/v1' },
-  { provider: 'glm (zai)', billing: 'subscription', isDefault: true, model: 'glm-5.3', baseUrl: 'https://api.z.ai/api/coding/paas/v4' },
+  { provider: 'glm (zai)', billing: 'subscription', isDefault: true, model: 'glm-5.4', baseUrl: 'https://api.z.ai/api/coding/paas/v4' },
   { provider: 'glm (zai)', billing: 'api', isDefault: false, model: 'glm-5.3', baseUrl: 'https://api.z.ai/api/paas/v4' },
   { provider: 'deepseek', billing: '—', isDefault: false, model: 'deepseek-flash', baseUrl: 'https://api.deepseek.com' },
   { provider: 'openai', billing: '—', isDefault: false, model: 'gpt-4o-mini', baseUrl: 'https://api.openai.com/v1' },
@@ -450,7 +450,7 @@ const vendors: Vendor[] = [
 
   Which provider?
     1) Kimi   (Moonshot)  — kimi-for-coding / K2.8 Preview, 1M context
-    2) GLM    (z.ai)      — glm-5.3, 1M context
+    2) GLM    (z.ai)      — glm-5.4 on the Coding Plan, glm-5.3 per token, 1M context
     3) DeepSeek           — deepseek-flash, 1M context, hybrid thinking, vision
     4) OpenAI-compatible endpoint
   Provider [1]: 1
@@ -494,9 +494,9 @@ const vendors: Vendor[] = [
     summary: (
       <>
         <code className="text-slate-300">--provider glm</code> (alias{' '}
-        <code className="text-slate-300">zai</code>). Z.AI serves glm-5.3 at both of its doors — the
-        Coding Plan and pay-per-token — so there the billing changes the URL, and which web tools
-        the session gets.
+        <code className="text-slate-300">zai</code>). Z.AI serves glm-5.4 on the Coding Plan only,
+        so it is the plan’s default and a pay-per-token key runs glm-5.3: there the billing changes
+        the URL, the default model, and which web tools the session gets.
       </>
     ),
     facts: [
@@ -510,7 +510,7 @@ const vendors: Vendor[] = [
         note: 'Z.AI takes a key at either endpoint and bills it by its type, so --billing must match the key. An older key made for an account with a Coding Plan is billed by the endpoint, so at the pay-per-token one it uses the account balance — error 1113, “Insufficient balance”, when there is none, which Rusta explains.',
         head: ['--billing', 'Default model', 'Base URL'],
         rows: [
-          ['subscription (default)', 'glm-5.3', 'https://api.z.ai/api/coding/paas/v4, or https://open.bigmodel.cn/api/coding/paas/v4 with --region china'],
+          ['subscription (default)', 'glm-5.4', 'https://api.z.ai/api/coding/paas/v4, or https://open.bigmodel.cn/api/coding/paas/v4 with --region china'],
           ['api', 'glm-5.3', 'https://api.z.ai/api/paas/v4, or https://open.bigmodel.cn/api/paas/v4 with --region china'],
         ],
       },
@@ -518,18 +518,19 @@ const vendors: Vendor[] = [
         title: 'Models',
         head: ['Model id', 'Context', 'Max output', 'Input', 'Effort (default)'],
         rows: [
-          ['glm-5.3 (default)', '1,048,576', '131,072', 'text', 'low / high / max (max); always thinks'],
+          ['glm-5.4 (Coding Plan default)', '1,048,576', '131,072', 'image, video', 'low / high / max (max); always thinks'],
+          ['glm-5.3 (pay-per-token default)', '1,048,576', '131,072', 'text', 'low / high / max (max); always thinks'],
           ['glm-5.3-flash', '1,048,576', '131,072', 'image, video', 'low / high / max (max); always thinks'],
           ['glm-5.3-flashx', '—', '—', 'image', 'the faster GLM-5.3-Flash, pay-per-token only'],
         ],
-        note: 'GLM’s vision line takes images: glm-5.3-flash*, glm-5v-turbo, glm-4.6v* (128K) and glm-4.5v (64K). Every other GLM is text-only, and Z.AI refuses an image sent to one with error 1210.',
+        note: 'GLM’s vision line takes images: glm-5.4, glm-5.3-flash*, glm-5v-turbo, glm-4.6v* (128K) and glm-4.5v (64K). Every other GLM is text-only, and Z.AI refuses an image sent to one with error 1210. Z.AI documents no window or output for glm-5.4; Rusta gives it glm-5.3’s.',
       },
       {
         title: 'What the Coding Plan answers',
-        note: 'The Coding Plan serves two models; other ids still get an answer, often from another model. Rusta follows the model that actually answers — its window, thinking and effort — so on the plan glm-5.1 is a 1M-context GLM-5.3. The pay-per-token endpoint serves every id as itself.',
+        note: 'The Coding Plan serves three models under their own names; other ids still get an answer, often from another model. Rusta follows the model that actually answers — its window, thinking and effort — so on the plan glm-5.1 is a 1M-context GLM-5.3. The pay-per-token endpoint serves every other id as itself, and refuses glm-5.4 with error 1220.',
         head: ['Requested', 'On the Coding Plan'],
         rows: [
-          ['glm-5.3, glm-5.3-flash', 'Served'],
+          ['glm-5.4, glm-5.3, glm-5.3-flash', 'Served'],
           ['glm-5, glm-5.1, glm-5.2', 'Answered by glm-5.3'],
           ['glm-4.5, glm-4.5-air, glm-4.6, glm-4.7, glm-5-turbo', 'Answered by glm-5.3-flash'],
           ['glm-4.5-flash, glm-4.7-flash, glm-4.6v, glm-4.6v-flash, glm-4.5v', 'Served under their own names, but undocumented'],
@@ -551,13 +552,27 @@ const vendors: Vendor[] = [
     ],
     features: [
       {
-        title: 'GLM-5.3 always thinks',
+        title: 'GLM-5.4, on the Coding Plan',
         body: (
           <>
-            Z.AI rejects {code('thinking: {type: "disabled"}')} for GLM-5.3, so Rusta never sends it
-            there: {code('thinking = false')} and {code('--reasoning-effort none')} become{' '}
-            {code('reasoning_effort: "low"')}, as Z.AI’s migration guide prescribes, rather than a
-            failed request.
+            Z.AI serves GLM-5.4 on the Coding Plan and refuses it to a pay-per-token key with error
+            1220, though every endpoint’s model list names it. Rusta makes it the plan’s default and
+            keeps {code('glm-5.3')} for a pay-per-token key: a request for GLM-5.4 with one says so
+            and what to use instead, {code('rusta doctor')} flags the setup, and {code('/model')}{' '}
+            leaves it out. It reads images and video itself, so a session on it starts no{' '}
+            {code('zai_vision')} server.
+          </>
+        ),
+      },
+      {
+        title: 'GLM-5.3 and GLM-5.4 always think',
+        body: (
+          <>
+            Z.AI rejects {code('thinking: {type: "disabled"}')} for GLM-5.3, and GLM-5.4 refuses any
+            effort but low, high and max as a model that always thinks, so Rusta never sends{' '}
+            {code('disabled')} there: {code('thinking = false')} and{' '}
+            {code('--reasoning-effort none')} become {code('reasoning_effort: "low"')}, as Z.AI’s
+            migration guide prescribes, rather than a failed request.
           </>
         ),
       },
@@ -565,7 +580,7 @@ const vendors: Vendor[] = [
         title: 'Three rungs, nothing dropped',
         body: (
           <>
-            GLM-5.3 serves {code('low')}, {code('high')} and {code('max')}. Rusta accepts the full
+            GLM-5.3 and GLM-5.4 serve {code('low')}, {code('high')} and {code('max')}. Rusta accepts the full
             seven-rung vocabulary and folds it onto those three: a dropped{' '}
             {code('reasoning_effort')} would fall back to max, the most expensive setting.
           </>
@@ -665,7 +680,7 @@ const vendors: Vendor[] = [
 
   Which provider?
     1) Kimi   (Moonshot)  — kimi-for-coding / K2.8 Preview, 1M context
-    2) GLM    (z.ai)      — glm-5.3, 1M context
+    2) GLM    (z.ai)      — glm-5.4 on the Coding Plan, glm-5.3 per token, 1M context
     3) DeepSeek           — deepseek-flash, 1M context, hybrid thinking, vision
     4) OpenAI-compatible endpoint
   Provider [1]: 2
@@ -868,7 +883,7 @@ ok     mcp servers: 5 connected (devscriptor, zai_web_search, zai_web_reader, za
 
   Which provider?
     1) Kimi   (Moonshot)  — kimi-for-coding / K2.8 Preview, 1M context
-    2) GLM    (z.ai)      — glm-5.3, 1M context
+    2) GLM    (z.ai)      — glm-5.4 on the Coding Plan, glm-5.3 per token, 1M context
     3) DeepSeek           — deepseek-flash, 1M context, hybrid thinking, vision
     4) OpenAI-compatible endpoint
   Provider [1]: 3

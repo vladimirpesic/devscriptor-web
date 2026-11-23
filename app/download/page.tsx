@@ -87,7 +87,7 @@ const rustaSteps = [
   {
     n: 3,
     title: 'Run a prompt, or open the REPL',
-    desc: 'Headless with -p for scripts and CI; without it, the interactive REPL. Defaults: kimi-for-coding (K2.8 Preview) on Kimi’s Coding Plan, glm-5.3 on GLM, deepseek-flash on DeepSeek.',
+    desc: 'Headless with -p for scripts and CI; without it, the interactive REPL. Defaults: kimi-for-coding (K2.8 Preview) on Kimi’s Coding Plan, glm-5.4 on GLM’s (glm-5.3 per token), deepseek-flash on DeepSeek.',
     code: 'rusta -p "Explain this repository"',
   },
 ]
