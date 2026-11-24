@@ -85,6 +85,7 @@ const securityFeatures = [
       'Extension allow-list: SSH keys and credential files are never opened',
       'Built-in excludes: node_modules, target, .venv, dist, vendor…',
       'json/yaml/toml/xml are in the allow-list — exclude them if sensitive',
+      'HTML a documentation generator wrote (Javadoc, Doxygen, Sphinx…) is left out',
     ],
     accent: 'text-orange-400',
     bgColor: 'bg-orange-500/10',
