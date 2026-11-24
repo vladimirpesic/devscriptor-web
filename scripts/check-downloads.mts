@@ -29,7 +29,7 @@ const TIMEOUT_MS = 15_000
  */
 const CARGO_TOML: Record<ProductId, string[]> = {
   devscriptor: ['../../devscriptor/Cargo.toml'],
-  rusta: ['../../rusta/Cargo.toml', '../../juggler/Cargo.toml'],
+  rusta: ['../../rusta/Cargo.toml'],
 }
 
 interface Result {

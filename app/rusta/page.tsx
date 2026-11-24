@@ -36,6 +36,7 @@ import {
   Webhook,
   Workflow,
 } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Rusta — The Coding Agent Built for Kimi, GLM & DeepSeek',
@@ -143,7 +144,7 @@ const harness = [
   {
     icon: ShieldCheck,
     title: 'Permissions and guardrails',
-    desc: 'Three modes — default, accept_edits, bypass_permissions — and ordered rules, the first match winning; a compound shell command is matched per segment. Writes to secrets (.env*, .ssh/, *.key, *.pem, …) and git push, reset, rebase, checkout -f and clean -f ask in every mode, --yes included. No command, hook or MCP server Rusta starts inherits the variables it reads its API keys from, and on Linux none can read them from Rusta’s own process.',
+    desc: 'Three modes — default, accept_edits, bypass_permissions — and ordered rules, the first match winning; a compound shell command is matched per segment. Writes to secrets (.env*, .ssh/, *.key, *.pem, …), also through a symlink, and git push, reset, rebase, a forced checkout or switch and clean -f, however git is called, ask in every mode, --yes included. No command, hook or MCP server Rusta starts inherits the variables it reads its API keys from, and on Linux none can read them from Rusta’s own process.',
   },
   {
     icon: AlertTriangle,
@@ -178,12 +179,12 @@ const harness = [
   {
     icon: Sparkles,
     title: 'Web content stays data',
-    desc: 'fetch refuses loopback, private, link-local and cloud-metadata addresses, checked after DNS resolution and on every redirect. A fetched page cannot pose as the harness: the system-reminder tags in web results are escaped, and the model is told web content is untrusted data.',
+    desc: 'fetch refuses every address that is not globally reachable — loopback, private, link-local and cloud-metadata ones, multicast, documentation and reserved ranges — checked after DNS resolution and on every redirect, and reads a response only up to its size cap. A fetched page cannot pose as the harness: the system-reminder tags in web results are escaped, and the model is told web content is untrusted data.',
   },
   {
     icon: Terminal,
     title: 'Headless, REPL and sessions',
-    desc: 'Headless (-p) for scripts and CI, with --stream-json events, and an interactive REPL; a terminal UI builds with --features tui. Sessions are JSONL records, written by one process at a time: --resume continues one, rusta fork copies one, and rusta export packs one into a ZIP archive.',
+    desc: 'Headless (-p) for scripts and CI, with --stream-json events, and an interactive REPL; a terminal UI builds with --features tui. Sessions are JSONL records, yours alone on disk and written by one process at a time: --resume continues one, rusta fork copies one, and rusta export packs one into a ZIP archive.',
   },
 ]
 
@@ -251,7 +252,7 @@ const hfLink = (repo: string) => (
     href={`https://huggingface.co/${repo}`}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-slate-300 underline-offset-4 hover:underline"
+    className="text-slate-300 underline-offset-4 underline"
   >
     {repo}
   </a>
@@ -929,12 +930,12 @@ function DataTable({ table }: { table: Table }) {
       <div className="border-b border-slate-800 px-4 py-3">
         <h4 className="text-sm font-semibold text-white">{table.title}</h4>
       </div>
-      <div className="overflow-x-auto">
+      <div role="region" aria-label={table.title} tabIndex={0} className="overflow-x-auto">
         <table className="w-full text-xs sm:text-sm">
           <thead>
             <tr className="border-b border-slate-800 text-left">
               {table.head.map((h) => (
-                <th key={h} className="whitespace-nowrap p-3 font-semibold text-slate-500">
+                <th key={h} className="whitespace-nowrap p-3 font-semibold text-slate-400">
                   {h}
                 </th>
               ))}
@@ -957,7 +958,7 @@ function DataTable({ table }: { table: Table }) {
         </table>
       </div>
       {table.note && (
-        <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+        <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
           {table.note}
         </p>
       )}
@@ -975,7 +976,7 @@ function VendorPanel({ vendor }: { vendor: Vendor }) {
         <dl className="mt-4 grid grid-cols-1 gap-3 text-xs sm:grid-cols-3">
           {vendor.facts.map((f) => (
             <div key={f.label}>
-              <dt className="uppercase tracking-wider text-slate-500">{f.label}</dt>
+              <dt className="uppercase tracking-wider text-slate-400">{f.label}</dt>
               <dd className="mt-1 break-words text-slate-400">{f.value}</dd>
             </div>
           ))}
@@ -1002,9 +1003,9 @@ function VendorPanel({ vendor }: { vendor: Vendor }) {
           <div className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
           <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
           <div className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
-          <span className="ml-3 font-mono text-xs text-slate-500">{vendor.transcript.title}</span>
+          <span className="ml-3 font-mono text-xs text-slate-400">{vendor.transcript.title}</span>
         </div>
-        <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-slate-400">
+        <pre tabIndex={0} className="overflow-x-auto p-4 text-xs leading-relaxed text-slate-400">
           <code>{vendor.transcript.text}</code>
         </pre>
       </div>
@@ -1078,14 +1079,14 @@ export default function RustaPage() {
                 <div className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
                 <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
                 <div className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
-                <span className="ml-3 font-mono text-xs text-slate-500">terminal</span>
+                <span className="ml-3 font-mono text-xs text-slate-400">terminal</span>
               </div>
-              <div className="overflow-x-auto p-4 text-left font-mono text-xs sm:text-sm">
-                <div className="text-slate-500"># Pick a provider, plan and key — verified, then saved</div>
+              <div tabIndex={0} className="overflow-x-auto p-4 text-left font-mono text-xs sm:text-sm">
+                <div className="text-slate-400"># Pick a provider, plan and key — verified, then saved</div>
                 <div className="text-emerald-400">$ rusta init</div>
-                <div className="mt-2 text-slate-500"># One headless prompt</div>
+                <div className="mt-2 text-slate-400"># One headless prompt</div>
                 <div className="text-amber-400">$ rusta -p &quot;Explain this repository&quot;</div>
-                <div className="mt-2 text-slate-500"># Or the interactive REPL</div>
+                <div className="mt-2 text-slate-400"># Or the interactive REPL</div>
                 <div className="text-amber-400">$ rusta</div>
               </div>
             </div>
@@ -1166,14 +1167,14 @@ export default function RustaPage() {
 
             <Card className="border-slate-800 bg-slate-900/50">
               <CardContent className="p-0">
-                <div className="overflow-x-auto">
+                <div role="region" aria-label="Providers, their billing, default models and endpoints" tabIndex={0} className="overflow-x-auto">
                   <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                     <thead>
                       <tr className="border-b border-slate-800 text-left">
-                        <th className="p-3 font-semibold text-slate-500">--provider</th>
-                        <th className="p-3 font-semibold text-slate-500">--billing</th>
-                        <th className="p-3 font-semibold text-slate-500">Default model</th>
-                        <th className="p-3 font-semibold text-slate-500">Base URL</th>
+                        <th className="p-3 font-semibold text-slate-400">--provider</th>
+                        <th className="p-3 font-semibold text-slate-400">--billing</th>
+                        <th className="p-3 font-semibold text-slate-400">Default model</th>
+                        <th className="p-3 font-semibold text-slate-400">Base URL</th>
                       </tr>
                     </thead>
                     <tbody className="font-mono">
@@ -1183,7 +1184,7 @@ export default function RustaPage() {
                           className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}
                         >
                           <td className="p-3 align-top text-slate-300">{row.provider}</td>
-                          <td className="p-3 align-top text-slate-500">
+                          <td className="p-3 align-top text-slate-400">
                             {row.billing}
                             {row.isDefault && (
                               <span className="ml-1 font-sans text-[10px] uppercase tracking-wider text-emerald-500">
@@ -1192,7 +1193,7 @@ export default function RustaPage() {
                             )}
                           </td>
                           <td className="p-3 align-top text-slate-300">{row.model}</td>
-                          <td className="p-3 align-top text-slate-500">{row.baseUrl}</td>
+                          <td className="p-3 align-top text-slate-400">{row.baseUrl}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1234,7 +1235,7 @@ export default function RustaPage() {
                 </p>
               </div>
             </div>
-            <p className="mt-6 text-center text-sm text-slate-500">
+            <p className="mt-6 text-center text-sm text-slate-400">
               <code className="text-slate-400">model</code>,{' '}
               <code className="text-slate-400">base_url</code> and{' '}
               <code className="text-slate-400">api_key</code> belong to the provider they were
@@ -1284,11 +1285,11 @@ export default function RustaPage() {
 
             <Card className="border-slate-800 bg-slate-900/50">
               <CardContent className="p-0">
-                <div className="overflow-x-auto">
+                <div role="region" aria-label="Preserved thinking by provider" tabIndex={0} className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-slate-800">
-                        <th className="p-4 text-left font-semibold text-slate-500"> </th>
+                        <th className="p-4 text-left font-semibold text-slate-400"> </th>
                         <th className="p-4 text-left font-semibold text-emerald-300">Kimi</th>
                         <th className="p-4 text-left font-semibold text-red-300">GLM (Z.AI)</th>
                         <th className="p-4 text-left font-semibold text-blue-300">DeepSeek</th>
@@ -1353,7 +1354,7 @@ export default function RustaPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="overflow-x-auto">
+                  <div tabIndex={0} className="overflow-x-auto">
                     <ol className="space-y-2 text-sm text-slate-400">
                       {[
                         <>
@@ -1379,7 +1380,7 @@ export default function RustaPage() {
                       ))}
                     </ol>
                   </div>
-                  <div className="rounded-lg bg-slate-950/60 p-3 text-xs leading-relaxed text-slate-500">
+                  <div className="rounded-lg bg-slate-950/60 p-3 text-xs leading-relaxed text-slate-400">
                     Started as <code className="text-slate-400">devscriptor mcp</code> in the
                     session&apos;s working directory, with an explicit absolute{' '}
                     <code className="text-slate-400">--database</code> — the workspace&apos;s{' '}
@@ -1410,7 +1411,7 @@ export default function RustaPage() {
                     renames, pruning, server stops) are asked about. To let the routine ones run for
                     the session:
                   </p>
-                  <pre className="overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs leading-relaxed text-slate-300">
+                  <pre tabIndex={0} className="overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs leading-relaxed text-slate-300">
                     <code>{`# ~/.config/rusta/config.toml — the first matching rule wins
 [[permissions.rules]]
 name   = "devscriptor-index-and-notes"
@@ -1418,7 +1419,7 @@ tool   = "mcp__devscriptor__{scan_codebase,start_analysis,generate_embeddings,ad
 action = "allow"
 scope  = "session"`}</code>
                   </pre>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-400">
                     Formatting, renames, pruning and server stops still ask. Path sandboxing applies
                     independently, so an <code className="text-slate-400">allow</code> rule never
                     escapes <code className="text-slate-400">allowed_paths</code>; in a project&apos;s{' '}
@@ -1493,7 +1494,7 @@ scope  = "session"`}</code>
                         <span className="font-semibold text-white">
                           {row.tokens.toLocaleString('en-US')}
                           {row.tokens > REQUEST_TOKENS.without && (
-                            <span className="ml-2 text-xs font-normal text-slate-500">
+                            <span className="ml-2 text-xs font-normal text-slate-400">
                               +{(row.tokens - REQUEST_TOKENS.without).toLocaleString('en-US')}
                             </span>
                           )}
@@ -1507,12 +1508,12 @@ scope  = "session"`}</code>
                       </div>
                     </div>
                   ))}
-                  <p className="text-xs leading-relaxed text-slate-500">
+                  <p className="text-xs leading-relaxed text-slate-400">
                     Tokens of the first request of a SWE-bench task, counted by DeepSeek. On the
                     benchmark, Devscriptor did not pay off: DeepSeek found the code as soon without it,
                     two in five of its calls went where the old guidance sent it on every task, and it cost
                     more. The{' '}
-                    <a href="/benchmarks/#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                    <a href="/benchmarks/#devscriptor" className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
                       runs with and without Devscriptor
                     </a>{' '}
                     show why, and what these changes did.
@@ -1584,7 +1585,7 @@ scope  = "session"`}</code>
                 <div key={group.category} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-sm font-semibold text-white">{group.category}</h3>
-                    <Badge variant="outline" className="border-slate-700 text-xs text-slate-500">
+                    <Badge variant="outline" className="border-slate-700 text-xs text-slate-400">
                       {group.tools.length}
                     </Badge>
                   </div>
@@ -1599,12 +1600,12 @@ scope  = "session"`}</code>
               ))}
             </div>
 
-            <p className="mt-6 text-center text-xs text-slate-600">
-              <code className="text-slate-500">update_goal</code> and{' '}
-              <code className="text-slate-500">set_goal_budget</code> are registered too, but hidden
-              until a goal is active. <code className="text-slate-500">web_reader</code> joins when
+            <p className="mt-6 text-center text-xs text-slate-400">
+              <code className="text-slate-400">update_goal</code> and{' '}
+              <code className="text-slate-400">set_goal_budget</code> are registered too, but hidden
+              until a goal is active. <code className="text-slate-400">web_reader</code> joins when
               the provider has a page reader — Kimi’s Coding Plan, Z.AI’s pay-per-token API, DeepSeek
-              — and <code className="text-slate-500">skill</code> when skills are loaded. A tool that
+              — and <code className="text-slate-400">skill</code> when skills are loaded. A tool that
               cannot work in the session is not offered at all. The table is pinned by a snapshot
               test, so adding or renaming a tool fails the build until its documentation is updated.
             </p>
@@ -1641,10 +1642,10 @@ scope  = "session"`}</code>
                 { label: 'DeepSeek', cmd: 'export DEEPSEEK_API_KEY=sk-...\nrusta --provider deepseek' },
               ].map((s) => (
                 <div key={s.label} className="rounded-lg border border-slate-800 bg-slate-900/50 p-4">
-                  <div className="mb-2 text-xs uppercase tracking-wider text-slate-500">
+                  <div className="mb-2 text-xs uppercase tracking-wider text-slate-400">
                     Or from the environment: {s.label}
                   </div>
-                  <pre className="overflow-x-auto font-mono text-xs text-slate-300">
+                  <pre tabIndex={0} className="overflow-x-auto font-mono text-xs text-slate-300">
                     <code>{s.cmd}</code>
                   </pre>
                 </div>
@@ -1675,7 +1676,7 @@ scope  = "session"`}</code>
 
             <Card className="border-slate-800 bg-slate-900/50">
               <CardContent className="p-0">
-                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-5 text-xs leading-relaxed text-slate-300 sm:text-sm">
+                <pre tabIndex={0} className="overflow-x-auto rounded-lg bg-slate-950 p-5 text-xs leading-relaxed text-slate-300 sm:text-sm">
                   <code>{`provider = "glm"
 api_key  = "zai-..."
 
@@ -1736,12 +1737,12 @@ action  = "allow"`}</code>
                 },
               ].map((item) => (
                 <div key={item.label} className="rounded-lg border border-slate-800 bg-slate-900/50 p-4">
-                  <div className="text-xs uppercase tracking-wider text-slate-500">{item.label}</div>
+                  <div className="text-xs uppercase tracking-wider text-slate-400">{item.label}</div>
                   <div className="mt-1 font-mono text-xs text-slate-300">{item.value}</div>
                 </div>
               ))}
             </div>
-            <p className="mt-6 text-center text-sm text-slate-500">
+            <p className="mt-6 text-center text-sm text-slate-400">
               A project&apos;s <code className="text-slate-400">.rusta.toml</code> cannot start MCP
               servers, redirect requests, loosen permissions or reach outside the folder until you
               trust it. The full reference is in the{' '}
@@ -1749,7 +1750,7 @@ action  = "allow"`}</code>
                 href={`${repoUrl('rusta')}/blob/main/docs/configuration.md`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-300 underline-offset-4 hover:underline"
+                className="text-slate-300 underline-offset-4 underline"
               >
                 configuration guide
               </a>
@@ -1792,9 +1793,9 @@ action  = "allow"`}</code>
                     </code>{' '}
                     at your own OpenAI-compatible server, such as vLLM, and Rusta runs against weights
                     you host. Pair it with{' '}
-                    <a href="/" className="font-semibold text-emerald-300 underline-offset-4 hover:underline">
+                    <Link href="/" className="font-semibold text-emerald-300 underline underline-offset-4">
                       Devscriptor
-                    </a>
+                    </Link>
                     , which analyses code on your machine with no backend, and{' '}
                     <span className="font-semibold text-white">
                       every layer of the stack stays inside your perimeter
@@ -1810,7 +1811,7 @@ action  = "allow"`}</code>
                   ].map((layer) => (
                     <div key={layer.label} className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
                       <layer.icon className="mb-2 h-5 w-5 text-emerald-400" />
-                      <div className="text-xs uppercase tracking-wider text-slate-500">{layer.label}</div>
+                      <div className="text-xs uppercase tracking-wider text-slate-400">{layer.label}</div>
                       <div className="mt-1 text-sm font-medium text-white">{layer.value}</div>
                     </div>
                   ))}
@@ -1836,7 +1837,7 @@ action  = "allow"`}</code>
                 terminal UI is not in the release binaries; build with{' '}
                 <code className="text-slate-300">--features tui</code> for it.
               </p>
-              <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-500">
+              <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400">
                 {LICENSE_SUMMARY}{' '}
                 <a
                   href={repoUrl('rusta')}
@@ -1848,7 +1849,7 @@ action  = "allow"`}</code>
                 </a>
                 .
               </p>
-              <p className="mx-auto mt-2 max-w-2xl text-xs text-slate-600">{RUSTA_NOT_AFFILIATED}</p>
+              <p className="mx-auto mt-2 max-w-2xl text-xs text-slate-400">{RUSTA_NOT_AFFILIATED}</p>
             </div>
 
             <DownloadSection variant="full" product="rusta" />
@@ -1856,7 +1857,7 @@ action  = "allow"`}</code>
             <div className="mx-auto mt-8 max-w-3xl rounded-lg border border-slate-800 bg-slate-950 p-6">
               <h3 className="font-semibold text-white">Or build from source</h3>
               <p className="mt-2 text-sm text-slate-400">With Rust 1.89 or newer:</p>
-              <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
+              <pre tabIndex={0} className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
                 <code>{`git clone https://github.com/vladimirpesic/rusta.git && cd rusta
 cargo build --release -p rusta-cli                  # target/release/rusta
 cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</code>
@@ -1876,7 +1877,7 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
               the agent starts with 75 code-intelligence tools within reach. Together they resolved
               75–81% of SWE-bench Multilingual with Kimi, GLM and DeepSeek models. Run without
               Devscriptor, DeepSeek resolved as many of those tasks;{' '}
-              <a href="/benchmarks/#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+              <a href="/benchmarks/#devscriptor" className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
                 the benchmark page
               </a>{' '}
               shows why, and what Devscriptor costs a request now.

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Download, ArrowRight, Package, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { buttonClass } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PRODUCTS, getReleaseInfo, repoUrl, type ProductId } from '@/lib/github';
 import {
@@ -17,6 +17,18 @@ import {
 import { DownloadCard } from './download-card';
 import Link from 'next/link';
 import { LICENSE_BADGE } from '@/lib/licensing';
+
+/** The visitor's platform, detected once: it does not change while the page is open. */
+let detected: DetectedPlatform | undefined;
+function visitorPlatform(): DetectedPlatform {
+  detected ??= detectPlatform();
+  return detected;
+}
+
+/** The platform never changes, so there is nothing to subscribe to. */
+function neverChanges(): () => void {
+  return () => {};
+}
 
 interface DownloadSectionProps {
   variant?: 'compact' | 'full';
@@ -53,12 +65,8 @@ export function DownloadSection({
   // The release is fixed at build time; only the visitor's platform is
   // detected in the browser, after hydration.
   const release = getReleaseInfo(product);
-  const [platform, setPlatform] = useState<DetectedPlatform | null>(null);
+  const platform = useSyncExternalStore(neverChanges, visitorPlatform, () => null);
   const spec = PRODUCTS[product];
-
-  useEffect(() => {
-    setPlatform(detectPlatform());
-  }, []);
 
   const recommended = platform
     ? getRecommendedAsset(release.assets, platform.os, platform.arch)
@@ -109,27 +117,27 @@ export function DownloadSection({
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 {recommended?.asset ? (
-                  <Button
-                    size="lg"
-                    className="gap-2"
-                    onClick={() => window.open(recommended.asset!.url, '_blank')}
+                  <a
+                    href={recommended.asset.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonClass({ size: 'lg', className: 'gap-2' })}
                   >
-                    <Download className="h-4 w-4" />
+                    <Download aria-hidden="true" className="h-4 w-4" />
                     Download for {getOSDisplayName(recommended.asset.os)}
-                  </Button>
+                  </a>
                 ) : (
-                  <Link href="/download/">
-                    <Button size="lg" className="gap-2">
-                      <Download className="h-4 w-4" />
-                      Download
-                    </Button>
+                  <Link href="/download/" className={buttonClass({ size: 'lg', className: 'gap-2' })}>
+                    <Download aria-hidden="true" className="h-4 w-4" />
+                    Download
                   </Link>
                 )}
-                <Link href="/download/">
-                  <Button variant="outline" size="lg" className="gap-2">
-                    All Platforms
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
+                <Link
+                  href="/download/"
+                  className={buttonClass({ variant: 'outline', size: 'lg', className: 'gap-2' })}
+                >
+                  All Platforms
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </Link>
               </div>
             </CardContent>

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button'
 import {
   Bot,
   Brain,
@@ -134,14 +134,14 @@ export function Rusta() {
                     <div className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
                     <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
                     <div className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
-                    <span className="ml-3 font-mono text-xs text-slate-500">terminal</span>
+                    <span className="ml-3 font-mono text-xs text-slate-400">terminal</span>
                   </div>
-                  <div className="overflow-x-auto p-4 font-mono text-xs sm:text-sm">
-                    <div className="text-slate-500"># Pick a provider, paste a key — verified, then saved</div>
+                  <div tabIndex={0} className="overflow-x-auto p-4 font-mono text-xs sm:text-sm">
+                    <div className="text-slate-400"># Pick a provider, paste a key — verified, then saved</div>
                     <div className="text-emerald-400">$ rusta init</div>
-                    <div className="mt-1 text-slate-500"># Check the setup, Devscriptor included</div>
+                    <div className="mt-1 text-slate-400"># Check the setup, Devscriptor included</div>
                     <div className="text-emerald-400">$ rusta doctor</div>
-                    <div className="mt-1 text-slate-500"># Then the REPL</div>
+                    <div className="mt-1 text-slate-400"># Then the REPL</div>
                     <div className="text-amber-400">$ rusta</div>
                   </div>
                 </div>
@@ -161,24 +161,27 @@ export function Rusta() {
                     )}
                   </div>
                   <div className="flex flex-col gap-3 sm:flex-row">
-                    <a href="/rusta/" className="flex-1">
-                      <Button
-                        size="lg"
-                        className="w-full bg-gradient-to-r from-amber-600 to-orange-600 font-semibold text-white shadow-lg shadow-amber-500/20 hover:from-amber-500 hover:to-orange-500"
-                      >
-                        Explore Rusta
-                        <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
+                    <a
+                      href="/rusta/"
+                      className={buttonClass({
+                        size: 'lg',
+                        className:
+                          'flex-1 bg-gradient-to-r from-amber-600 to-orange-600 font-semibold text-white shadow-lg shadow-amber-500/20 hover:from-amber-500 hover:to-orange-500',
+                      })}
+                    >
+                      Explore Rusta
+                      <ChevronRight aria-hidden="true" className="ml-1 h-4 w-4" />
                     </a>
-                    <a href="/rusta/#download" className="flex-1">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="w-full border-slate-700 hover:bg-slate-800"
-                      >
-                        <Download className="mr-2 h-4 w-4" />
-                        Download
-                      </Button>
+                    <a
+                      href="/rusta/#download"
+                      className={buttonClass({
+                        size: 'lg',
+                        variant: 'outline',
+                        className: 'flex-1 border-slate-700 hover:bg-slate-800',
+                      })}
+                    >
+                      <Download aria-hidden="true" className="mr-2 h-4 w-4" />
+                      Download
                     </a>
                   </div>
                 </div>

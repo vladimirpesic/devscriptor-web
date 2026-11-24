@@ -183,7 +183,7 @@ function ModelCard({ model }: { model: ModelResult }) {
       <CardHeader className="pb-4">
         <div className="text-sm text-slate-400">{model.vendor}</div>
         <CardTitle className={`text-xl ${tone.text}`}>{model.name}</CardTitle>
-        <code className="text-xs text-slate-500">{model.modelId}</code>
+        <code className="text-xs text-slate-400">{model.modelId}</code>
       </CardHeader>
       <CardContent className="space-y-5">
         <div>
@@ -198,7 +198,7 @@ function ModelCard({ model }: { model: ModelResult }) {
         <dl className="space-y-2 text-sm">
           {facts.map((f) => (
             <div key={f.label} className="flex justify-between gap-4 border-t border-slate-800/60 pt-2">
-              <dt className="text-slate-500">{f.label}</dt>
+              <dt className="text-slate-400">{f.label}</dt>
               <dd className="text-right text-slate-300">{f.value}</dd>
             </div>
           ))}
@@ -279,7 +279,7 @@ export default function BenchmarksPage() {
               Run again with and without Devscriptor — with Rusta {ARMS.rusta}, then with Rusta{' '}
               {RELEASED.rusta} and Devscriptor {RELEASED.devscriptor} — {ARM_MODEL.name} resolved about as
               many tasks either way, and spent more with Devscriptor.{' '}
-              <a href="#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+              <a href="#devscriptor" className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
                 Why, and what the new versions changed
               </a>
               .
@@ -309,7 +309,7 @@ export default function BenchmarksPage() {
                 <ModelCard key={m.id} model={m} />
               ))}
             </div>
-            <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-slate-500">
+            <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-slate-400">
               The interval is where the true rate lies with 95% confidence, given 300 tasks. A run
               that changed no file counts as unresolved: one for GLM and one for Kimi, on the same
               task. Tokens are summed over all 300 tasks.
@@ -334,12 +334,12 @@ export default function BenchmarksPage() {
             </SectionHeading>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50">
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Resolved tasks by language and model" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">Language</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Tasks</th>
+                      <th className="p-3 font-semibold text-slate-400">Language</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Tasks</th>
                       {ORDER.map((id) => (
                         <th key={id} className={`p-3 text-right font-semibold ${TONES[id].text}`}>
                           {byId[id].name}
@@ -351,7 +351,7 @@ export default function BenchmarksPage() {
                     {LANGUAGE_RESULTS.map((row, i) => (
                       <tr key={row.language} className={i % 2 === 0 ? 'bg-slate-950/40' : undefined}>
                         <td className="p-3 text-slate-300">{row.language}</td>
-                        <td className="p-3 text-right text-slate-500">{row.tasks}</td>
+                        <td className="p-3 text-right text-slate-400">{row.tasks}</td>
                         {ORDER.map((id) => {
                           const resolved = row.resolved[id]
                           const top = resolved === best(row)
@@ -361,7 +361,7 @@ export default function BenchmarksPage() {
                               className={`p-3 text-right ${top ? 'font-semibold text-white' : 'text-slate-400'}`}
                             >
                               {pct(resolved, row.tasks, 0)}
-                              <span className="ml-2 text-xs text-slate-500">
+                              <span className="ml-2 text-xs text-slate-400">
                                 {resolved}/{row.tasks}
                               </span>
                             </td>
@@ -372,7 +372,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 JavaScript and TypeScript share a row: several of their repositories hold both. With
                 12 to 44 tasks a language, a difference of a few tasks is within chance.
               </p>
@@ -421,7 +421,7 @@ export default function BenchmarksPage() {
                 <Card className="border-slate-800 bg-slate-900/50">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base text-white">Rusta + Devscriptor</CardTitle>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-400">
                       {MULTILINGUAL.runDates} · one attempt per task
                     </p>
                   </CardHeader>
@@ -453,7 +453,7 @@ export default function BenchmarksPage() {
                       code intelligence is expected to do better than a minimal one with only a shell.
                       How much of the gap is Rusta or the newer models, these runs cannot tell apart;
                       for DeepSeek, Devscriptor’s share is measured{' '}
-                      <a href="#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                      <a href="#devscriptor" className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
                         below
                       </a>
                       .
@@ -477,7 +477,7 @@ export default function BenchmarksPage() {
               <Card className="border-slate-800 bg-slate-900/50">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base text-white">Official leaderboard</CardTitle>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-400">
                     {LEADERBOARD.agent} · {LEADERBOARD.dated} · one attempt per task
                   </p>
                 </CardHeader>
@@ -487,16 +487,16 @@ export default function BenchmarksPage() {
                       <div className="mb-1 flex justify-between gap-4 text-sm">
                         <span className="text-slate-300">
                           {e.name}
-                          <span className="ml-2 text-xs text-slate-500">{e.org}</span>
+                          <span className="ml-2 text-xs text-slate-400">{e.org}</span>
                         </span>
                         <span className="text-slate-300">{e.resolved.toFixed(1)}%</span>
                       </div>
                       <Bar value={e.resolved} className="bg-slate-500" />
                     </div>
                   ))}
-                  <p className="pt-2 text-xs text-slate-500">
+                  <p className="pt-2 text-xs text-slate-400">
                     From{' '}
-                    <a href={LEADERBOARD.url} className="text-cyan-400 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
+                    <a href={LEADERBOARD.url} className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
                       swebench.com
                     </a>
                     , Multilingual tab.
@@ -602,11 +602,11 @@ export default function BenchmarksPage() {
             <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
               <div className="border-b border-slate-800 px-4 py-3">
                 <h3 className="text-sm font-semibold text-white">The prompt every run got</h3>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-400">
                   The task’s issue goes in place of @PROBLEM_STATEMENT@.
                 </p>
               </div>
-              <pre className="m-0 overflow-x-auto rounded-none rounded-b-xl bg-slate-950 p-4 text-xs leading-relaxed text-slate-300">
+              <pre tabIndex={0} className="m-0 overflow-x-auto rounded-none rounded-b-xl bg-slate-950 p-4 text-xs leading-relaxed text-slate-300">
                 <code>{TASK_PROMPT}</code>
               </pre>
             </div>
@@ -629,14 +629,14 @@ export default function BenchmarksPage() {
             </SectionHeading>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50">
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Devscriptor calls by model" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">Model</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Runs using it</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Calls</th>
-                      <th className="p-3 font-semibold text-slate-500">Most-called tools</th>
+                      <th className="p-3 font-semibold text-slate-400">Model</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Runs using it</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Calls</th>
+                      <th className="p-3 font-semibold text-slate-400">Most-called tools</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -648,7 +648,7 @@ export default function BenchmarksPage() {
                         </td>
                         <td className="p-3 text-right text-slate-300">
                           {m.devscriptor.calls}
-                          <span className="ml-2 text-xs text-slate-500">
+                          <span className="ml-2 text-xs text-slate-400">
                             {(m.devscriptor.calls / m.tasks).toFixed(1)} a run
                           </span>
                         </td>
@@ -663,7 +663,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 Runs that called Devscriptor resolved{' '}
                 {MODEL_RESULTS.map((m) => `${m.devscriptor.resolvedWith} of ${m.devscriptor.runs}`).join(', ')};
                 the rest resolved{' '}
@@ -673,7 +673,7 @@ export default function BenchmarksPage() {
                 (DeepSeek, GLM, Kimi). The two groups are not alike: the runs without a Devscriptor
                 call needed fewer model requests, which suggests easier tasks. Measuring what
                 Devscriptor adds takes the same tasks run without it, which {ARM_MODEL.name} did:{' '}
-                <a href="#devscriptor" className="text-cyan-400 hover:text-cyan-300">
+                <a href="#devscriptor" className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
                   see below
                 </a>
                 .
@@ -683,21 +683,21 @@ export default function BenchmarksPage() {
             <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
               <div className="border-b border-slate-800 px-4 py-3">
                 <h3 className="text-sm font-semibold text-white">Without the prompt’s sentence</h3>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-400">
                   The smoke test’s {WITHOUT_SENTENCE.tasks} tasks, one in each of eight languages,
                   run by the three models with Devscriptor {MULTILINGUAL.devscriptor}:{' '}
                   {WITHOUT_SENTENCE.runs} runs a row.
                 </p>
               </div>
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Devscriptor calls without the prompt’s sentence" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">Rusta</th>
-                      <th className="p-3 font-semibold text-slate-500">Prompt</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Runs using it</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Calls</th>
-                      <th className="p-3 font-semibold text-slate-500">DeepSeek · GLM · Kimi</th>
+                      <th className="p-3 font-semibold text-slate-400">Rusta</th>
+                      <th className="p-3 font-semibold text-slate-400">Prompt</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Runs using it</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Calls</th>
+                      <th className="p-3 font-semibold text-slate-400">DeepSeek · GLM · Kimi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -714,7 +714,7 @@ export default function BenchmarksPage() {
                         <td className="p-3">
                           {MODEL_RESULTS.map((m, j) => (
                             <span key={m.id}>
-                              {j > 0 && <span className="text-slate-600"> · </span>}
+                              {j > 0 && <span className="text-slate-400"> · </span>}
                               <span className={TONES[m.id].text}>{row.byModel[m.id].using}</span>
                             </span>
                           ))}
@@ -724,7 +724,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 Rusta 1.0.0 loads every Devscriptor tool on demand, and without the sentence the
                 models mostly searched with grep and read files instead, which is why the full run’s
                 prompt has it. Rusta 1.0.1 takes its place: Devscriptor’s twelve most-used tools are
@@ -755,16 +755,16 @@ export default function BenchmarksPage() {
             </SectionHeading>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50">
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Resolved tasks with and without Devscriptor" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">Arm</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">95% interval</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Input tokens</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Cost</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Devscriptor calls</th>
+                      <th className="p-3 font-semibold text-slate-400">Arm</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">95% interval</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Input tokens</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Cost</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Devscriptor calls</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -775,7 +775,7 @@ export default function BenchmarksPage() {
                         </td>
                         <td className="p-3 text-right text-slate-300">
                           {pct(r.resolved, ARMS.tasks)}
-                          <span className="ml-2 text-xs text-slate-500">
+                          <span className="ml-2 text-xs text-slate-400">
                             {r.resolved}/{ARMS.tasks}
                           </span>
                         </td>
@@ -792,7 +792,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 Both arms resolved {ARMS.paired.both} tasks, and neither resolved {ARMS.paired.neither}.
                 Of the {ARMS.paired.onlyWith + ARMS.paired.onlyWithout} tasks only one arm resolved,{' '}
                 {ARMS.paired.onlyWith} went to the arm with Devscriptor and {ARMS.paired.onlyWithout} to
@@ -804,13 +804,13 @@ export default function BenchmarksPage() {
             </div>
 
             <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Resolved by language, with and without Devscriptor" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">Resolved by language</th>
+                      <th className="p-3 font-semibold text-slate-400">Resolved by language</th>
                       {LANGUAGE_RESULTS.map((l) => (
-                        <th key={l.language} className="p-3 text-right font-semibold text-slate-500">
+                        <th key={l.language} className="p-3 text-right font-semibold text-slate-400">
                           {l.language === 'JavaScript / TypeScript' ? 'JS / TS' : l.language}
                         </th>
                       ))}
@@ -823,7 +823,7 @@ export default function BenchmarksPage() {
                         {r.byLanguage.map((n, j) => (
                           <td key={LANGUAGE_RESULTS[j].language} className="p-3 text-right text-slate-400">
                             {n}
-                            <span className="text-xs text-slate-600">/{LANGUAGE_RESULTS[j].tasks}</span>
+                            <span className="text-xs text-slate-400">/{LANGUAGE_RESULTS[j].tasks}</span>
                           </td>
                         ))}
                       </tr>
@@ -986,12 +986,12 @@ export default function BenchmarksPage() {
               </Card>
 
               <div className="rounded-xl border border-slate-800 bg-slate-900/50">
-                <div className="overflow-x-auto">
+                <div role="region" aria-label="Devscriptor’s share of each request" tabIndex={0} className="overflow-x-auto">
                   <table className="w-full text-xs sm:text-sm">
                     <thead>
                       <tr className="border-b border-slate-800 text-left">
-                        <th className="p-3 font-semibold text-slate-500">Devscriptor’s share</th>
-                        <th className="whitespace-nowrap p-3 text-right font-semibold text-slate-500">
+                        <th className="p-3 font-semibold text-slate-400">Devscriptor’s share</th>
+                        <th className="whitespace-nowrap p-3 text-right font-semibold text-slate-400">
                           {REQUEST_TOKENS.before.rusta} · {REQUEST_TOKENS.before.devscriptor}
                         </th>
                         <th className="whitespace-nowrap p-3 text-right font-semibold text-emerald-300">
@@ -1015,13 +1015,13 @@ export default function BenchmarksPage() {
                         <td className="p-3 font-semibold text-white">Every request</td>
                         <td className="p-3 text-right text-slate-400">
                           +{thousands(added(REQUEST_TOKENS.before))}
-                          <span className="ml-1 text-xs text-slate-500">
+                          <span className="ml-1 text-xs text-slate-400">
                             ({more(REQUEST_TOKENS.before.total, REQUEST_TOKENS.without)})
                           </span>
                         </td>
                         <td className="p-3 text-right font-semibold text-emerald-300">
                           +{thousands(added(REQUEST_TOKENS.after))}
-                          <span className="ml-1 text-xs text-slate-500">
+                          <span className="ml-1 text-xs text-slate-400">
                             ({more(REQUEST_TOKENS.after.total, REQUEST_TOKENS.without)})
                           </span>
                         </td>
@@ -1029,7 +1029,7 @@ export default function BenchmarksPage() {
                     </tbody>
                   </table>
                 </div>
-                <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                   Tokens of Rusta’s first request of a task, counted by DeepSeek, beyond the{' '}
                   {thousands(REQUEST_TOKENS.without)} of the same request without Devscriptor. Each
                   part is what the count lost when it was taken out. The requests and their counts
@@ -1058,15 +1058,15 @@ export default function BenchmarksPage() {
             </SectionHeading>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50">
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="The released versions, side by side" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">Runs</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Input tokens</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Cost, off-peak</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Devscriptor calls</th>
+                      <th className="p-3 font-semibold text-slate-400">Runs</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Input tokens</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Cost, off-peak</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Devscriptor calls</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1088,7 +1088,7 @@ export default function BenchmarksPage() {
                         >
                           <td className={`p-3 ${released ? 'font-semibold text-amber-300' : 'text-white'}`}>
                             {label}
-                            <span className="ml-2 text-xs font-normal text-slate-500">{when}</span>
+                            <span className="ml-2 text-xs font-normal text-slate-400">{when}</span>
                           </td>
                           <td className="p-3 text-right text-slate-300">
                             {row.resolved}/{RELEASED.tasks}
@@ -1104,7 +1104,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 Both arms resolved {RELEASED.paired.both} tasks, and neither resolved {RELEASED.paired.neither}.
                 Of the {RELEASED.paired.onlyWith + RELEASED.paired.onlyWithout} tasks only one arm resolved,{' '}
                 {RELEASED.paired.onlyWith} went to the arm with Devscriptor and {RELEASED.paired.onlyWithout} to
@@ -1167,16 +1167,16 @@ export default function BenchmarksPage() {
             </SectionHeading>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/50">
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Every fifth task, run again" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">{LEAN.tasks} tasks</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Requests</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Input tokens</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Cost, off-peak</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Devscriptor calls</th>
+                      <th className="p-3 font-semibold text-slate-400">{LEAN.tasks} tasks</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Requests</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Input tokens</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Cost, off-peak</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Devscriptor calls</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1208,7 +1208,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 The builds’ row ran on {LEAN.runDates}; Devscriptor’s tools, descriptions and
                 instructions in it are those 1.0.7 released. The rows above it are the {ARMS.runDates}{' '}
                 arms’ runs of the same tasks, the two below it the released versions’ of{' '}
@@ -1225,7 +1225,7 @@ export default function BenchmarksPage() {
             <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50">
               <div className="border-b border-slate-800 px-4 py-3">
                 <h3 className="text-sm font-semibold text-white">The notes, only when a search lists them</h3>
-                <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                <p className="mt-1 text-xs leading-relaxed text-slate-400">
                   Those runs still called the Context Graph’s tools,{' '}
                   {run(LEAN, 'devscriptor-lean').contextGraphCalls} times, in the hope that an earlier
                   session had left notes. Rusta 1.0.2’s guidance sends the model to the notes only when
@@ -1233,14 +1233,14 @@ export default function BenchmarksPage() {
                   them ran again on {NOTES.runDates}.
                 </p>
               </div>
-              <div className="overflow-x-auto">
+              <div role="region" aria-label="Context Graph calls and cost" tabIndex={0} className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap text-xs sm:text-sm">
                   <thead>
                     <tr className="border-b border-slate-800 text-left">
-                      <th className="p-3 font-semibold text-slate-500">{NOTES.tasks} tasks</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Resolved</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Context Graph calls</th>
-                      <th className="p-3 text-right font-semibold text-slate-500">Cost, off-peak</th>
+                      <th className="p-3 font-semibold text-slate-400">{NOTES.tasks} tasks</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Resolved</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Context Graph calls</th>
+                      <th className="p-3 text-right font-semibold text-slate-400">Cost, off-peak</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1272,7 +1272,7 @@ export default function BenchmarksPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <p className="border-t border-slate-800 px-4 py-3 text-xs leading-relaxed text-slate-400">
                 The highlighted row ran Rusta 1.0.2 as released, with the same Devscriptor build; the two
                 below it are the released versions’ runs of the same tasks. It resolved one task fewer
                 than the builds: its patch made the fix’s test pass but broke three tests that had
@@ -1376,9 +1376,9 @@ export default function BenchmarksPage() {
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="break-all font-mono text-sm text-white">{BENCHMARK_ARCHIVE.name}</div>
-                    <div className="mt-1 text-sm text-slate-500">
+                    <div className="mt-1 text-sm text-slate-400">
                       {BENCHMARK_ARCHIVE.sizeMb} MB ·{' '}
-                      <a href={BENCHMARK_ARCHIVE.sha256Url} className="text-cyan-400 hover:text-cyan-300">
+                      <a href={BENCHMARK_ARCHIVE.sha256Url} className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
                         SHA-256
                       </a>
                     </div>
@@ -1427,13 +1427,13 @@ export default function BenchmarksPage() {
               </CardContent>
             </Card>
 
-            <p className="mt-6 text-center text-sm text-slate-500">
+            <p className="mt-6 text-center text-sm text-slate-400">
               Tasks from{' '}
-              <a href={MULTILINGUAL.aboutUrl} className="text-cyan-400 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
+              <a href={MULTILINGUAL.aboutUrl} className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
                 SWE-bench Multilingual
               </a>{' '}
               (
-              <a href={MULTILINGUAL.datasetUrl} className="text-cyan-400 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
+              <a href={MULTILINGUAL.datasetUrl} className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300" target="_blank" rel="noopener noreferrer">
                 {MULTILINGUAL.dataset}
               </a>
               ). Run {MULTILINGUAL.runDates}.

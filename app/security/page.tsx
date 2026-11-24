@@ -92,10 +92,10 @@ const securityFeatures = [
   {
     icon: Cpu,
     title: 'Memory-Safe Rust',
-    description: 'Written in Rust for memory safety without garbage collection. Shipped code has sixteen unsafe blocks, each small, each listed with its reason in the security documentation.',
+    description: 'Written in Rust for memory safety without garbage collection. Shipped code has twelve unsafe blocks, each small, each listed with its reason in the security documentation.',
     details: [
-      'Memory-mapped reads of large files, and the sqlite-vec FFI callback',
-      'Platform memory queries, and process setup for servers it starts',
+      'The sqlite-vec FFI callback, and platform memory queries',
+      'Process setup for the servers it starts, and Windows pipe and file identity',
       'A zero-copy tensor read, and ASCII lowercasing in a search hot path',
       'Dependencies pinned in Cargo.lock; cargo audit runs in CI',
     ],
@@ -280,17 +280,17 @@ export default function SecurityPage() {
                     <CardTitle className="flex items-center gap-2 text-base text-white">
                       <Radio className="h-4 w-4 text-cyan-400" /> {p.platform}
                     </CardTitle>
-                    <p className="text-xs text-slate-500">{p.tools}</p>
+                    <p className="text-xs text-slate-400">{p.tools}</p>
                   </CardHeader>
                   <CardContent>
-                    <pre className="overflow-x-auto rounded bg-slate-900 p-3 text-xs text-emerald-400">
+                    <pre tabIndex={0} className="overflow-x-auto rounded bg-slate-900 p-3 text-xs text-emerald-400">
                       <code>{p.cmd}</code>
                     </pre>
                   </CardContent>
                 </Card>
               ))}
             </div>
-            <p className="mt-4 text-center text-sm text-slate-500">
+            <p className="mt-4 text-center text-sm text-slate-400">
               Run any of these, then exercise both tools hard. Filter out your model provider and its services, the
               first-run model fetch and the pages the agent&apos;s tools fetch, and the capture stays empty.
             </p>
@@ -324,17 +324,25 @@ export default function SecurityPage() {
                     <CardTitle className="text-base text-white">{c.platform}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <pre className="overflow-x-auto rounded bg-slate-900 p-3 text-xs text-emerald-400">
+                    <pre tabIndex={0} className="overflow-x-auto rounded bg-slate-900 p-3 text-xs text-emerald-400">
                       <code>{c.cmd}</code>
                     </pre>
                   </CardContent>
                 </Card>
               ))}
             </div>
-            <p className="mt-4 text-sm text-slate-500">
+            <p className="mt-4 text-sm text-slate-400">
               Rusta archives are published the same way — every <code className="text-slate-400">.tar.gz</code> and{' '}
               <code className="text-slate-400">.zip</code> has a matching <code className="text-slate-400">.sha256</code>.
             </p>
+            <p className="mt-4 text-sm text-slate-400">
+              Each archive of both also has a build provenance attestation: GitHub&apos;s signed record that the
+              release workflow built it from the commit of the release&apos;s tag. Check it with the GitHub CLI:
+            </p>
+            <pre tabIndex={0} className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-emerald-400">
+              <code>{`gh attestation verify devscriptor-<ver>-<target>.tar.gz --repo vladimirpesic/devscriptor
+gh attestation verify rusta-<ver>-<target>.tar.gz --repo vladimirpesic/rusta`}</code>
+            </pre>
           </div>
         </div>
       </section>

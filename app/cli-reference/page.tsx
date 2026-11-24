@@ -345,8 +345,8 @@ function CommandCard({ command }: { command: Command }) {
         <CardTitle className="text-base font-mono text-white group-hover:text-blue-400 transition-colors whitespace-normal break-words">
           {command.name}
         </CardTitle>
-        <div className="mt-1 overflow-x-auto">
-          <code className="text-xs text-slate-500 font-mono">{command.usage}</code>
+        <div tabIndex={0} className="mt-1 overflow-x-auto">
+          <code className="text-xs text-slate-400 font-mono">{command.usage}</code>
         </div>
       </CardHeader>
       <CardContent className="pt-0 space-y-4">
@@ -354,7 +354,7 @@ function CommandCard({ command }: { command: Command }) {
 
         {command.options.length > 0 && (
           <div>
-            <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Options</h4>
+            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Options</h4>
             <div className="space-y-1.5">
               {command.options.map((opt, index) => (
                 <div key={index} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 text-sm">
@@ -367,12 +367,12 @@ function CommandCard({ command }: { command: Command }) {
         )}
 
         <div>
-          <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Examples</h4>
+          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Examples</h4>
           <div className="space-y-1.5">
             {command.examples.map((example, index) => (
               <div key={index} className="flex items-start gap-2">
-                <ChevronRight className="w-3 h-3 text-slate-600 mt-0.5 flex-shrink-0" />
-                <div className="min-w-0 flex-1 overflow-x-auto">
+                <ChevronRight className="w-3 h-3 text-slate-400 mt-0.5 flex-shrink-0" />
+                <div tabIndex={0} className="min-w-0 flex-1 overflow-x-auto">
                   <code className="text-xs font-mono text-slate-300">{example}</code>
                 </div>
               </div>
@@ -442,7 +442,7 @@ export default function CLIReferencePage() {
               the MCP server — all from the single <code className="text-slate-300">devscriptor</code> binary.
             </p>
             <div className="mx-auto max-w-2xl rounded-lg border border-slate-800 bg-slate-900/50 p-4 text-left">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Global options</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Global options</p>
               <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
                 <code className="text-slate-300">-d, --database &lt;FILE&gt;</code>
                 <code className="text-slate-300">--config &lt;FILE&gt;</code>
@@ -459,7 +459,7 @@ export default function CLIReferencePage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="index" className="max-w-6xl mx-auto">
-            <TabsList className="w-full flex flex-wrap justify-center gap-2 mb-12 bg-transparent h-auto">
+            <TabsList aria-label="Command group" className="w-full flex flex-wrap justify-center gap-2 mb-12 bg-transparent h-auto">
               <TabsTrigger value="index" className="data-[state=active]:bg-slate-800 bg-slate-900/50 border border-slate-800 px-4 py-2 rounded-lg">
                 <Database className="w-4 h-4 mr-2" /> Index &amp; Embed
               </TabsTrigger>

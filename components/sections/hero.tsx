@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button'
 import {
   Terminal,
   Database,
@@ -97,22 +97,22 @@ export function Hero() {
             <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <Zap className="w-6 h-6 text-yellow-400" />
               <span className="text-white font-semibold">75 MCP Tools</span>
-              <span className="text-xs text-slate-500 text-center">32 Core + 38 LSP + 5 Arch</span>
+              <span className="text-xs text-slate-400 text-center">32 Core + 38 LSP + 5 Arch</span>
             </div>
             <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <Layers className="w-6 h-6 text-purple-400" />
               <span className="text-white font-semibold">LSP Intelligence</span>
-              <span className="text-xs text-slate-500">21 Language Servers</span>
+              <span className="text-xs text-slate-400">21 Language Servers</span>
             </div>
             <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <Brain className="w-6 h-6 text-pink-400" />
               <span className="text-white font-semibold">Context Graph</span>
-              <span className="text-xs text-slate-500">AI Memory System</span>
+              <span className="text-xs text-slate-400">AI Memory System</span>
             </div>
             <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <Search className="w-6 h-6 text-emerald-400" />
               <span className="text-white font-semibold">Semantic Search</span>
-              <span className="text-xs text-slate-500">Vector Embeddings</span>
+              <span className="text-xs text-slate-400">Vector Embeddings</span>
             </div>
           </motion.div>
 
@@ -148,24 +148,27 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <a href="/download/">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-8 py-6 text-lg font-semibold shadow-lg shadow-blue-500/25"
-              >
-                Download
-                <ChevronRight className="ml-2 w-5 h-5" />
-              </Button>
+            <a
+              href="/download/"
+              className={buttonClass({
+                size: 'lg',
+                className:
+                  'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-8 py-6 text-lg font-semibold shadow-lg shadow-blue-500/25',
+              })}
+            >
+              Download
+              <ChevronRight aria-hidden="true" className="ml-2 w-5 h-5" />
             </a>
-            <a href="#features">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-slate-700 hover:bg-slate-800 px-8 py-6 text-lg"
-              >
-                <Sparkles className="mr-2 w-5 h-5" />
-                Explore Features
-              </Button>
+            <a
+              href="#features"
+              className={buttonClass({
+                size: 'lg',
+                variant: 'outline',
+                className: 'border-slate-700 hover:bg-slate-800 px-8 py-6 text-lg',
+              })}
+            >
+              <Sparkles aria-hidden="true" className="mr-2 w-5 h-5" />
+              Explore Features
             </a>
           </motion.div>
 
@@ -197,11 +200,11 @@ export function Hero() {
             className="mt-12"
           >
             <CommandLine command={DOWNLOAD_COMMAND} />
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-slate-400">
               Linux x86_64: the archive and its checksum — verify with:
             </p>
             <CommandLine command={VERIFY_COMMAND} className="mt-2" codeClassName="text-slate-400" />
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-slate-400">
               Or pick another <a href="/download/" className="text-blue-400 hover:text-blue-300">platform</a>
             </p>
           </motion.div>
@@ -223,10 +226,10 @@ function CommandLine({
 }) {
   return (
     <div className={`mx-auto flex max-w-full items-center gap-3 bg-slate-950/80 backdrop-blur-sm border border-slate-800 rounded-lg px-4 sm:px-6 py-3 w-fit ${className}`}>
-      <span className="text-slate-500 flex-shrink-0">$</span>
-      <code className={`${codeClassName} font-mono text-xs sm:text-sm overflow-x-auto whitespace-nowrap`}>{command}</code>
+      <span className="text-slate-400 flex-shrink-0">$</span>
+      <code tabIndex={0} className={`${codeClassName} font-mono text-xs sm:text-sm overflow-x-auto whitespace-nowrap`}>{command}</code>
       <button
-        className="text-slate-500 hover:text-white transition-colors flex-shrink-0"
+        className="text-slate-400 hover:text-white transition-colors flex-shrink-0"
         aria-label="Copy the command"
         onClick={() => navigator.clipboard.writeText(command)}
       >

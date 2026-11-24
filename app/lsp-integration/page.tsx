@@ -395,8 +395,8 @@ export default function LSPIntegrationPage() {
                             </Badge>
                             <CardTitle className="text-lg text-white">{tier.title}</CardTitle>
                           </div>
-                          <div className="overflow-x-auto">
-                            <code className="text-xs text-slate-500">{tier.path}</code>
+                          <div tabIndex={0} className="overflow-x-auto">
+                            <code className="text-xs text-slate-400">{tier.path}</code>
                           </div>
                         </div>
                       </div>
@@ -459,7 +459,7 @@ export default function LSPIntegrationPage() {
             </div>
 
             <Tabs defaultValue="navigation" className="w-full">
-              <TabsList className="w-full flex flex-wrap justify-center gap-2 mb-8 bg-transparent h-auto">
+              <TabsList aria-label="Tool category" className="w-full flex flex-wrap justify-center gap-2 mb-8 bg-transparent h-auto">
                 {Object.entries(lspTools).map(([key, category]) => {
                   const Icon = category.icon
                   return (
@@ -536,13 +536,13 @@ export default function LSPIntegrationPage() {
                         <CardTitle className="text-sm font-mono text-white group-hover:text-blue-400 transition-colors break-all">
                           {server.name}
                         </CardTitle>
-                        <p className="text-xs text-slate-500 mt-1">{server.language}</p>
+                        <p className="text-xs text-slate-400 mt-1">{server.language}</p>
                       </div>
                       <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <code className="text-xs text-slate-600">{server.source}</code>
+                    <code className="text-xs text-slate-400">{server.source}</code>
                   </CardContent>
                 </Card>
               ))}
@@ -637,7 +637,7 @@ export default function LSPIntegrationPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+                  <pre tabIndex={0} className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
                     <code>{`# devscriptor-lsp.toml: the LSP tools use exactly these
 [workspace]
 roots = ["."]
@@ -669,7 +669,7 @@ idle_timeout_secs = 600    # 0 never stops an idle server`}</code>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+                  <pre tabIndex={0} className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
                     <code>{`# A configuration file anywhere (needs no trust: you set it)
 export DEVSCRIPTOR_LSP_CONFIG=/path/to/devscriptor-lsp.toml
 
@@ -713,7 +713,7 @@ export DEVSCRIPTOR_LSP_MAX_SERVERS=4`}</code>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <pre className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+                    <pre tabIndex={0} className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
                       <code>{cmd.example}</code>
                     </pre>
                   </CardContent>

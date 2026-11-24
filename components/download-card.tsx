@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Download, Check, Copy, Terminal, FileArchive } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { buttonClass } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -31,10 +31,7 @@ export function DownloadCard({
 }: DownloadCardProps) {
   const [showInstallInstructions, setShowInstallInstructions] = useState(false);
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
-
-  const handleDownload = () => {
-    window.open(asset.url, '_blank');
-  };
+  const instructionsId = useId();
 
   const handleCopyCommand = async (command: string) => {
     try {
@@ -82,25 +79,29 @@ export function DownloadCard({
           <span className="text-xs">v{asset.version}</span>
         </div>
 
-        <Button
-          onClick={handleDownload}
-          className="w-full gap-2"
-          size="lg"
+        <a
+          href={asset.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonClass({ size: 'lg', className: 'w-full gap-2' })}
         >
-          <Download className="h-4 w-4" />
+          <Download aria-hidden="true" className="h-4 w-4" />
           Download
-        </Button>
+        </a>
 
         <button
+          type="button"
           onClick={() => setShowInstallInstructions(!showInstallInstructions)}
+          aria-expanded={showInstallInstructions}
+          aria-controls={instructionsId}
           className="flex w-full items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          <Terminal className="h-4 w-4" />
+          <Terminal aria-hidden="true" className="h-4 w-4" />
           {showInstallInstructions ? 'Hide' : 'Show'} install instructions
         </button>
 
         {showInstallInstructions && (
-          <div className="space-y-2 rounded-lg bg-muted p-3">
+          <div id={instructionsId} className="space-y-2 rounded-lg bg-muted p-3">
             <p className="text-xs font-medium text-muted-foreground">
               Install via terminal:
             </p>
@@ -121,8 +122,10 @@ export function DownloadCard({
                         {line}
                       </code>
                       <button
+                        type="button"
                         onClick={() => handleCopyCommand(line)}
-                        className="opacity-0 transition-opacity group-hover:opacity-100"
+                        className="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+                        aria-label="Copy command"
                         title="Copy command"
                       >
                         {copiedCommand === line ? (

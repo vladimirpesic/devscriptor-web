@@ -13,6 +13,7 @@ import {
   Heart,
 } from 'lucide-react'
 import { LICENSE_NAME } from '@/lib/licensing'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Thank You - Devscriptor',
@@ -112,7 +113,7 @@ export default function ThankYouPage() {
       <section className="pb-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-6 text-sm uppercase tracking-wider text-slate-500">
+            <p className="mb-6 text-sm uppercase tracking-wider text-slate-400">
               While you&apos;re here
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -130,15 +131,15 @@ export default function ThankYouPage() {
                 <Bot className="h-4 w-4" />
                 Explore Rusta
               </a>
-              <a
+              <Link
                 href="/"
                 className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-700"
               >
                 Home
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
-            <p className="mt-8 text-sm text-slate-500">
+            <p className="mt-8 text-sm text-slate-400">
               Something not right with your contribution? Email{' '}
               <a
                 href="mailto:contact@devscriptor.com"

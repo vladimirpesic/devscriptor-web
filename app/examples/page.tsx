@@ -235,7 +235,7 @@ export default function ExamplesPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="cli" className="max-w-6xl mx-auto">
-            <TabsList className="w-full flex flex-wrap justify-center gap-2 mb-8 bg-transparent h-auto">
+            <TabsList aria-label="Example" className="w-full flex flex-wrap justify-center gap-2 mb-8 bg-transparent h-auto">
               <TabsTrigger value="cli" className="data-[state=active]:bg-slate-800 bg-slate-900/50 border border-slate-800 px-4 py-2 rounded-lg">
                 <Terminal className="w-4 h-4 mr-2" /> CLI
               </TabsTrigger>

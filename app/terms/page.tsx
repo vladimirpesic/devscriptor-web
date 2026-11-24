@@ -106,7 +106,7 @@ export default function LicensePage() {
                       href={repoUrl('devscriptor')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-cyan-300 underline-offset-4 hover:underline"
+                      className="text-cyan-300 underline-offset-4 underline"
                     >
                       Devscriptor
                     </a>{' '}
@@ -115,7 +115,7 @@ export default function LicensePage() {
                       href={repoUrl('rusta')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-cyan-300 underline-offset-4 hover:underline"
+                      className="text-cyan-300 underline-offset-4 underline"
                     >
                       Rusta
                     </a>{' '}
@@ -146,7 +146,7 @@ export default function LicensePage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-sm text-slate-500">
+              <p className="mt-3 text-sm text-slate-400">
                 It also grants a license to the contributors&apos; patents that the work needs;
                 anyone who sues claiming that the work infringes a patent loses the license.
               </p>
@@ -166,7 +166,7 @@ export default function LicensePage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-sm text-slate-500">
+              <p className="mt-3 text-sm text-slate-400">
                 Running the tools, at work or anywhere, and changing them for your own use ask
                 nothing of you; these conditions apply to passing copies on.
               </p>
@@ -242,7 +242,7 @@ export default function LicensePage() {
                   href={licenseUrl('devscriptor')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline-offset-4 hover:underline"
+                  className="text-blue-400 underline-offset-4 underline"
                 >
                   Devscriptor
                 </a>
@@ -251,7 +251,7 @@ export default function LicensePage() {
                   href={licenseUrl('rusta')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline-offset-4 hover:underline"
+                  className="text-blue-400 underline-offset-4 underline"
                 >
                   Rusta
                 </a>
@@ -260,7 +260,7 @@ export default function LicensePage() {
                   href="https://www.gnu.org/licenses/gpl-3.0.html"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline-offset-4 hover:underline"
+                  className="text-blue-400 underline-offset-4 underline"
                 >
                   gnu.org/licenses/gpl-3.0.html
                 </a>
@@ -296,7 +296,7 @@ export default function LicensePage() {
                   </a>
                 ))}
               </div>
-              <p className="mt-3 text-xs text-slate-500">
+              <p className="mt-3 text-xs text-slate-400">
                 Payments are handled by Polar, the merchant of record.
               </p>
             </div>
@@ -312,7 +312,7 @@ export default function LicensePage() {
                 trackers, and its fonts are served from the site itself. The download buttons lead
                 to GitHub, and the support links to Polar, each under its own privacy policy. What
                 the tools themselves send over the network is on{' '}
-                <a href="/security/" className="text-cyan-400 underline-offset-4 hover:underline">
+                <a href="/security/" className="text-cyan-400 underline-offset-4 underline">
                   Security &amp; Privacy
                 </a>
                 . Its{' '}
@@ -320,7 +320,7 @@ export default function LicensePage() {
                   href={WEBSITE_REPO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-cyan-400 underline-offset-4 hover:underline"
+                  className="text-cyan-400 underline-offset-4 underline"
                 >
                   source
                 </a>{' '}
@@ -338,7 +338,7 @@ export default function LicensePage() {
                 Write to{' '}
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="text-blue-400 underline-offset-4 hover:underline"
+                  className="text-blue-400 underline-offset-4 underline"
                 >
                   {CONTACT_EMAIL}
                 </a>

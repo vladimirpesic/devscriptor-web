@@ -193,7 +193,7 @@ export default function LanguagesPage() {
                       >
                         {language.name}
                         {language.kind && (
-                          <span className="text-[10px] font-normal uppercase tracking-wider text-slate-500">
+                          <span className="text-[10px] font-normal uppercase tracking-wider text-slate-400">
                             {language.kind}
                           </span>
                         )}
@@ -211,12 +211,12 @@ export default function LanguagesPage() {
       <section className="py-8 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-400">
               Built on Tree-sitter 0.27, an incremental parsing library. The TypeScript
               grammar covers both TypeScript and TSX, so 26 crates wire 27 grammars in total — every
               language gets a dedicated parser for accurate syntax-tree extraction.
             </p>
-            <p className="text-sm text-slate-500 mt-4">
+            <p className="text-sm text-slate-400 mt-4">
               Markdown is indexed too, a heading section at a time rather than through a
               grammar, so the reasoning a codebase writes down — design notes, ADRs,
               thresholds — is searchable alongside the code it explains.

@@ -189,7 +189,7 @@ function ToolCard({ tool }: { tool: { name: string; description: string; example
       </CardHeader>
       <CardContent className="pt-0">
         <p className="text-sm text-slate-400 mb-3">{tool.description}</p>
-        <pre className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+        <pre tabIndex={0} className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
           <code>{tool.example}</code>
         </pre>
       </CardContent>

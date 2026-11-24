@@ -162,7 +162,7 @@ export function MCPIntegration() {
         >
           <div className="text-center mb-6">
             <h3 className="text-lg font-semibold text-white mb-2">Supported AI Agents</h3>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-400">
               Any MCP client that starts a stdio server: <code className="text-slate-400">devscriptor mcp</code>.
             </p>
           </div>
@@ -170,7 +170,7 @@ export function MCPIntegration() {
             {supportedAgents.map((agent, index) => (
               <div key={index} className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-center">
                 <div className={`text-sm font-medium ${agent.color}`}>{agent.name}</div>
-                <div className="text-xs text-slate-500 mt-1">{agent.status}</div>
+                <div className="text-xs text-slate-400 mt-1">{agent.status}</div>
               </div>
             ))}
           </div>

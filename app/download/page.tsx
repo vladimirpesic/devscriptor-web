@@ -108,7 +108,7 @@ function ManualInstall({ product }: { product: ProductId }) {
           </span>
           macOS &amp; Linux
         </h3>
-        <pre className="mt-4 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
+        <pre tabIndex={0} className="mt-4 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
           <code>{`# Example: Linux x86_64 (swap the target for your platform)
 # Downloads the archive and its checksum.
 ${linuxDownloadCommand(product)}
@@ -118,7 +118,7 @@ tar -xzf ${linux}
 sudo mv ${linuxFolder}/${bin} /usr/local/bin/
 ${bin} --version`}</code>
         </pre>
-        <p className="mt-3 text-xs text-slate-500">
+        <p className="mt-3 text-xs text-slate-400">
           The macOS binaries are not signed: if Gatekeeper blocks the first launch, clear the
           quarantine flag with{' '}
           <code className="whitespace-normal break-words text-slate-400">
@@ -133,7 +133,7 @@ ${bin} --version`}</code>
         <h3 className="flex items-center gap-2 font-semibold text-white">
           <PlatformLogo platform="windows" className="h-4 w-4" /> Windows (PowerShell)
         </h3>
-        <pre className="mt-4 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
+        <pre tabIndex={0} className="mt-4 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
           <code>{`# Verify integrity: the printed hash must match the .sha256 file
 # published next to the archive.
 (Get-FileHash -Algorithm SHA256 ${windows}).Hash.ToLower()
@@ -172,7 +172,7 @@ export default function DownloadPage() {
               knowledge graph; <span className="text-white">Rusta</span> is the coding agent that
               drives it. Download a release, or build either from source.
             </p>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-500">
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400">
               {LICENSE_SUMMARY}{' '}
               <a href="/terms/" className="text-slate-400 underline underline-offset-4 hover:text-white">
                 License
@@ -255,7 +255,7 @@ export default function DownloadPage() {
                 With Rust 1.95 or newer and a C compiler (the tree-sitter grammars and the bundled
                 SQLite are C):
               </p>
-              <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
+              <pre tabIndex={0} className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
                 <code>{`git clone ${repoUrl('devscriptor')}.git && cd devscriptor
 cargo build --release -p devscriptor-cli       # target/release/devscriptor`}</code>
               </pre>
@@ -277,7 +277,7 @@ cargo build --release -p devscriptor-cli       # target/release/devscriptor`}</c
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <p className="text-sm text-slate-400">{step.desc}</p>
-                      <pre className="overflow-x-auto rounded bg-slate-950 p-3 text-xs text-emerald-400">
+                      <pre tabIndex={0} className="overflow-x-auto rounded bg-slate-950 p-3 text-xs text-emerald-400">
                         <code>{step.code}</code>
                       </pre>
                     </CardContent>
@@ -300,7 +300,7 @@ cargo build --release -p devscriptor-cli       # target/release/devscriptor`}</c
               <h2 className="text-2xl font-bold text-white sm:text-3xl">Rusta {RUSTA_VERSION}</h2>
               <p className="text-sm text-slate-400">
                 Coding agent for Kimi, GLM &amp; DeepSeek · auto-wires Devscriptor&apos;s 75 MCP tools ·{' '}
-                <a href="/rusta/" className="text-amber-400 underline-offset-4 hover:underline">
+                <a href="/rusta/" className="text-amber-400 underline-offset-4 underline">
                   learn more
                 </a>
               </p>
@@ -331,7 +331,7 @@ cargo build --release -p devscriptor-cli       # target/release/devscriptor`}</c
                 <Github className="h-4 w-4" /> Or build from source
               </h3>
               <p className="mt-2 text-sm text-slate-400">With Rust 1.89 or newer:</p>
-              <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
+              <pre tabIndex={0} className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-300 sm:text-sm">
                 <code>{`git clone ${repoUrl('rusta')}.git && cd rusta
 cargo build --release -p rusta-cli                  # target/release/rusta
 cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</code>
@@ -353,7 +353,7 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <p className="text-sm text-slate-400">{step.desc}</p>
-                      <pre className="overflow-x-auto rounded bg-slate-950 p-3 text-xs text-amber-400">
+                      <pre tabIndex={0} className="overflow-x-auto rounded bg-slate-950 p-3 text-xs text-amber-400">
                         <code>{step.code}</code>
                       </pre>
                     </CardContent>
@@ -452,7 +452,7 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
                   </a>
                 ))}
               </div>
-              <p className="mt-4 text-xs text-slate-500">
+              <p className="mt-4 text-xs text-slate-400">
                 Handled by Polar, the merchant of record. Nothing about your code is involved.
               </p>
             </div>

@@ -32,7 +32,7 @@ const features = [
     description: 'A memory-safe engine with zero-cost abstractions, designed to run efficiently on everyday developer hardware.',
     details: [
       'Multi-threaded parsing (scales to num_cpus)',
-      'Memory-mapped file reading for zero-copy access',
+      'Extraction in time linear in each file’s size',
       'Batched, WAL-mode SQLite transactions',
       'Content-hash caches skip redundant parsing & inference',
     ],

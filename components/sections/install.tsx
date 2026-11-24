@@ -107,7 +107,7 @@ export function Install() {
               >
                 <PlatformLogo platform={method.platform} className="w-6 h-6 mx-auto mb-2" />
                 <div className="text-sm font-medium text-white">{method.name}</div>
-                <div className="text-xs text-slate-500 mt-1">{method.platforms}</div>
+                <div className="text-xs text-slate-400 mt-1">{method.platforms}</div>
               </div>
             ))}
           </div>
@@ -126,7 +126,7 @@ export function Install() {
               <CardTitle className="text-base text-white">Quick Install (Linux x86_64)</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-slate-950 rounded-lg p-4 font-mono text-xs sm:text-sm overflow-x-auto">
+              <div tabIndex={0} className="bg-slate-950 rounded-lg p-4 font-mono text-xs sm:text-sm overflow-x-auto">
                 <code className="text-emerald-400 whitespace-pre">{QUICK_INSTALL}</code>
               </div>
             </CardContent>

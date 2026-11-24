@@ -102,7 +102,7 @@ const modules = [
 
 // Technology stack
 const techStack = [
-  { category: 'Parsing', items: ['tree-sitter 0.27', '26 grammars (27 with TSX)', 'Memory-mapped file reading'] },
+  { category: 'Parsing', items: ['tree-sitter 0.27', '26 grammars (27 with TSX)', 'Each file read once, size-capped'] },
   { category: 'Database', items: ['rusqlite 0.41 (bundled SQLite 3.54)', 'sqlite-vec 0.1.9 — FLOAT[768]', 'FTS5 code-aware tokenizer', 'r2d2 0.8 connection pool'] },
   { category: 'Embeddings', items: ['jinaai/jina-embeddings-v2-base-code', 'tract-onnx 0.23 (pure-Rust ONNX inference)', 'Shared model, RAM-aware concurrency, no API keys'] },
   { category: 'Async Runtime', items: ['Tokio 1.x', 'ignore 0.4 (ripgrep engine)', 'reqwest 0.13 with rustls (model + LSP downloads)'] },
@@ -196,7 +196,7 @@ function ModuleCard({ module }: { module: typeof modules[0] }) {
                     {component.desc}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">{component.detail}</p>
+                <p className="text-xs text-slate-400 mt-1">{component.detail}</p>
               </div>
             </div>
           ))}
@@ -346,7 +346,7 @@ export default function ArchitecturePage() {
             </div>
             
             <Tabs defaultValue="scanning" className="w-full">
-              <TabsList className="grid w-full grid-cols-1 gap-1 h-auto sm:grid-cols-3 bg-slate-900/50 border border-slate-800 mb-8">
+              <TabsList aria-label="Data flow" className="grid w-full grid-cols-1 gap-1 h-auto sm:grid-cols-3 bg-slate-900/50 border border-slate-800 mb-8">
                 <TabsTrigger value="scanning" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-300">
                   <Search className="w-4 h-4 mr-2" />
                   Codebase Scanning
@@ -448,7 +448,7 @@ export default function ArchitecturePage() {
                     <p className="text-sm text-slate-400">Claude Desktop, Cursor, Cline, etc.</p>
                   </div>
                   
-                  <ArrowDown className="w-5 h-5 text-slate-600 my-2" />
+                  <ArrowDown className="w-5 h-5 text-slate-400 my-2" />
                   
                   {/* MCP Server Layer */}
                   <div className="w-full max-w-lg p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-center mb-4">
@@ -460,9 +460,9 @@ export default function ArchitecturePage() {
                   </div>
                   
                   <div className="flex gap-4 my-2">
-                    <ArrowDown className="w-5 h-5 text-slate-600" />
-                    <ArrowDown className="w-5 h-5 text-slate-600" />
-                    <ArrowDown className="w-5 h-5 text-slate-600" />
+                    <ArrowDown className="w-5 h-5 text-slate-400" />
+                    <ArrowDown className="w-5 h-5 text-slate-400" />
+                    <ArrowDown className="w-5 h-5 text-slate-400" />
                   </div>
                   
                   {/* Core Modules Layer */}
@@ -490,7 +490,7 @@ export default function ArchitecturePage() {
                     </div>
                   </div>
                   
-                  <ArrowDown className="w-5 h-5 text-slate-600 my-2" />
+                  <ArrowDown className="w-5 h-5 text-slate-400 my-2" />
                   
                   {/* External Dependencies */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl">

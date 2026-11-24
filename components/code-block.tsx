@@ -39,7 +39,7 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
 
   return (
     <div className="relative">
-      <pre className="bg-slate-950 rounded-lg p-4 pt-8 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent border border-slate-800">
+      <pre tabIndex={0} className="bg-slate-950 rounded-lg p-4 pt-8 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent border border-slate-800">
         <code className={`text-sm font-mono whitespace-pre ${getLanguageColor()}`}>{code}</code>
       </pre>
       <button

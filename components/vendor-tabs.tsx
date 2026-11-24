@@ -65,20 +65,25 @@ export function VendorTabs({ panels }: { panels: Record<VendorId, ReactNode> }) 
 
   return (
     <Tabs value={vendor} onValueChange={choose} className="mx-auto max-w-6xl">
-      <TabsList className="mb-10 grid h-auto w-full grid-cols-1 gap-1 border border-slate-800 bg-slate-900/50 p-1 sm:grid-cols-3">
+      <TabsList
+        aria-label="Provider"
+        className="mb-10 grid h-auto w-full grid-cols-1 gap-1 border border-slate-800 bg-slate-900/50 p-1 sm:grid-cols-3"
+      >
         {VENDORS.map((v) => (
           <TabsTrigger key={v.id} value={v.id} className={`py-2.5 ${v.active}`}>
             <span className={`mr-2 h-2 w-2 flex-shrink-0 rounded-full ${v.dot}`} />
             {v.label}
-            <span className="ml-2 hidden text-xs font-normal text-slate-500 sm:inline">
+            <span className="ml-2 hidden text-xs font-normal text-slate-400 sm:inline">
               {v.maker}
             </span>
           </TabsTrigger>
         ))}
       </TabsList>
       {VENDORS.map((v) => (
-        <TabsContent key={v.id} value={v.id} id={v.id} className="mt-0 scroll-mt-24">
-          {panels[v.id]}
+        <TabsContent key={v.id} value={v.id} className="mt-0">
+          <div id={v.id} className="scroll-mt-24">
+            {panels[v.id]}
+          </div>
         </TabsContent>
       ))}
     </Tabs>

@@ -12,12 +12,24 @@ Node.js 22.6 or newer (the CI uses 24):
 npm ci
 npm run dev                # http://localhost:3000
 npm run lint
-npm run build              # the static site, in dist/
+npm run build              # the static site, in dist/, each page with its CSP
 npm run check:downloads    # every download, checksum and source link is live
+npx playwright install chromium   # once, for check:pages
+npm run check:pages        # accessibility, CSP and sitemap of every built page
 ```
 
 The site sets no cookies and loads nothing from third parties at run time: its
-fonts are downloaded at build time and served with the site.
+fonts are downloaded at build time and served with the site. GitHub Pages sets no
+headers of a site's choosing, so `npm run build` writes each page's Content
+Security Policy into it as a `<meta>` tag (`scripts/csp.mts`): the site's own
+origin only, and of inline scripts exactly those the page holds, by their
+SHA-256.
+
+`npm run check:pages` serves `dist/` and opens every page in Chromium, at a
+phone's width and a desktop's: each must pass axe's WCAG 2.2 A and AA rules, as
+loaded, with each of its tabs selected and with the navigation menu open; run
+within its policy without a console error; and be in `app/sitemap.ts` if it may
+be indexed, and only then.
 
 ## Where the facts live
 
@@ -32,8 +44,8 @@ fonts are downloaded at build time and served with the site.
 ## Publishing
 
 `.github/workflows/pages.yml` runs on every push to `main`: it installs, lints,
-checks every link `check:downloads` checks, builds, and deploys `dist/` to GitHub
-Pages. The custom domain is set in the repository's Pages settings.
+checks every link `check:downloads` checks, builds, runs `check:pages`, and
+deploys `dist/` to GitHub Pages. The custom domain is set in the repository's Pages settings.
 
 After a product's release is published on GitHub, set its version in
 `lib/github.ts`. `check:downloads` fails while any archive or `.sha256` of that

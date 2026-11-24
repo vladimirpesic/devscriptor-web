@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useId, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button'
 import { Menu, X, Cpu, ChevronDown, Bot } from 'lucide-react'
 import { BrandMark } from '@/components/brand-mark'
 import { PRODUCT, moduleNav, resourceNav, sourceNav } from '@/lib/navigation'
+import Link from 'next/link'
 
 interface DropdownProps {
   label: string
@@ -17,20 +18,35 @@ interface DropdownProps {
 }
 
 function NavDropdown({ label, items, isOpen, onToggle, onOpen, onClose }: DropdownProps) {
+  const listId = useId()
+  const buttonRef = useRef<HTMLButtonElement>(null)
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && isOpen) {
+          onClose()
+          buttonRef.current?.focus()
+        }
+      }}
+    >
       <button
+        ref={buttonRef}
+        type="button"
         onClick={onToggle}
         onMouseEnter={onOpen}
+        aria-expanded={isOpen}
+        aria-controls={listId}
         className="flex items-center gap-1 px-3 py-2 text-sm text-slate-400 hover:text-white transition-colors rounded-md hover:bg-slate-800/50"
       >
         {label}
-        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown aria-hidden="true" className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id={listId}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -61,6 +77,7 @@ function NavDropdown({ label, items, isOpen, onToggle, onOpen, onClose }: Dropdo
 
 export function Navigation() {
   const headerRef = useRef<HTMLElement>(null)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [openMenu, setOpenMenu] = useState<'modules' | 'resources' | null>(null)
 
@@ -94,6 +111,18 @@ export function Navigation() {
     }
   }, [])
 
+  // Escape closes the open menu and gives the focus back to its button.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      setIsMobileMenuOpen(false)
+      menuButtonRef.current?.focus()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isMobileMenuOpen])
+
   return (
     <>
       <motion.header
@@ -111,10 +140,10 @@ export function Navigation() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <a href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <BrandMark />
               <span className="text-xl font-bold text-white">de{`>`}scriptor</span>
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
@@ -154,20 +183,34 @@ export function Navigation() {
 
             {/* CTA Button */}
             <div className="hidden lg:block">
-              <a href={PRODUCT.download.href}>
-                <Button variant="outline" size="sm" className="border-slate-700 hover:bg-slate-800">
-                  <Cpu className="w-4 h-4 mr-2" />
-                  {PRODUCT.download.label}
-                </Button>
+              <a
+                href={PRODUCT.download.href}
+                className={buttonClass({
+                  variant: 'outline',
+                  size: 'sm',
+                  className: 'border-slate-700 hover:bg-slate-800',
+                })}
+              >
+                <Cpu aria-hidden="true" className="w-4 h-4 mr-2" />
+                {PRODUCT.download.label}
               </a>
             </div>
 
             {/* Mobile Menu Button */}
             <button
+              ref={menuButtonRef}
+              type="button"
               className="lg:hidden p-2 text-slate-400 hover:text-white"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? (
+                <X aria-hidden="true" className="w-6 h-6" />
+              ) : (
+                <Menu aria-hidden="true" className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -181,6 +224,7 @@ export function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
+            id="mobile-navigation"
             className="fixed inset-x-0 top-16 z-40 lg:hidden"
           >
             <div className="bg-slate-950/95 backdrop-blur-xl border-b border-slate-800 p-4 max-h-[80vh] overflow-y-auto">
@@ -202,7 +246,7 @@ export function Navigation() {
                   {PRODUCT.rusta.label}
                 </a>
 
-                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   Modules
                 </div>
                 {moduleNav.map((item) => (
@@ -216,7 +260,7 @@ export function Navigation() {
                   </a>
                 ))}
 
-                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   Resources
                 </div>
                 {[...resourceNav, ...sourceNav].map((item) => (
@@ -234,11 +278,16 @@ export function Navigation() {
                 ))}
 
                 <div className="border-t border-slate-800 my-3" />
-                <a href={PRODUCT.download.href} onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white">
-                    <Cpu className="w-4 h-4 mr-2" />
-                    {PRODUCT.download.label}
-                  </Button>
+                <a
+                  href={PRODUCT.download.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={buttonClass({
+                    className:
+                      'w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white',
+                  })}
+                >
+                  <Cpu aria-hidden="true" className="w-4 h-4 mr-2" />
+                  {PRODUCT.download.label}
                 </a>
               </nav>
             </div>

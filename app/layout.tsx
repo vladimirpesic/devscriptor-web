@@ -15,8 +15,6 @@ const jetbrainsMono = JetBrains_Mono({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export const metadata: Metadata = {
@@ -43,6 +41,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // Each page's own address, with the trailing slash it is served at.
+  alternates: {
+    canonical: './',
+  },
+  referrer: 'strict-origin-when-cross-origin',
 }
 
 export default function RootLayout({

@@ -93,7 +93,7 @@ const coreTools = {
   fileContext: [
     { name: 'describe_file', description: "Describe a file's contents: its entities and a numbered excerpt" },
     { name: 'describe_modification', description: 'Describe what a modification would do' },
-    { name: 'get_file_context', description: 'The entities in a file, with a source excerpt around each' },
+    { name: 'get_file_context', description: 'A file’s entities with a source excerpt around each, its imports, and the files the graph connects it to' },
     { name: 'validate_file_edit', description: 'Validate a file edit with context' },
     { name: 'query_with_context', description: 'Query with context awareness' },
   ],
@@ -278,7 +278,7 @@ function ToolCard({ tool, category }: { tool: { name: string; description: strin
       <CardContent className="pt-0">
         <p className="text-sm text-slate-400 mb-3">{tool.description}</p>
         {tool.params && (
-          <pre className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+          <pre tabIndex={0} className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
             <code>{tool.params}</code>
           </pre>
         )}
@@ -356,7 +356,7 @@ export default function MCPToolsPage() {
         <div className="container mx-auto px-4">
           {/* max-w-6xl matches the tab panels below, so the selector lines up with its content */}
           <Tabs defaultValue="core" className="max-w-6xl mx-auto">
-            <TabsList className="grid w-full grid-cols-1 gap-1 h-auto sm:grid-cols-3 bg-slate-900/50 border border-slate-800 p-1 mb-12">
+            <TabsList aria-label="Tool category" className="grid w-full grid-cols-1 gap-1 h-auto sm:grid-cols-3 bg-slate-900/50 border border-slate-800 p-1 mb-12">
               {/* Active colours match each category's icon in the hero above. */}
               <TabsTrigger
                 value="core"
@@ -476,7 +476,7 @@ export default function MCPToolsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+                  <pre tabIndex={0} className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
                     <code>{`{
   "mcpServers": {
     "devscriptor": {
@@ -486,11 +486,11 @@ export default function MCPToolsPage() {
   }
 }`}</code>
                   </pre>
-                  <p className="text-xs text-slate-500 mt-3">For debug logs on stderr use:</p>
-                  <pre className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-400 overflow-x-auto border border-slate-800 mt-2">
+                  <p className="text-xs text-slate-400 mt-3">For debug logs on stderr use:</p>
+                  <pre tabIndex={0} className="bg-slate-950 rounded-lg p-3 text-xs font-mono text-slate-400 overflow-x-auto border border-slate-800 mt-2">
                     <code>{`"args": ["--verbose", "mcp", "--no-daemon"]`}</code>
                   </pre>
-                  <p className="text-xs text-slate-500 mt-2">
+                  <p className="text-xs text-slate-400 mt-2">
                     A shared server writes its log to its runtime directory instead. Setting{' '}
                     <code className="text-slate-400">RUST_LOG</code> has no effect — it is not read.
                   </p>
@@ -505,7 +505,7 @@ export default function MCPToolsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
+                  <pre tabIndex={0} className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-slate-300 overflow-x-auto border border-slate-800">
                     <code>{`{
   "mcpServers": {
     "devscriptor": {
@@ -515,7 +515,7 @@ export default function MCPToolsPage() {
   }
 }`}</code>
                   </pre>
-                  <p className="text-xs text-slate-500 mt-3">
+                  <p className="text-xs text-slate-400 mt-3">
                     Identical on every platform — Devscriptor ships one executable answering to one
                     name (<code className="text-slate-400">devscriptor.exe</code> on Windows).
                   </p>

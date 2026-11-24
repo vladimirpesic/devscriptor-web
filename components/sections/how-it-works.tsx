@@ -142,10 +142,10 @@ export function HowItWorks() {
               <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
               <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-              <span className="ml-3 text-xs text-slate-500 font-mono">terminal</span>
+              <span className="ml-3 text-xs text-slate-400 font-mono">terminal</span>
             </div>
-            <div className="p-4 font-mono text-xs overflow-x-auto">
-              <div className="text-slate-500 mb-1"># Quick start</div>
+            <div tabIndex={0} className="p-4 font-mono text-xs overflow-x-auto">
+              <div className="text-slate-400 mb-1"># Quick start</div>
               <div className="text-emerald-400">$ devscriptor scan ./my-project</div>
               <div className="text-blue-400">$ devscriptor lsp setup</div>
               <div className="text-purple-400">$ devscriptor mcp</div>

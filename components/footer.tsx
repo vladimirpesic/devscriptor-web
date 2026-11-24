@@ -4,6 +4,7 @@ import { Mail, Heart } from 'lucide-react'
 import { BrandMark } from '@/components/brand-mark'
 import { productNav, moduleNav, resourceNav, sourceNav, supportNav, CONTACT_EMAIL } from '@/lib/navigation'
 import { COPYRIGHT, LICENSE_NAME } from '@/lib/licensing'
+import Link from 'next/link'
 
 // Same groups, same order as the header — both read from lib/navigation.
 const footerLinks = {
@@ -19,19 +20,20 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <a href="/" className="flex items-center gap-2 mb-4">
+            <Link href="/" className="flex items-center gap-2 mb-4">
               <BrandMark />
               <span className="text-xl font-bold text-white">Devscriptor</span>
-            </a>
+            </Link>
             <p className="text-slate-400 text-sm max-w-xs mb-6">
               A local knowledge graph of your codebase for any AI coding agent, and Rusta, the coding agent built for Kimi, GLM and DeepSeek. Open source, built in Rust.
             </p>
             <div className="flex gap-4">
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
+                aria-label={`Email ${CONTACT_EMAIL}`}
                 className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-700 transition-colors"
               >
-                <Mail className="w-5 h-5" />
+                <Mail aria-hidden="true" className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -78,17 +80,17 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-xs text-slate-600">Optional. Unlocks nothing.</p>
+            <p className="mt-3 text-xs text-slate-400">Optional. Unlocks nothing.</p>
           </div>
         </div>
 
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">
+          <p className="text-slate-400 text-sm">
             {COPYRIGHT}. Devscriptor, Rusta and this website are free software under the {LICENSE_NAME}.
           </p>
           <div className="flex gap-6">
-            <span className="text-slate-600 text-sm">
+            <span className="text-slate-400 text-sm">
               {CONTACT_EMAIL}
             </span>
           </div>

@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     question: 'Is it suitable for large codebases?',
-    answer: 'Yes. Devscriptor is built in Rust and uses parallel, gitignore-aware file discovery, memory-mapped parsing, and a streamed cross-file analysis pass with bounded memory. Incremental scanning (mtime+size+XXH3) and a content-hash embedding cache make re-analysis fast. A scan stays under ~400 MB of memory, and under memory pressure the pipeline slows down instead of failing. Embedding is CPU-bound and takes longest: minutes to an hour or two for a small or medium repository, and it can run in the background, incrementally.',
+    answer: 'Yes. Devscriptor is built in Rust and uses parallel, gitignore-aware file discovery, parsing on every core in time linear in each file’s size, and a streamed cross-file analysis pass with bounded memory. Incremental scanning (mtime+size+XXH3) and a content-hash embedding cache make re-analysis fast. A scan stays under ~400 MB of memory, and under memory pressure the pipeline slows down instead of failing. Embedding is CPU-bound and takes longest: minutes to an hour or two for a small or medium repository, and it can run in the background, incrementally.',
     category: 'Performance',
   },
   {
