@@ -16,13 +16,14 @@ import {
   Code2,
   Layers,
   GitBranch,
+  GitCompare,
   ListFilter,
   Sparkles
 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Features - Devscriptor',
-  description: 'Complete feature overview of Devscriptor: 75 MCP tools, 26 languages & frameworks, LSP code intelligence, Context Graph memory, and more.',
+  description: 'Complete feature overview of Devscriptor: 76 MCP tools, 26 languages & frameworks, LSP code intelligence, Context Graph memory, and more.',
 }
 
 const features = [
@@ -74,7 +75,7 @@ const features = [
       'Hover information and type signatures',
       'Code completions',
       'Call and type hierarchy',
-      'Diagnostics and error detection',
+      'Diagnostics, a Rust file’s cargo check errors included',
     ],
     accent: 'text-violet-400',
     bgColor: 'bg-violet-500/10',
@@ -101,6 +102,7 @@ const features = [
       'All glob and negation patterns',
       'Nested .gitignore files with proper precedence',
       '.git/info/exclude support',
+      'Built-in excludes (target, build, node_modules…) below the scanned folder only',
     ],
     accent: 'text-amber-400',
     bgColor: 'bg-amber-500/10',
@@ -149,9 +151,9 @@ const features = [
   {
     icon: Zap,
     title: 'MCP Server Built-in',
-    description: 'Works with Claude Desktop, Claude Code, Cursor, Cline, Rusta and any MCP-compatible AI agent. 75 total tools: 32 Core + 38 LSP + 5 Architecture.',
+    description: 'Works with Claude Desktop, Claude Code, Cursor, Cline, Rusta and any MCP-compatible AI agent. 76 total tools: 33 Core + 38 LSP + 5 Architecture.',
     details: [
-      '32 Core analysis, context & watcher tools',
+      '33 Core analysis, change-impact, context & watcher tools',
       '38 LSP code intelligence tools',
       '5 Architecture management tools',
       'One shared server per workspace, over stdio (devscriptor mcp)',
@@ -184,6 +186,19 @@ const features = [
     ],
     accent: 'text-indigo-400',
     bgColor: 'bg-indigo-500/10',
+  },
+  {
+    icon: GitCompare,
+    title: 'Change Impact',
+    description: 'What a change touches, read from git and the graph: the entities it changes, what depends on them, and the tests to run for it.',
+    details: [
+      'Uncommitted changes, a branch or commit, or a range a..b',
+      'Each changed line mapped to the innermost entity',
+      'Callers, users and implementers, up to six levels away',
+      'The tests among them, by file, name or #[test]-style attributes',
+    ],
+    accent: 'text-violet-400',
+    bgColor: 'bg-violet-500/10',
   },
 ]
 

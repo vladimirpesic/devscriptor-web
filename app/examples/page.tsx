@@ -69,7 +69,7 @@ const mcpExamples = [
   {
     id: 'mcp-server',
     title: 'Run the MCP Server',
-    description: 'Launch the unified MCP server (75 tools over JSON-RPC on stdio), shared by every agent of a workspace.',
+    description: 'Launch the unified MCP server (76 tools over JSON-RPC on stdio), shared by every agent of a workspace.',
     code: `# The unified MCP server — this is what agents spawn. It relays to
 # the workspace's shared server, starting it when none answers.
 devscriptor mcp
@@ -186,6 +186,8 @@ const queryExamples = [
 "Get the definition of the AuthMiddleware type"
 
 "Find all references to the database connection function"
+
+"What does my uncommitted change touch, and which tests should I run?"
 
 "What do we already know about the retry logic here?"`,
     language: 'text',

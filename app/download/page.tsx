@@ -66,7 +66,7 @@ const devscriptorSteps = [
   {
     n: 4,
     title: 'Connect your AI agent',
-    desc: 'Point Claude Desktop, Claude Code, Cursor or Cline at the devscriptor binary with args ["mcp"] for all 75 MCP tools over stdio. Rusta finds it on its own.',
+    desc: 'Point Claude Desktop, Claude Code, Cursor or Cline at the devscriptor binary with args ["mcp"] for all 76 MCP tools over stdio. Rusta finds it on its own.',
     code: 'devscriptor mcp',
   },
 ]
@@ -223,7 +223,7 @@ export default function DownloadPage() {
             <div>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">Devscriptor {CURRENT_VERSION}</h2>
               <p className="text-sm text-slate-400">
-                Local code-intelligence engine · 26 languages · 75 MCP tools · 21 language servers
+                Local code-intelligence engine · 26 languages · 76 MCP tools · 21 language servers
               </p>
             </div>
           </div>
@@ -299,7 +299,7 @@ cargo build --release -p devscriptor-cli       # target/release/devscriptor`}</c
             <div>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">Rusta {RUSTA_VERSION}</h2>
               <p className="text-sm text-slate-400">
-                Coding agent for Kimi, GLM &amp; DeepSeek · auto-wires Devscriptor&apos;s 75 MCP tools ·{' '}
+                Coding agent for Kimi, GLM &amp; DeepSeek · auto-wires Devscriptor&apos;s 76 MCP tools ·{' '}
                 <a href="/rusta/" className="text-amber-400 underline-offset-4 underline">
                   learn more
                 </a>
@@ -368,7 +368,7 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
                 <span className="font-medium text-white">Install Devscriptor first</span> and Rusta
                 finds it — on <code className="text-slate-400">PATH</code>, in the usual install
                 directories, or at <code className="text-slate-400">$DEVSCRIPTOR_BIN</code> — and
-                registers its 75 MCP tools on startup, with no configuration and no trust prompt,
+                registers its 76 MCP tools on startup, with no configuration and no trust prompt,
                 since it comes from your own install. Confirm with{' '}
                 <code className="text-slate-400">rusta doctor</code>.
               </p>

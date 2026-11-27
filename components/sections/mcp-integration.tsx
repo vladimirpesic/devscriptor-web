@@ -14,12 +14,12 @@ import {
 const toolCategories = [
   {
     category: 'Core Analysis',
-    count: 32,
+    count: 33,
     icon: Code2,
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/10',
     href: '/mcp-tools/',
-    items: ['scan_codebase', 'semantic_search', 'get_relationships', 'add_context_note', 'find_dead_code', 'start_watching'],
+    items: ['scan_codebase', 'semantic_search', 'get_relationships', 'get_change_impact', 'add_context_note', 'find_dead_code', 'start_watching'],
   },
   {
     category: 'LSP Intelligence',
@@ -83,7 +83,7 @@ export function MCPIntegration() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg text-slate-400 mb-6"
           >
-            Native MCP server with 75 total tools: 32 Core + 38 LSP + 5 Architecture
+            Native MCP server with 76 total tools: 33 Core + 38 LSP + 5 Architecture
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -24,7 +24,7 @@ const pillars = [
   {
     icon: Sparkles,
     title: 'Kimi, GLM and DeepSeek, natively',
-    desc: 'Defaults to each vendor’s coding model — kimi-for-coding (K2.8 Preview), glm-5.3, deepseek-flash — and runs K3.1 Pro and the rest with --model. Each model’s window, input and effort levels come from the vendor’s live model list, so a new model needs no update.',
+    desc: 'Defaults to each vendor’s coding model — kimi-for-coding (K2.8 Preview), glm-5.4 on GLM’s Coding Plan (glm-5.3 per token), deepseek-flash — and runs K3.1 Pro and the rest with --model. Each model’s window, input and effort levels come from the vendor’s live model list, so a new model needs no update.',
   },
   {
     icon: Brain,
@@ -34,7 +34,7 @@ const pillars = [
   {
     icon: Server,
     title: 'Devscriptor, auto-wired',
-    desc: 'Detects your Devscriptor install and registers its 75 MCP tools on first run: the six it uses most are at hand from the first request, and the rest load on demand so they do not crowd the context. Zero configuration.',
+    desc: 'Detects your Devscriptor install and registers its 76 MCP tools on first run: the six it uses most are at hand from the first request, and the rest load on demand so they do not crowd the context. Each file the agent writes is checked by its language server, and the errors come back with the write. Zero configuration.',
   },
   {
     icon: KeyRound,

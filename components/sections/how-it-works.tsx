@@ -39,7 +39,7 @@ const steps = [
   {
     icon: Brain,
     title: 'Query',
-    description: 'AI connects via MCP with 75 tools: 32 Core + 38 LSP + 5 Architecture tools.',
+    description: 'AI connects via MCP with 76 tools: 33 Core + 38 LSP + 5 Architecture tools.',
     color: 'from-teal-500 to-emerald-500',
   },
 ]

@@ -73,9 +73,9 @@ const modules = [
     icon: Workflow,
     color: 'from-cyan-500 to-blue-500',
     bgColor: 'bg-cyan-500/10',
-    description: 'One Model Context Protocol server per workspace with 75 tools, shared by every agent working there.',
+    description: 'One Model Context Protocol server per workspace with 76 tools, shared by every agent working there.',
     components: [
-      { icon: Box, name: 'Core Tools', desc: '32 Tools', detail: 'Scan, search, analyze, context, and the real-time watcher' },
+      { icon: Box, name: 'Core Tools', desc: '33 Tools', detail: 'Scan, search, analyze, change impact, context, and the real-time watcher' },
       { icon: Layers, name: 'LSP Tools', desc: '38 Tools', detail: 'Navigation, completion, diagnostics, refactoring' },
       { icon: Settings, name: 'Architecture Tools', desc: '5 Tools', detail: 'LSP detection, prerequisite checks, setup' },
       { icon: Workflow, name: 'Shared Server', desc: 'One per workspace', detail: 'devscriptor mcp relays its stdio to devscriptor serve over a local socket (a named pipe on Windows): one index, watcher, model and set of language servers — no network port' },
@@ -253,7 +253,7 @@ export default function ArchitecturePage() {
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
               High-performance code analysis platform built in Rust with 26 tree-sitter grammars,
-              75 MCP tools, and 4-tier LSP detection.
+              76 MCP tools, and 4-tier LSP detection.
             </p>
           </div>
         </div>
@@ -291,8 +291,8 @@ export default function ArchitecturePage() {
               <Card className="bg-slate-900/50 border-slate-800">
                 <CardContent className="pt-6">
                   <Workflow className="w-10 h-10 text-blue-400 mb-4" />
-                  <div className="text-3xl font-bold text-white mb-2">75</div>
-                  <p className="text-slate-400">MCP Tools total: 32 Core + 38 LSP + 5 Architecture</p>
+                  <div className="text-3xl font-bold text-white mb-2">76</div>
+                  <p className="text-slate-400">MCP Tools total: 33 Core + 38 LSP + 5 Architecture</p>
                 </CardContent>
               </Card>
               <Card className="bg-slate-900/50 border-slate-800">
@@ -456,7 +456,7 @@ export default function ArchitecturePage() {
                       <Server className="w-5 h-5 text-blue-400" />
                       <span className="font-semibold text-blue-300">crates/mcp</span>
                     </div>
-                    <p className="text-sm text-slate-400">Unified MCP Server · 75 Tools · stdio</p>
+                    <p className="text-sm text-slate-400">Unified MCP Server · 76 Tools · stdio</p>
                   </div>
                   
                   <div className="flex gap-4 my-2">

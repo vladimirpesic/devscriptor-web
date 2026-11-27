@@ -85,7 +85,7 @@ const features = [
   {
     icon: Zap,
     title: 'MCP Server Built-in',
-    description: 'Native integration with 75 total tools: 32 Core + 38 LSP + 5 Architecture.',
+    description: 'Native integration with 76 total tools: 33 Core + 38 LSP + 5 Architecture.',
     accent: 'text-yellow-400',
     bgColor: 'bg-yellow-500/10',
   },

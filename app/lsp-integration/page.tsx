@@ -128,7 +128,7 @@ const lspTools = {
     icon: AlertCircle,
     bgColor: 'bg-red-500/10',
     tools: [
-      { name: 'get_diagnostics', description: 'Diagnostics (errors and warnings) for a file' },
+      { name: 'get_diagnostics', description: 'Diagnostics (errors and warnings) for a file as it is on disk, a Rust file’s cargo check errors included; severity leaves out the less severe, and wait_ms bounds the wait' },
       { name: 'get_code_actions', description: 'Available code actions for a range' },
       { name: 'get_code_action_resolve', description: 'Resolve an action from get_code_actions' },
     ],
@@ -589,6 +589,16 @@ export default function LSPIntegrationPage() {
                   icon: Package,
                   title: 'A ruby-lsp for this Ruby',
                   text: 'ruby-lsp’s native extensions load only on a Ruby like the one that built them. Devscriptor checks them with the Ruby it runs, skips a package another Ruby built with a warning naming both, and lsp setup ruby-lsp installs it again for this Ruby.',
+                },
+                {
+                  icon: CheckCircle,
+                  title: 'Saved, and checked',
+                  text: 'get_diagnostics tells a server that takes saves that the file is saved — what Devscriptor sends is what is on disk — and waits for the check that starts. rust-analyzer then runs cargo check, and its errors, type errors among them, come with its own analysis. Other requests do not wait for the check, which can take minutes on a large workspace.',
+                },
+                {
+                  icon: AlertCircle,
+                  title: 'Diagnostics of the text now',
+                  text: 'A file changed on disk is diagnosed as it is now, never with the diagnostics of the text before. An answer that may describe an older text says stale, and one given before the server’s check ended says checking, so a caller never takes a missing check for a clean file.',
                 },
               ].map((item) => (
                 <Card key={item.title} className="bg-slate-900/50 border-slate-800">

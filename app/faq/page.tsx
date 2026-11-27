@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     question: 'How does MCP integration work?',
-    answer: 'Devscriptor includes a native, unified MCP (Model Context Protocol) server that exposes 75 tools over JSON-RPC on stdio to AI agents like Claude Desktop, Cursor, and Cline. This includes 32 core tools for scanning, search, analysis, the Context Graph, and the real-time watcher; 38 LSP tools for live code intelligence (go-to-definition, hover, completions, diagnostics); and 5 architecture tools for LSP detection and setup. Configure your client with command "devscriptor" and args ["mcp"] — one binary, one name, on every platform. The agents working in one workspace share one Devscriptor server, so they share its index, watcher, model and language servers. Rusta finds Devscriptor on your PATH and registers it with no configuration.',
+    answer: 'Devscriptor includes a native, unified MCP (Model Context Protocol) server that exposes 76 tools over JSON-RPC on stdio to AI agents like Claude Desktop, Cursor, and Cline. This includes 33 core tools for scanning, search, analysis, change impact, the Context Graph, and the real-time watcher; 38 LSP tools for live code intelligence (go-to-definition, hover, completions, diagnostics); and 5 architecture tools for LSP detection and setup. Configure your client with command "devscriptor" and args ["mcp"] — one binary, one name, on every platform. The agents working in one workspace share one Devscriptor server, so they share its index, watcher, model and language servers. Rusta finds Devscriptor on your PATH and registers it with no configuration.',
     category: 'Integration',
   },
   {
@@ -47,7 +47,7 @@ const faqs = [
   },
   {
     question: 'What is LSP Code Intelligence?',
-    answer: 'LSP (Language Server Protocol) integration provides real-time IDE features: go-to-definition, hover information, completions, diagnostics, call hierarchy, and type hierarchy. Devscriptor includes 38 LSP tools and 5 architecture tools, and ships 21 pre-configured language servers, each looked for in four places (a configuration file → Devscriptor’s own installs → the system → editor extensions) and, where none has it, installed when you ask — checksum-verified. Servers include rust-analyzer, pyright, typescript-language-server, gopls, clangd, and more.',
+    answer: 'LSP (Language Server Protocol) integration provides real-time IDE features: go-to-definition, hover information, completions, diagnostics (a Rust file’s cargo check errors included), call hierarchy, and type hierarchy. Devscriptor includes 38 LSP tools and 5 architecture tools, and ships 21 pre-configured language servers, each looked for in four places (a configuration file → Devscriptor’s own installs → the system → editor extensions) and, where none has it, installed when you ask — checksum-verified. Servers include rust-analyzer, pyright, typescript-language-server, gopls, clangd, and more.',
     category: 'Features',
   },
   {
@@ -77,7 +77,7 @@ const faqs = [
   },
   {
     question: 'What is Rusta?',
-    answer: 'Rusta is a coding agent for the terminal, built in Rust for Kimi, GLM and DeepSeek models — and any OpenAI-compatible endpoint, such as one serving their open weights. It speaks each vendor’s API natively: preserved reasoning, where the effort setting goes, sampling and output budgets, each as that vendor wants them. It finds Devscriptor on your PATH and registers its 75 tools with no configuration. It is a separate download, under the same license, the GNU GPL v3.0; see the Rusta page.',
+    answer: 'Rusta is a coding agent for the terminal, built in Rust for Kimi, GLM and DeepSeek models — and any OpenAI-compatible endpoint, such as one serving their open weights. It speaks each vendor’s API natively: preserved reasoning, where the effort setting goes, sampling and output budgets, each as that vendor wants them. It finds Devscriptor on your PATH and registers its 76 tools with no configuration, and has its language servers check each file the agent writes. It is a separate download, under the same license, the GNU GPL v3.0; see the Rusta page.',
     category: 'Rusta',
   },
   {

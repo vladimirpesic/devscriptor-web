@@ -82,7 +82,7 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-xl sm:text-2xl text-slate-400 max-w-3xl mx-auto mb-8"
           >
-            One portable SQLite file. 26 languages &amp; frameworks. 75 MCP tools with LSP code intelligence.
+            One portable SQLite file. 26 languages &amp; frameworks. 76 MCP tools with LSP code intelligence.
             Semantic search, relationship mapping, and persistent memory
             for any AI coding agent — analysed on your machine, open source.
           </motion.p>
@@ -96,8 +96,8 @@ export function Hero() {
           >
             <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <Zap className="w-6 h-6 text-yellow-400" />
-              <span className="text-white font-semibold">75 MCP Tools</span>
-              <span className="text-xs text-slate-400 text-center">32 Core + 38 LSP + 5 Arch</span>
+              <span className="text-white font-semibold">76 MCP Tools</span>
+              <span className="text-xs text-slate-400 text-center">33 Core + 38 LSP + 5 Arch</span>
             </div>
             <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <Layers className="w-6 h-6 text-purple-400" />

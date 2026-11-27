@@ -16,10 +16,14 @@ import {
   Bot,
   Boxes,
   Brain,
+  Coins,
   Cpu,
   Download,
+  FileCheck,
+  FileDiff,
   Gauge,
   GitBranch,
+  GitFork,
   Github,
   KeyRound,
   Layers,
@@ -109,7 +113,7 @@ const harness = [
   {
     icon: Brain,
     title: 'Compaction that summarizes',
-    desc: 'Past 90 % of the model’s window — 786,432 tokens on DeepSeek, which keeps 256K for output — the model writes a handoff summary: goals and constraints, decisions, commands run and files changed, what is still unknown, and the plan. Your oldest and most recent messages stay verbatim, with the live todo list and a pointer to the replaced lines in the records. A context overrun the provider reports, Z.AI’s 1261 included, takes the same path. /context shows what the next request holds, part by part, against the window, and how far it is from that point.',
+    desc: 'Past 90 % of the model’s window — 786,432 tokens on DeepSeek, which keeps 256K for output — the model writes a handoff summary: goals and constraints, decisions, commands run and files changed, what is still unknown, and the plan. Your oldest and most recent messages stay verbatim, with the live todo list and a pointer to the replaced lines in the records, and the files the agent was working with come back as they are now — up to five — so it need not read them again. The conversation is measured as the model counts it: each reply’s token count calibrates Rusta’s estimates. A context overrun the provider reports, Z.AI’s 1261 included, takes the same path. /context shows what the next request holds, part by part, against the window, and how far it is from that point.',
   },
   {
     icon: Repeat,
@@ -127,6 +131,11 @@ const harness = [
     desc: 'agent delegates to a sub-agent, and agent_swarm runs many at once — only when you ask for delegation, and swarms only in swarm mode, which you turn on. Delegation nests one level unless max_subagent_depth raises it. Each sub-agent keeps an agent_id and its records, so one that stopped, failed or ran past its deadline can be resumed, and its result hands back its last message: the work it did not finish is not lost.',
   },
   {
+    icon: GitFork,
+    title: 'Worktrees and checks',
+    desc: 'isolation: "worktree" runs a sub-agent in a git worktree of its own, a copy of the repository as it stands, uncommitted files included, so sub-agents writing at once do not step on each other. Its work comes back file by file when it finishes: a file changed on both sides is merged three ways, a conflict is marked in the file, and nothing is committed to your branches. check is a command its work must pass — your tests, a build — run through its own bash under your rules; a failing check sends it back with the output, up to twice.',
+  },
+  {
     icon: Boxes,
     title: 'Profiles and a model pool',
     desc: 'Four profiles are built in — explore and plan (read-only), coder and default — and YAML profiles add your own. Declare [subagent.models] and the delegation tools gain a model parameter, so a file-locating sub-agent runs on a small fast model while the session stays on the flagship. An unknown alias fails the call rather than billing the flagship.',
@@ -142,9 +151,19 @@ const harness = [
     desc: 'write_file overwrites only a file this agent has read and that has not changed on disk since — judged on length, modification time and a content digest, since the first two miss an equal-length rewrite inside one clock tick. edit_file needs its old_string to match exactly once. Creating a file needs no read.',
   },
   {
+    icon: FileDiff,
+    title: 'Changes it did not make',
+    desc: 'A file the agent read or wrote that you edited, a formatter rewrote or another agent changed is named before its next request, with the changed lines numbered as the file is now, and the agent is asked to build on the change rather than undo it.',
+  },
+  {
+    icon: FileCheck,
+    title: 'The language server’s word',
+    desc: 'With Devscriptor, each file write_file or edit_file changes is checked by its language server, and the file’s errors come with the write’s result, so a change that breaks the build is fixed at once — a Rust file’s include what cargo check finds. A slower server answers with the next step, and a turn the model would end with a check still running waits up to 15 seconds for its errors.',
+  },
+  {
     icon: ShieldCheck,
     title: 'Permissions and guardrails',
-    desc: 'Three modes — default, accept_edits, bypass_permissions — and ordered rules, the first match winning; a compound shell command is matched per segment. Writes to secrets (.env*, .ssh/, *.key, *.pem, …), also through a symlink, and git push, reset, rebase, a forced checkout or switch and clean -f, however git is called, ask in every mode, --yes included. No command, hook or MCP server Rusta starts inherits the variables it reads its API keys from, and on Linux none can read them from Rusta’s own process.',
+    desc: 'Three modes — default, accept_edits, bypass_permissions — and ordered rules, the first match winning; a compound shell command is matched per segment. Writes to secrets (.env*, .ssh/, *.key, *.pem, …), also through a symlink, and git push, reset, rebase, a forced checkout or switch and clean -f, however git is called, ask in every mode, --yes included. A command that can only read the workspace — ls, cat, grep, rg, find, sed -n, git status, log or diff — runs without asking, in plan mode too, and a yes for the session covers that exact call and no wider. No command, hook or MCP server Rusta starts inherits the variables it reads its API keys from, and on Linux none can read them from Rusta’s own process.',
   },
   {
     icon: AlertTriangle,
@@ -185,6 +204,11 @@ const harness = [
     icon: Terminal,
     title: 'Headless, REPL and sessions',
     desc: 'Headless (-p) for scripts and CI, with --stream-json events, and an interactive REPL; a terminal UI builds with --features tui. Sessions are JSONL records, yours alone on disk and written by one process at a time: --resume continues one, rusta fork copies one, and rusta export packs one into a ZIP archive.',
+  },
+  {
+    icon: Coins,
+    title: 'What a session costs',
+    desc: '/usage shows the session’s input and output tokens, its sub-agents’ included, how much the prompt cache served, and the cost — at DeepSeek’s published prices, peak hours included, at Z.AI’s pay-per-token GLM prices, or at the [prices] you configure for any other model. A prompt cache that keeps missing is reported once, so a request that pays full price again and again does not go unnoticed.',
   },
 ]
 
@@ -1061,7 +1085,7 @@ export default function RustaPage() {
                 { icon: Cpu, label: 'Native Rust · one binary' },
                 { icon: Brain, label: 'Preserved Thinking' },
                 { icon: Sparkles, label: 'Live model catalogues' },
-                { icon: Server, label: 'Devscriptor’s 75 MCP tools' },
+                { icon: Server, label: 'Devscriptor’s 76 MCP tools' },
                 { icon: Github, label: `Open source · ${LICENSE_SPDX}` },
               ].map((chip) => (
                 <span
@@ -1341,7 +1365,7 @@ export default function RustaPage() {
               <p className="mx-auto max-w-2xl text-lg text-slate-400">
                 Rusta detects an installed Devscriptor and registers it as the{' '}
                 <code className="text-slate-300">devscriptor</code> MCP server —{' '}
-                <span className="font-semibold text-white">75 tools</span>, with no configuration.
+                <span className="font-semibold text-white">76 tools</span>, with no configuration.
               </p>
             </div>
 
@@ -1405,8 +1429,8 @@ export default function RustaPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-slate-400">
-                    A tool its server declares read-only runs without asking. Devscriptor declares 59
-                    of its 75 — every search, navigation and LSP query — so those run freely, while
+                    A tool its server declares read-only runs without asking. Devscriptor declares 60
+                    of its 76 — every search, navigation and LSP query — so those run freely, while
                     in the default mode the 16 that change something (scans, notes, formatting,
                     renames, pruning, server stops) are asked about. To let the routine ones run for
                     the session:
@@ -1447,7 +1471,7 @@ scope  = "session"`}</code>
                         Six tools are loaded up front, not twelve
                       </span>{' '}
                       — the searches by meaning and by name, a file&apos;s summary, an entity&apos;s
-                      details and a symbol&apos;s references. The other 69 load with{' '}
+                      details and a symbol&apos;s references. The other 70 load with{' '}
                       <code className="text-slate-400">select_tools</code> when a task needs one.
                     </li>
                     <li>
@@ -1702,6 +1726,14 @@ project_context_files         = ["NOTES.md"]
 project_context_budget_tokens = 8192   # the default
 
 permission_mode = "accept_edits"
+# Devscriptor's language servers check each file the agent writes (the default).
+diagnostics_after_edit = true
+
+# Prices per million tokens for /usage, for a model Rusta has none for.
+[prices."kimi-k3.1-pro"]
+input        = 1.0
+cached_input = 0.25
+output       = 4.0
 
 # Sub-agents may run on a cheaper model than the session's own.
 [subagent]
@@ -1874,7 +1906,7 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
             <h2 className="mb-4 text-3xl font-bold text-white">Better together</h2>
             <p className="mb-8 text-slate-400">
               Rusta drives the model. Devscriptor gives it a map of your codebase. Install both and
-              the agent starts with 75 code-intelligence tools within reach. Together they resolved
+              the agent starts with 76 code-intelligence tools within reach. Together they resolved
               75–81% of SWE-bench Multilingual with Kimi, GLM and DeepSeek models. Run without
               Devscriptor, DeepSeek resolved as many of those tasks;{' '}
               <a href="/benchmarks/#devscriptor" className="text-cyan-400 underline underline-offset-4 hover:text-cyan-300">
@@ -1895,7 +1927,7 @@ cargo build --release -p rusta-cli --features tui   # with the terminal UI`}</co
                 className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-700"
               >
                 <Layers className="h-4 w-4" />
-                Explore the 75 MCP Tools
+                Explore the 76 MCP Tools
               </a>
               <a
                 href="/benchmarks/"

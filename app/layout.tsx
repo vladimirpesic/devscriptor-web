@@ -29,13 +29,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://devscriptor.com',
     title: 'Devscriptor — Local code intelligence for AI agents',
-    description: 'One SQLite file. 26 languages & frameworks. 75 MCP tools. Runs locally on your machine.',
+    description: 'One SQLite file. 26 languages & frameworks. 76 MCP tools. Runs locally on your machine.',
     siteName: 'Devscriptor',
   },
   twitter: {
     card: 'summary',
     title: 'Devscriptor — Local code intelligence for AI agents',
-    description: 'One SQLite file. 26 languages & frameworks. 75 MCP tools. Runs locally on your machine.',
+    description: 'One SQLite file. 26 languages & frameworks. 76 MCP tools. Runs locally on your machine.',
   },
   robots: {
     index: true,

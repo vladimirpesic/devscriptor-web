@@ -29,15 +29,16 @@ import {
   Boxes,
   Network,
   Download,
+  GitCompare,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'MCP Tools - Devscriptor',
   description:
-    'Complete reference for all 75 MCP tools in Devscriptor: 32 Core analysis tools, 38 LSP code-intelligence tools, and 5 Architecture management tools, served by the unified MCP server over stdio.',
+    'Complete reference for all 76 MCP tools in Devscriptor: 33 Core analysis tools, 38 LSP code-intelligence tools, and 5 Architecture management tools, served by the unified MCP server over stdio.',
 }
 
-// Core Tools (32). Descriptions follow the server's tools/list.
+// Core Tools (33). Descriptions follow the server's tools/list.
 const coreTools = {
   jobs: [
     { name: 'scan_codebase', description: 'Scan a codebase and build the entity database. extensions is a whitelist; exclude_patterns add to the built-in excludes; the project’s devscriptor.yaml sets both when omitted', params: `{
@@ -83,6 +84,13 @@ const coreTools = {
 }` },
     { name: 'get_relationships', description: 'What an entity is linked to — calls, uses, supertypes, members — with where each end is and the lines a call is made on' },
   ],
+  impact: [
+    { name: 'get_change_impact', description: 'What a change touches, read from git — the uncommitted changes by default, or against a revision, or a range a..b: the entities it changes, what depends on them up to depth relationships away, and the tests among them to run', params: `{
+  "path": "/path/to/project",
+  "base": "main",
+  "depth": 3
+}` },
+  ],
   context: [
     { name: 'add_context_note', description: 'Add a note, optionally linked to code entities and concepts' },
     { name: 'search_context', description: 'Search notes: keyword, semantic or hybrid, with type, status and priority filters' },
@@ -122,7 +130,7 @@ const lspTools = {
     { name: 'get_completion_resolve', description: 'Resolve a completion item from get_completions' },
   ],
   diagnostics: [
-    { name: 'get_diagnostics', description: 'Diagnostics (errors and warnings) for a file, pulled or collected from the server’s pushes' },
+    { name: 'get_diagnostics', description: 'Diagnostics (errors and warnings) for a file as it is on disk: severity leaves out the less severe, wait_ms bounds the wait. A Rust file’s include what cargo check finds; stale and checking say when the answer may be incomplete' },
     { name: 'get_code_actions', description: 'Available code actions for a range' },
     { name: 'get_code_action_resolve', description: 'Resolve an action from get_code_actions' },
   ],
@@ -199,6 +207,7 @@ const coreSections = [
   { key: 'search', title: 'Search & Embeddings', tools: coreTools.search },
   { key: 'quality', title: 'Code Quality Analysis', tools: coreTools.quality },
   { key: 'entities', title: 'Entities & Relationships', tools: coreTools.entities },
+  { key: 'impact', title: 'Change Impact', tools: coreTools.impact },
   { key: 'context', title: 'Context Graph', tools: coreTools.context },
   { key: 'fileContext', title: 'File Context & Edit Validation', tools: coreTools.fileContext },
   { key: 'watcher', title: 'Real-time Watcher', tools: coreTools.watcher },
@@ -223,6 +232,7 @@ const categoryIcons: Record<string, React.ElementType> = {
   search: Search,
   quality: AlertCircle,
   entities: Network,
+  impact: GitCompare,
   context: Brain,
   fileContext: FileCode,
   watcher: RefreshCw,
@@ -244,6 +254,7 @@ const categoryBgColors: Record<string, string> = {
   search: 'bg-cyan-500/10',
   quality: 'bg-red-500/10',
   entities: 'bg-indigo-500/10',
+  impact: 'bg-violet-500/10',
   context: 'bg-pink-500/10',
   fileContext: 'bg-teal-500/10',
   watcher: 'bg-amber-500/10',
@@ -323,7 +334,7 @@ export default function MCPToolsPage() {
               Reference
             </Badge>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient">75 MCP Tools</span>
+              <span className="text-gradient">76 MCP Tools</span>
               <br />
               <span className="text-white">for AI Coding Agents</span>
             </h1>
@@ -336,7 +347,7 @@ export default function MCPToolsPage() {
             <div className="flex flex-wrap justify-center gap-4">
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/50 rounded-lg border border-slate-800">
                 <Cpu className="w-4 h-4 text-blue-400" />
-                <span className="text-sm text-slate-300">32 Core Tools</span>
+                <span className="text-sm text-slate-300">33 Core Tools</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/50 rounded-lg border border-slate-800">
                 <Code2 className="w-4 h-4 text-violet-400" />
@@ -365,7 +376,7 @@ export default function MCPToolsPage() {
                 <Cpu className="w-4 h-4 mr-2 flex-shrink-0" />
                 Core Tools
                 <Badge variant="outline" className="ml-2 border-slate-700 text-xs text-slate-400">
-                  32
+                  33
                 </Badge>
               </TabsTrigger>
               <TabsTrigger
@@ -459,7 +470,7 @@ export default function MCPToolsPage() {
               <p className="text-slate-400">
                 Point your client at the <code className="text-slate-300">devscriptor</code> binary on
                 your PATH with <code className="text-slate-300">args: [&quot;mcp&quot;]</code>. It serves all
-                75 tools over JSON-RPC on stdio — there is no network port. The clients of one
+                76 tools over JSON-RPC on stdio — there is no network port. The clients of one
                 workspace share one server process, through a local socket: one index, watcher,
                 embedding model and set of language servers. On connecting, the server tells the
                 model which tools to start with, which matters most to a client that loads tools
@@ -532,7 +543,7 @@ export default function MCPToolsPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Works with Any MCP Client</h2>
             <p className="text-slate-400 mb-8">
-              All 75 tools are available through the Model Context Protocol — to Claude Desktop,
+              All 76 tools are available through the Model Context Protocol — to Claude Desktop,
               Claude Code, Cursor, Cline, and any other MCP-compatible agent. Rusta detects
               Devscriptor and wires it in with no configuration.
             </p>

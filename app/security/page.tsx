@@ -83,7 +83,7 @@ const securityFeatures = [
     details: [
       'Native .gitignore support (ignore crate)',
       'Extension allow-list: SSH keys and credential files are never opened',
-      'Built-in excludes: node_modules, target, .venv, dist, vendor…',
+      'Built-in excludes below the indexed path: node_modules, target, .venv, dist, vendor…',
       'json/yaml/toml/xml are in the allow-list — exclude them if sensitive',
       'HTML a documentation generator wrote (Javadoc, Doxygen, Sphinx…) is left out',
     ],
@@ -125,6 +125,7 @@ const securityFeatures = [
       'Editing the file withdraws the trust',
       'Installs only from lsp setup or lsp_arch_setup',
       'Every download checked against a pinned or published SHA-256',
+      'get_change_impact runs git with the fsmonitor and external diff and textconv programs off',
     ],
     accent: 'text-indigo-400',
     bgColor: 'bg-indigo-500/10',

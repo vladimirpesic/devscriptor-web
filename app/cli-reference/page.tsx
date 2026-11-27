@@ -312,7 +312,7 @@ const utilityCommands: Command[] = [
     name: 'mcp',
     usage: 'mcp [OPTIONS]',
     description:
-      'The 75-tool MCP server, over stdio (no TCP port). By default it relays to the workspace’s shared server, starting it when none answers. Unlike the other commands, it defaults to a shared database that does not depend on the working directory.',
+      'The 76-tool MCP server, over stdio (no TCP port). By default it relays to the workspace’s shared server, starting it when none answers. Unlike the other commands, it defaults to a shared database that does not depend on the working directory.',
     options: [
       { flag: '--lsp-startup <lazy|eager>', description: 'When language servers start (default lazy)' },
       { flag: '--no-watch', description: 'Do not watch the scanned project it runs in' },

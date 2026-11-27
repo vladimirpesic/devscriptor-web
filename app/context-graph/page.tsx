@@ -341,7 +341,7 @@ export default function ContextGraphPage() {
               </Badge>
               <h2 className="text-3xl font-bold text-white mb-4">5 Context Graph Tools</h2>
               <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                Five of Devscriptor&apos;s 32 core MCP tools manage the Context Graph.
+                Five of Devscriptor&apos;s 33 core MCP tools manage the Context Graph.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
