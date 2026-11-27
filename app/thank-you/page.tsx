@@ -113,7 +113,7 @@ export default function ThankYouPage() {
       <section className="pb-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-6 text-sm uppercase tracking-wider text-slate-400">
+            <p className="mb-6 text-sm uppercase tracking-wider text-slate-450">
               While you&apos;re here
             </p>
             <div className="flex flex-wrap justify-center gap-4">

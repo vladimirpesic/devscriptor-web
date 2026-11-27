@@ -354,7 +354,7 @@ function CommandCard({ command }: { command: Command }) {
 
         {command.options.length > 0 && (
           <div>
-            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Options</h4>
+            <h4 className="text-xs font-semibold text-slate-450 uppercase tracking-wider mb-2">Options</h4>
             <div className="space-y-1.5">
               {command.options.map((opt, index) => (
                 <div key={index} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 text-sm">
@@ -367,7 +367,7 @@ function CommandCard({ command }: { command: Command }) {
         )}
 
         <div>
-          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Examples</h4>
+          <h4 className="text-xs font-semibold text-slate-450 uppercase tracking-wider mb-2">Examples</h4>
           <div className="space-y-1.5">
             {command.examples.map((example, index) => (
               <div key={index} className="flex items-start gap-2">
@@ -442,7 +442,7 @@ export default function CLIReferencePage() {
               the MCP server — all from the single <code className="text-slate-300">devscriptor</code> binary.
             </p>
             <div className="mx-auto max-w-2xl rounded-lg border border-slate-800 bg-slate-900/50 p-4 text-left">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Global options</p>
+              <p className="text-xs font-semibold text-slate-450 uppercase tracking-wider mb-2">Global options</p>
               <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
                 <code className="text-slate-300">-d, --database &lt;FILE&gt;</code>
                 <code className="text-slate-300">--config &lt;FILE&gt;</code>

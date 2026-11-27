@@ -21,13 +21,18 @@
   --destructive-foreground: 210 40% 98%;
   --border: 217 33% 17%;
   --input: 217 33% 17%;
-  --ring: 224 76% 48%;
   --radius: 0.75rem;
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+  /* Focus draws no ring or outline: a clicked button, tab or link keeps the
+     look it was given. */
+  :focus,
+  :focus-visible {
+    outline: none;
   }
   body {
     @apply bg-background text-foreground;

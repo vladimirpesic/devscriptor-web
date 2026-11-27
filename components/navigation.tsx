@@ -246,7 +246,7 @@ export function Navigation() {
                   {PRODUCT.rusta.label}
                 </a>
 
-                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-450 uppercase tracking-wider">
                   Modules
                 </div>
                 {moduleNav.map((item) => (
@@ -260,7 +260,7 @@ export function Navigation() {
                   </a>
                 ))}
 
-                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <div className="px-4 pt-4 pb-1 text-xs font-semibold text-slate-450 uppercase tracking-wider">
                   Resources
                 </div>
                 {[...resourceNav, ...sourceNav].map((item) => (

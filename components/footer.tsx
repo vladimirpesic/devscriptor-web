@@ -80,17 +80,17 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-xs text-slate-400">Optional. Unlocks nothing.</p>
+            <p className="mt-3 text-xs text-slate-450">Optional. Unlocks nothing.</p>
           </div>
         </div>
 
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-450 text-sm">
             {COPYRIGHT}. Devscriptor, Rusta and this website are free software under the {LICENSE_NAME}.
           </p>
           <div className="flex gap-6">
-            <span className="text-slate-400 text-sm">
+            <span className="text-slate-450 text-sm">
               {CONTACT_EMAIL}
             </span>
           </div>

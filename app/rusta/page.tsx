@@ -1000,7 +1000,7 @@ function VendorPanel({ vendor }: { vendor: Vendor }) {
         <dl className="mt-4 grid grid-cols-1 gap-3 text-xs sm:grid-cols-3">
           {vendor.facts.map((f) => (
             <div key={f.label}>
-              <dt className="uppercase tracking-wider text-slate-400">{f.label}</dt>
+              <dt className="uppercase tracking-wider text-slate-450">{f.label}</dt>
               <dd className="mt-1 break-words text-slate-400">{f.value}</dd>
             </div>
           ))}
@@ -1666,7 +1666,7 @@ scope  = "session"`}</code>
                 { label: 'DeepSeek', cmd: 'export DEEPSEEK_API_KEY=sk-...\nrusta --provider deepseek' },
               ].map((s) => (
                 <div key={s.label} className="rounded-lg border border-slate-800 bg-slate-900/50 p-4">
-                  <div className="mb-2 text-xs uppercase tracking-wider text-slate-400">
+                  <div className="mb-2 text-xs uppercase tracking-wider text-slate-450">
                     Or from the environment: {s.label}
                   </div>
                   <pre tabIndex={0} className="overflow-x-auto font-mono text-xs text-slate-300">
@@ -1769,7 +1769,7 @@ action  = "allow"`}</code>
                 },
               ].map((item) => (
                 <div key={item.label} className="rounded-lg border border-slate-800 bg-slate-900/50 p-4">
-                  <div className="text-xs uppercase tracking-wider text-slate-400">{item.label}</div>
+                  <div className="text-xs uppercase tracking-wider text-slate-450">{item.label}</div>
                   <div className="mt-1 font-mono text-xs text-slate-300">{item.value}</div>
                 </div>
               ))}
@@ -1843,7 +1843,7 @@ action  = "allow"`}</code>
                   ].map((layer) => (
                     <div key={layer.label} className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
                       <layer.icon className="mb-2 h-5 w-5 text-emerald-400" />
-                      <div className="text-xs uppercase tracking-wider text-slate-400">{layer.label}</div>
+                      <div className="text-xs uppercase tracking-wider text-slate-450">{layer.label}</div>
                       <div className="mt-1 text-sm font-medium text-white">{layer.value}</div>
                     </div>
                   ))}

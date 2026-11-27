@@ -193,7 +193,7 @@ export default function LanguagesPage() {
                       >
                         {language.name}
                         {language.kind && (
-                          <span className="text-[10px] font-normal uppercase tracking-wider text-slate-400">
+                          <span className="text-[10px] font-normal uppercase tracking-wider text-slate-450">
                             {language.kind}
                           </span>
                         )}

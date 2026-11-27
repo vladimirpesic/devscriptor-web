@@ -10,9 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Labels and fine print: dimmer than the text they stand beside, and
+        // still at least 4.5:1 on the site's slate-950 and slate-900 grounds.
+        slate: { 450: '#77869c' },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
