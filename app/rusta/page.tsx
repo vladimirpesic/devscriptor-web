@@ -1341,7 +1341,7 @@ export default function RustaPage() {
                 that loses its reasoning every turn re-derives the same conclusions on the next one —
                 spending tokens and time to arrive back where it started. Precedence is{' '}
                 <code className="text-slate-400">--thinking-keep</code> →{' '}
-                <code className="text-slate-400">KIMI_MODEL_THINKING_KEEP</code> →{' '}
+                <code className="text-slate-400">RUSTA_THINKING_KEEP</code> →{' '}
                 <code className="text-slate-400">thinking_keep</code> in the config file → the
                 model&apos;s own default. A Kimi model whose schema lacks the field never receives it,
                 and the platform&apos;s K3 series always keeps its reasoning and takes no thinking
